@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace University.Domain.Entities.Interfaces
+namespace University.Domain.Entities.Contract
 {
-    public interface IUser
+    public interface IBaseEntity
     {
-        public Guid UserId { get; set; }
     }
 }

@@ -8,29 +8,29 @@ using University.Domain.Entities.BaseEntities;
 
 namespace University.Application.Services
 {
-    public class CourseService:IGenericService<Course>
+    public class CreditWorkService : IGenericService<CreditWork>
     {
-        public Task<List<Course>> GetAllAsync()
+        public Task<CreditWork> CreateAsync(CreditWork entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Course> GetByIdAsync(Guid id)
+        public Task<CreditWork> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Course> CreateAsync(Course entity)
+        public Task<List<CreditWork>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Course> UpdateAsync(Course entity)
+        public Task<CreditWork> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Course> DeleteAsync(Guid id)
+        public Task<CreditWork> UpdateAsync(CreditWork entity)
         {
             throw new NotImplementedException();
         }

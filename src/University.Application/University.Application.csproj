@@ -10,8 +10,4 @@
     <ProjectReference Include="..\University.Domain\University.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Contract\" />
-  </ItemGroup>
-
 </Project>
