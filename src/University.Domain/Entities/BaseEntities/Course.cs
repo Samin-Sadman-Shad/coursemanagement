@@ -13,5 +13,8 @@ namespace University.Domain.Entities.BaseEntities
         [Key]
         public Guid Id { get; set; }
         public string Title { get; set; }
+
+        List<CreditWork> CreditWorks { get; set; }
+        List<Student> Students { get; set; }
     }
 }
