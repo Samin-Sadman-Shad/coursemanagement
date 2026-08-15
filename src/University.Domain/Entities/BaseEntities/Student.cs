@@ -21,7 +21,5 @@ namespace University.Domain.Entities.BaseEntities
 
         public List<CourseEnrollment> CoursesEnrolled { get; set; }
         public List<CreditWorkEnrollment> CreditWorksEnrolled { get; set; }
-
-
     }
 }

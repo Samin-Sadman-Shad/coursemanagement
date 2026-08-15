@@ -12,10 +12,10 @@ namespace University.Persistance.Repositories
 {
     internal class StudentRepository : GenericRepository<Student>, IStudentRepository
     {
-        private readonly UniversityDbContext _dbContext;
+        
         public StudentRepository(UniversityDbContext dbContext): base(dbContext) 
         {
-            _dbContext = dbContext;
+           
         }
         public async Task<List<Course>> GetCoursesByStudentIdAsync(Guid studentId)
         {

@@ -17,6 +17,5 @@ namespace University.Domain.Entities.JunctionEntities
         public Student Student { get; set; }
         public Guid CourseId { get; set; }
         public Course Course { get; set; }
-
     }
 }

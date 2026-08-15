@@ -12,7 +12,7 @@ namespace University.Persistance.Repositories
 {
     internal class GenericRepository<T> : IGenericRepository<T> where T : class, IBaseEntity
     {
-        private readonly UniversityDbContext _dbContext;
+        protected readonly UniversityDbContext _dbContext;
 
         public GenericRepository(UniversityDbContext dbContext)
         {
