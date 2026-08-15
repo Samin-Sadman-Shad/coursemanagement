@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using University.Domain.Entities.Contract;
+using University.Domain.Entities.JunctionEntities;
 
 namespace University.Domain.Entities.BaseEntities
 {
@@ -22,7 +23,7 @@ namespace University.Domain.Entities.BaseEntities
         }
         public string? Description { get; set; }
 
-        public List<Student> StudentsInCreditWork { get; set; }
-        public List<Course> CoursesOfCreditWork { get; set; }
+        public List<CreditWorkEnrollment> StudentsInCreditWork { get; set; }
+        public List<CourseCreditWork> CoursesOfCreditWork { get; set; }
     }
 }

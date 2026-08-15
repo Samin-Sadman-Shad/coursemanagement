@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using University.Domain.Entities.Contract;
 using University.Domain.Entities.Interfaces;
+using University.Domain.Entities.JunctionEntities;
 
 namespace University.Domain.Entities.BaseEntities
 {
@@ -18,8 +19,8 @@ namespace University.Domain.Entities.BaseEntities
         [EmailAddress]
         public string? Email { get; set; }
 
-        public List<Course> Courses { get; set; }
-        public List<CreditWork> CreditWorks { get; set; }
+        public List<CourseEnrollment> CoursesEnrolled { get; set; }
+        public List<CreditWorkEnrollment> CreditWorksEnrolled { get; set; }
 
 
     }
