@@ -17,17 +17,27 @@ namespace University.Persistance.Repositories
         {
             
         }
-        public async Task<List<Course>> GetCoursesByCreditWorkIdAsync(Guid creditWorkId)
+
+        public async Task<List<CreditWork>> GetCreditWorksByStudentIdAsync(Guid studentId)
         {
-            return await _dbContext.Courses
-                .Where(c => c.CreditWorksInCourse.Any(cw => cw.CreditWorkId == creditWorkId))
+            //var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.UserId == studentId);
+            //if (student is not null)
+            //{
+            //    return student.CreditWorksEnrolled.Select(creditOfStudent => creditOfStudent.CreditWork).ToList();
+            //}
+            //else
+            //{
+            //    throw new ArgumentNullException($"Student with id {studentId} not found.");
+            //}
+            return await _dbContext.CreditWorks
+                .Where(cw => cw.StudentsInCreditWork.Any(junction => junction.StudentId == studentId))
                 .ToListAsync();
         }
 
-        public async Task<List<Student>> GetStudentsByCreditWorkIdAsync(Guid creditWorkId)
+        public async Task<List<CreditWork>> GetCreditWorksByCourseIdAsync(Guid courseId)
         {
-            return await _dbContext.Students
-                .Where(s => s.CreditWorksEnrolled.Any(cw => cw.CreditWorkId == creditWorkId))
+            return await _dbContext.CreditWorks
+                .Where(cw => cw.CoursesOfCreditWork.Any(junction => junction.CourseId == courseId))
                 .ToListAsync();
         }
     }

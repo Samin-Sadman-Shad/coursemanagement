@@ -17,32 +17,6 @@ namespace University.Persistance.Repositories
         {
            
         }
-        public async Task<List<Course>> GetCoursesByStudentIdAsync(Guid studentId)
-        {
-            var student =  await _dbContext.Students.FirstOrDefaultAsync(s => s.UserId == studentId);
-            if(student is not null)
-            {
-                return student.CoursesEnrolled.Select(coursesOfStudent => coursesOfStudent.Course).ToList();
-            }
-            else
-            {
-                throw new ArgumentNullException($"Student with id {studentId} not found.");
-            }
-            
-        }
-
-        public async Task<List<CreditWork>> GetCreditWorksByStudentIdAsync(Guid studentId)
-        {
-            var student =  await _dbContext.Students.FirstOrDefaultAsync(s => s.UserId == studentId);
-            if (student is not null)
-            {
-                return student.CreditWorksEnrolled.Select(creditOfStudent => creditOfStudent.CreditWork).ToList();
-            }
-            else
-            {
-                throw new ArgumentNullException($"Student with id {studentId} not found.");
-            }
-        }
         
         //view other students in their classes
         public async Task<List<Student>> GetPeersByStudentIdAsync(Guid studentId)
@@ -58,6 +32,23 @@ namespace University.Persistance.Repositories
             {
                 throw new ArgumentNullException($"Student with id {studentId} not found.");
             }
+        }
+
+        public async Task<List<Student>> GetStudentsByCreditWorkIdAsync(Guid creditWorkId)
+        {
+            return await _dbContext.Students
+                .Where(s => s.CreditWorksEnrolled.Any(junction => junction.CreditWorkId == creditWorkId))
+                .ToListAsync();
+        }
+
+        public async Task<List<Student>> GetStudentsByCourseIdAsync(Guid courseId)
+        {
+            //filter students by checking the student-course mapping list of each student
+            //and checking if the courseId is present in the mapping list 
+            return await _dbContext.Students
+                .Where(s => s.CoursesEnrolled.Any(junction => junction.CourseId == courseId))
+                .ToListAsync();
+
         }
     }
 }

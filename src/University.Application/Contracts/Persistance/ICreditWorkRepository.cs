@@ -9,10 +9,10 @@ namespace University.Application.Contracts.Persistance
 {
     public interface ICreditWorkRepository: IGenericRepository<CreditWork>
     {
-        //view student of a given course by staff
-        Task<List<Student>> GetStudentsByCreditWorkIdAsync(Guid creditWorkId);
+        //all the classes of a given course
+        Task<List<CreditWork>> GetCreditWorksByCourseIdAsync(Guid courseId);
 
-        //all the courses of a gievn class
-        Task<List<Course>> GetCoursesByCreditWorkIdAsync(Guid creditWorkId);
+        //student request for own credit works
+        Task<List<CreditWork>> GetCreditWorksByStudentIdAsync(Guid studentId);
     }
 }

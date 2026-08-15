@@ -9,13 +9,13 @@ namespace University.Application.Contracts.Persistance
 {
     public interface IStudentRepository: IGenericRepository<Student>
     {
-        //student request for own courses
-        Task<List<Course>> GetCoursesByStudentIdAsync(Guid studentId);
-
-        //student request for own credit works
-        Task<List<CreditWork>> GetCreditWorksByStudentIdAsync(Guid studentId);
-
         //student request for other students in their class
         Task<List<Student>> GetPeersByStudentIdAsync(Guid studentId);
+
+        //get all the students of a given course by staff
+        Task<List<Student>> GetStudentsByCourseIdAsync(Guid courseId);
+
+        //view student of a given course by staff
+        Task<List<Student>> GetStudentsByCreditWorkIdAsync(Guid creditWorkId);
     }
 }

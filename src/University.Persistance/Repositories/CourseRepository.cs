@@ -16,23 +16,27 @@ namespace University.Persistance.Repositories
         {
             
         }
-        public async Task<List<CreditWork>> GetCreditWorksByCourseIdAsync(Guid courseId)
+
+        public async Task<List<Course>> GetCoursesByStudentIdAsync(Guid studentId)
         {
-            return await _dbContext.CreditWorks
-                .Where(cw => cw.CoursesOfCreditWork.Any(creditWork => creditWork.CourseId == courseId))
+            //var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.UserId == studentId);
+            //if (student is not null)
+            //{
+            //    return student.CoursesEnrolled.Select(coursesOfStudent => coursesOfStudent.Course).ToList();
+            //}
+            //else
+            //{
+            //    throw new ArgumentNullException($"Student with id {studentId} not found.");
+            //}
+            return await _dbContext.Courses
+                .Where(c=> c.StudentsInCourse.Any(junction => junction.StudentId == studentId)) //if this course is enrolled by student
                 .ToListAsync();
         }
 
-        public async Task<List<Student>> GetStudentsByCourseIdAsync(Guid courseId)
+        public async Task<List<Course>> GetCoursesByCreditWorkIdAsync(Guid creditWorkId)
         {
-            return await _dbContext.Students
-                .Where(s => s.CoursesEnrolled.Any(enrollment => enrollment.CourseId == courseId))
-                .ToListAsync();
-
-            _dbContext.Courses.Include(c => c.StudentsInCourse)
-                .ThenInclude(se => se.Student)
-                .Where(c => c.Id == courseId)
-                .SelectMany(c => c.StudentsEnrolled.Select(se => se.Student))
+            return await _dbContext.Courses
+                .Where(c => c.CreditWorksInCourse.Any(junction => junction.CreditWorkId == creditWorkId))
                 .ToListAsync();
         }
     }
