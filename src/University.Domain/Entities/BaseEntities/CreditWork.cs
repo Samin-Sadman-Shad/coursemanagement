@@ -8,7 +8,7 @@ using University.Domain.Entities.Contract;
 
 namespace University.Domain.Entities.BaseEntities
 {
-    public class CreditWork:IBaseEntity
+    public class CreditWork:BaseEntity
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -22,7 +22,7 @@ namespace University.Domain.Entities.BaseEntities
         }
         public string? Description { get; set; }
 
-        public List<Student> Students { get; set; }
-        public List<Course> Courses { get; set; }
+        public List<Student> StudentsInCreditWork { get; set; }
+        public List<Course> CoursesOfCreditWork { get; set; }
     }
 }

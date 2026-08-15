@@ -7,7 +7,7 @@ using University.Domain.Entities.BaseEntities;
 
 namespace University.Domain.Entities.Common
 {
-    public class Enroller
+    public class Enroller: BaseEntity
     {
         public DateTimeOffset EnrolledAt { get; set; }
         public Guid StaffId { get; set; }

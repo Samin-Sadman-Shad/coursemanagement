@@ -9,7 +9,7 @@ using University.Domain.Entities.Interfaces;
 
 namespace University.Domain.Entities.BaseEntities
 {
-    public class Student: IUser, IBaseEntity
+    public class Student: BaseEntity, IUser
     {
         [Key]
         public Guid UserId { get; set; }
@@ -18,8 +18,8 @@ namespace University.Domain.Entities.BaseEntities
         [EmailAddress]
         public string? Email { get; set; }
 
-        List<Course> Courses { get; set; }
-        List<CreditWork> CreditWorks { get; set; }
+        public List<Course> Courses { get; set; }
+        public List<CreditWork> CreditWorks { get; set; }
 
 
     }

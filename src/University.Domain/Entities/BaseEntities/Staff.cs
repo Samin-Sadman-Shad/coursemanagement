@@ -7,7 +7,7 @@ using University.Domain.Entities.Interfaces;
 
 namespace University.Domain.Entities.BaseEntities
 {
-    public class Staff : IUser
+    public class Staff : User
     {
         public Guid UserId { get; set; }
     }

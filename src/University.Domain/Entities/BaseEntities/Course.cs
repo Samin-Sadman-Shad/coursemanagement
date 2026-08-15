@@ -8,13 +8,13 @@ using University.Domain.Entities.Contract;
 
 namespace University.Domain.Entities.BaseEntities
 {
-    public class Course: IBaseEntity
+    public class Course: BaseEntity
     {
         [Key]
         public Guid Id { get; set; }
         public string Title { get; set; }
 
-        List<CreditWork> CreditWorks { get; set; }
-        List<Student> Students { get; set; }
+        public List<CreditWork> CreditWorksInCourse { get; set; }
+        public List<Student> StudentsInCourse { get; set; }
     }
 }

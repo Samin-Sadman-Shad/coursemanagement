@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using University.Domain.Entities.BaseEntities;
+using University.Domain.Entities.Contract;
 
 namespace University.Domain.Entities.JunctionEntities
 {
