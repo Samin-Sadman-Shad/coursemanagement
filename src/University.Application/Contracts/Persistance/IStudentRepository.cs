@@ -16,6 +16,6 @@ namespace University.Application.Contracts.Persistance
         Task<List<CreditWork>> GetCreditWorksByStudentIdAsync(Guid studentId);
 
         //student request for other students in their class
-        Task<List<Student>> GetPeersByStudentIdAsyn(Guid studentId);
+        Task<List<Student>> GetPeersByStudentIdAsync(Guid studentId);
     }
 }
