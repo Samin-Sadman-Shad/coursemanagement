@@ -12,13 +12,13 @@ namespace University.Domain.Entities.BaseEntities
     public class CreditWork:BaseEntity
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
+        public string Heading { get; set; }
         public int Code { get; set; }
-        public string CreditWorkName 
+        public string CreditWorkTitle 
         {
             get
             {
-                return $"{Title} - {Code}";
+                return $"{Heading} - {Code}";
             }    
         }
         public string? Description { get; set; }

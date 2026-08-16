@@ -10,7 +10,7 @@ using University.Domain.Entities.JunctionEntities;
 
 namespace University.Persistance.Context
 {
-    internal class UniversityDbContext : DbContext
+    public class UniversityDbContext : DbContext
     {
         public UniversityDbContext(DbContextOptions<UniversityDbContext> options) : base(options)
         {
