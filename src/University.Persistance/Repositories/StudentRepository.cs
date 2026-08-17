@@ -50,5 +50,26 @@ namespace University.Persistance.Repositories
                 .ToListAsync();
 
         }
+
+        public async Task<Student?> GetStudentByEmailAsync(string email)
+        {
+            var student = await _dbContext.Students
+                .FirstOrDefaultAsync(s => s.Email == email);
+            return student;
+        }
+
+        public async Task<List<Student>> GetStudentsByNameAsync(string name)
+        {
+            return await _dbContext.Students
+                .Where(s=> s.Name == name)
+                .ToListAsync();   
+        }
+
+        public async Task<Student?> GetStudentByRollAsync(int rollNo)
+        {
+            var student = await _dbContext.Students
+                .FirstOrDefaultAsync(s => s.Roll == rollNo);
+            return student;
+        }
     }
 }

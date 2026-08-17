@@ -20,6 +20,7 @@ namespace University.Persistance.Repositories
         }
         public async Task<T> CreateAsync(T entity)
         {
+
              await _dbContext.AddAsync(entity);
              await _dbContext.SaveChangesAsync();
              return entity;
@@ -45,7 +46,7 @@ namespace University.Persistance.Repositories
             return await _dbContext.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(Guid id)
+        public async Task<T?> GetByIdAsync(Guid id)
         {
             return await _dbContext.FindAsync<T>(id);
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Models.DTOs.StudentDTOs;
 using University.Domain.Entities.BaseEntities;
 
 namespace University.Application.Contracts.Persistance
@@ -17,5 +18,11 @@ namespace University.Application.Contracts.Persistance
 
         //view student of a given course by staff
         Task<List<Student>> GetStudentsByCreditWorkIdAsync(Guid creditWorkId);
+
+        Task<Student?> GetStudentByEmailAsync(string email);
+
+        Task<List<Student>> GetStudentsByNameAsync(string name);
+
+        Task<Student?> GetStudentByRollAsync(int rollNo);
     }
 }
