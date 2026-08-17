@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace University.Application.Contracts.DTOs
 {
-    public interface ICreditWorkDto : IBaseDto
+    public interface IQueryDto : IBaseDto
     {
-        public string Heading { get; set; } 
-        public  int Code { get; set; }
-        public string? Description { get; set; }
+        public Guid Id { get; set; }
     }
 }

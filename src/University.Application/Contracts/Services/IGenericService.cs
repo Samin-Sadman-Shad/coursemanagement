@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Contracts.DTOs;
+using University.Domain.Entities.BaseEntities;
 using University.Domain.Entities.Contract;
 
 namespace University.Application.Services.Contract
 {
-    internal interface IGenericService<T> where T : IBaseEntity
+    public interface IGenericService<TEntity, TCreateDto, TGetDto, TUpdateDto> where TEntity:IBaseEntity 
+        where TCreateDto: ICreateDto
+        where TGetDto: IQueryDto
+        where TUpdateDto : IUpdateDto
     {
-        Task<List<T>> GetAllAsync();
-        Task<T> GetByIdAsync(Guid id);
-        Task<T> CreateAsync(T entity);
-        Task<T> UpdateAsync(T entity);
-        Task<T> DeleteAsync(Guid id);
+        Task<List<TGetDto>> GetAllAsync();
+        Task<TGetDto?> GetByIdAsync(Guid id);
+        Task<TGetDto> CreateAsync(TCreateDto dto, Staff createdBy);
+        Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id, Staff UpdatedBy);
+        Task<TGetDto> DeleteAsync(Guid id);
 
     }
 }

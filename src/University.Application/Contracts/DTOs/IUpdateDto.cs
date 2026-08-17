@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using University.Application.Contracts.DTOs;
 using University.Domain.Entities.BaseEntities;
 
-namespace University.Application.Models.DTOs.Common
+namespace University.Application.Contracts.DTOs
 {
-    public class BaseUpdateDto: IUpdateDto
+    public interface IUpdateDto : IBaseDto
     {
-        public required Staff LastModifiedBy { get; set; }
+        public Staff LastModifiedBy { get; set; }
         public DateTimeOffset LastModifiedAt { get; set; }
     }
 }

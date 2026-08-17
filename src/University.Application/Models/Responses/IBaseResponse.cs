@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace University.Application.Models.DTOs.Responses
+namespace University.Application.Models.Responses
 {
     public interface IBaseResponse
     {
