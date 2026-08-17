@@ -22,30 +22,6 @@ namespace University.Application.Models.DTOs.StudentDTOs
             };
         }
 
-        public static CreateStudentDto MapToCreateStudentDto(this Student student, Staff staff)
-        {
-            return new CreateStudentDto
-            {
-                Name = student.Name,
-                Roll = student.Roll,
-                Email = student.Email,
-                CreatedBy = student.CreatedBy ??= staff,
-                CreatedAt = student.CreatedAt
-            };
-        }
-
-        public static UpdateStudentDto MapToUpdateStudentDto(this Student student, Staff staff)
-        {
-            return new UpdateStudentDto
-            {
-                Name = student.Name,
-                Roll = student.Roll,
-                Email = student.Email,
-                LastModifiedBy = student.LastModifiedBy ??= student.CreatedBy ??= staff,
-                LastModifiedAt = student.LastModifiedAt
-            };
-        }
-
         public static Student MapToStudent(this CreateStudentDto createStudentDto, Staff createdBy)
         {
             return new Student
@@ -53,10 +29,22 @@ namespace University.Application.Models.DTOs.StudentDTOs
                 Name = createStudentDto.Name,
                 Roll = createStudentDto.Roll,
                 Email = createStudentDto.Email,
-                CreatedBy = createdBy,
-                CreatedAt = DateTimeOffset.UtcNow,
-                LastModifiedBy = createdBy,
-                LastModifiedAt = DateTimeOffset.UtcNow
+                CreatedBy = createStudentDto.CreatedBy,
+                CreatedAt = createStudentDto.CreatedAt,
+                LastModifiedBy = createStudentDto.CreatedBy,
+                LastModifiedAt = createStudentDto.CreatedAt
+            };
+        }
+
+        public static Student MapToStudent(this UpdateStudentDto updateStudentDto)
+        {
+            return new Student
+            {
+                Name = updateStudentDto.Name,
+                Roll = updateStudentDto.Roll,
+                Email = updateStudentDto.Email,
+                LastModifiedBy = updateStudentDto.LastModifiedBy,
+                LastModifiedAt = updateStudentDto.LastModifiedAt 
             };
         }
 
