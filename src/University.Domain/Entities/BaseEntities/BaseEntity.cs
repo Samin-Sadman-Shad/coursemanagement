@@ -9,8 +9,8 @@ namespace University.Domain.Entities.BaseEntities
 {
     public class BaseEntity: IBaseEntity
     {
-        public Staff CreatedBy { get; set; }
-        public Staff LastModifiedBy { get; set; }
+        public  Staff? CreatedBy { get; set; }
+        public  Staff? LastModifiedBy { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset LastModifiedAt { get; set; }
     }

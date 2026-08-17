@@ -10,7 +10,7 @@ namespace University.Domain.Entities.Common
     public class Enroller: BaseEntity
     {
         public DateTimeOffset EnrolledAt { get; set; }
-        public Guid StaffId { get; set; }
-        public Staff EnrolledBy { get; set; }
+        public required Guid StaffId { get; set; }
+        public required Staff EnrolledBy { get; set; }
     }
 }

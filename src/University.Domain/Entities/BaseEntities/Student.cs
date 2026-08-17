@@ -14,12 +14,12 @@ namespace University.Domain.Entities.BaseEntities
     {
         [Key]
         public Guid UserId { get; set; }
-        public string Name { get; set; }
-        public int Roll { get; set; }
+        public required string Name { get; set; }
+        public required int Roll { get; set; }
         [EmailAddress]
         public string? Email { get; set; }
 
-        public List<CourseEnrollment> CoursesEnrolled { get; set; }
-        public List<CreditWorkEnrollment> CreditWorksEnrolled { get; set; }
+        public List<CourseEnrollment> CoursesEnrolled { get; set; } = new List<CourseEnrollment>();
+        public List<CreditWorkEnrollment> CreditWorksEnrolled { get; set; } = new List<CreditWorkEnrollment>();
     }
 }

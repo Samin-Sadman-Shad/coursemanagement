@@ -12,8 +12,8 @@ namespace University.Domain.Entities.BaseEntities
     public class CreditWork:BaseEntity
     {
         public Guid Id { get; set; }
-        public string Heading { get; set; }
-        public int Code { get; set; }
+        public required string Heading { get; set; }
+        public required int Code { get; set; }
         public string CreditWorkTitle 
         {
             get
@@ -23,7 +23,7 @@ namespace University.Domain.Entities.BaseEntities
         }
         public string? Description { get; set; }
 
-        public List<CreditWorkEnrollment> StudentsInCreditWork { get; set; }
-        public List<CourseCreditWork> CoursesOfCreditWork { get; set; }
+        public List<CreditWorkEnrollment> StudentsInCreditWork { get; set; } = new List<CreditWorkEnrollment>();
+        public List<CourseCreditWork> CoursesOfCreditWork { get; set; } = new List<CourseCreditWork>();
     }
 }

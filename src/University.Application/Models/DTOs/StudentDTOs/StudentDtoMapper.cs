@@ -9,7 +9,7 @@ namespace University.Application.Models.DTOs.StudentDTOs
 {
     internal static class StudentDtoMapper
     {
-        public static GetStudentDto MapToGetStudentDto(this Student student)
+        public static GetStudentDto MapToGetStudentDto(this Student student, Staff staff)
         {
             return new GetStudentDto
             {
@@ -18,30 +18,30 @@ namespace University.Application.Models.DTOs.StudentDTOs
                 Roll = student.Roll,
                 Email = student.Email,
                 EnrolledAt = student.CreatedAt,
-                EnrolledBy = student.CreatedBy
+                EnrolledBy = student.CreatedBy ??= staff
             };
         }
 
-        public static CreateStudentDto MapToCreateStudentDto(this Student student)
+        public static CreateStudentDto MapToCreateStudentDto(this Student student, Staff staff)
         {
             return new CreateStudentDto
             {
                 Name = student.Name,
                 Roll = student.Roll,
                 Email = student.Email,
-                CreatedBy = student.CreatedBy,
+                CreatedBy = student.CreatedBy ??= staff,
                 CreatedAt = student.CreatedAt
             };
         }
 
-        public static UpdateStudentDto MapToUpdateStudentDto(this Student student)
+        public static UpdateStudentDto MapToUpdateStudentDto(this Student student, Staff staff)
         {
             return new UpdateStudentDto
             {
                 Name = student.Name,
                 Roll = student.Roll,
                 Email = student.Email,
-                ModifiedBy = student.LastModifiedBy,
+                LastModifiedBy = student.LastModifiedBy ??= student.CreatedBy ??= staff,
                 LastModifiedAt = student.LastModifiedAt
             };
         }
@@ -54,29 +54,8 @@ namespace University.Application.Models.DTOs.StudentDTOs
                 Roll = createStudentDto.Roll,
                 Email = createStudentDto.Email,
                 CreatedBy = createdBy,
-                CreatedAt = DateTimeOffset.UtcNow
-            };
-        }
-
-        public static Student MapToStudent(this UpdateStudentDto updateStudentDto, Student existingStudent, Staff modifiedBy)
-        {
-            existingStudent.Name = updateStudentDto.Name;
-            existingStudent.Roll = updateStudentDto.Roll;
-            existingStudent.Email = updateStudentDto.Email;
-            existingStudent.LastModifiedBy = modifiedBy;
-            existingStudent.LastModifiedAt = DateTimeOffset.UtcNow;
-            return existingStudent;
-        }
-
-        public static Student MapToStudent(this GetStudentDto getStudentDto, Staff modifiedBy)
-        {
-            return new Student
-            {
-                UserId = getStudentDto.Id,
-                Name = getStudentDto.Name,
-                Roll = getStudentDto.Roll,
-                Email = getStudentDto.Email,
-                LastModifiedBy = modifiedBy,
+                CreatedAt = DateTimeOffset.UtcNow,
+                LastModifiedBy = createdBy,
                 LastModifiedAt = DateTimeOffset.UtcNow
             };
         }

@@ -11,10 +11,10 @@ namespace University.Application.Models.DTOs.StudentDTOs
 {
     public class GetStudentDto: BaseQueryDto, IStudentDto
     {
-        public string Name { get; set; }
-        public int Roll { get; set; }
+        public required string Name { get; set; }
+        public required int Roll { get; set; }
         public string? Email { get; set; }
-        public Staff EnrolledBy { get; set; }  //createdBy
+        public required Staff EnrolledBy { get; set; }  //createdBy
         public DateTimeOffset EnrolledAt { get; set; }
     }
 }
