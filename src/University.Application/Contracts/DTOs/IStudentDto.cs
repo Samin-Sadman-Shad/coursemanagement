@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using University.Application.Models.DTOs.Common;
 
-namespace University.Application.Models.DTOs.StudentDTOs
+namespace University.Application.Contracts.DTOs
 {
     public interface IStudentDto:IBaseDto
     {
