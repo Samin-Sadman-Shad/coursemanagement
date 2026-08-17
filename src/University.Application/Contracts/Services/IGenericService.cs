@@ -9,7 +9,7 @@ using University.Domain.Entities.Contract;
 
 namespace University.Application.Services.Contract
 {
-    public interface IGenericService<TEntity, TCreateDto, TGetDto, TUpdateDto> where TEntity:IBaseEntity 
+    public interface IGenericService<TEntity, TCreateDto, TGetDto, in TUpdateDto> where TEntity:IBaseEntity 
         where TCreateDto: ICreateDto
         where TGetDto: IQueryDto
         where TUpdateDto : IUpdateDto
@@ -18,7 +18,7 @@ namespace University.Application.Services.Contract
         Task<TGetDto?> GetByIdAsync(Guid id);
         Task<TGetDto> CreateAsync(TCreateDto dto, Staff createdBy);
         Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id, Staff UpdatedBy);
-        Task<TGetDto> DeleteAsync(Guid id);
+        Task<TGetDto> DeleteAsync(Guid id, Staff deletedBy);
 
     }
 }

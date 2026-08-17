@@ -9,7 +9,7 @@ namespace University.Application.Models.DTOs.StudentDTOs
 {
     internal static class StudentDtoMapper
     {
-        public static GetStudentDto MapToGetStudentDto(this Student student, Staff staff)
+        public static GetStudentDto MapToGetStudentDto(this Student student)
         {
             return new GetStudentDto
             {
@@ -18,7 +18,7 @@ namespace University.Application.Models.DTOs.StudentDTOs
                 Roll = student.Roll,
                 Email = student.Email,
                 EnrolledAt = student.CreatedAt,
-                EnrolledBy = student.CreatedBy ??= staff
+                EnrolledBy = student.CreatedBy 
             };
         }
 

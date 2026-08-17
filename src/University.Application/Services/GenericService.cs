@@ -11,13 +11,14 @@ using University.Domain.Entities.Contract;
 
 namespace University.Application.Services
 {
-    public abstract class GenericService<TEntity, TCreateDto, TGetDto, TUpdateDto> : IGenericService<TEntity, TCreateDto, TGetDto, TUpdateDto> 
+    public abstract class GenericService<TEntity, TCreateDto, TGetDto, TUpdateDto> 
+        : IGenericService<TEntity, TCreateDto, TGetDto, TUpdateDto> 
         where TEntity:IBaseEntity
         where TCreateDto : ICreateDto
         where TGetDto : IQueryDto
         where TUpdateDto : IUpdateDto
     {
-        private readonly IGenericRepository<TEntity> _repository;
+        protected readonly IGenericRepository<TEntity> _repository;
         protected GenericService(IGenericRepository<TEntity> repository)
         {
             _repository = repository;
@@ -42,7 +43,7 @@ namespace University.Application.Services
 
         }
 
-        public async Task<TGetDto> DeleteAsync(Guid id)
+        public async Task<TGetDto> DeleteAsync(Guid id, Staff deletedBy)
         {
             try
             {
