@@ -8,7 +8,7 @@ using University.Domain.Entities.BaseEntities;
 
 namespace University.Application.Models.DTOs.CourseDTOs
 {
-    public class UpdateCourseDto : BaseUpdateDto, ICourseDto
+    public class UpdateCourseTitleDto : BaseUpdateDto, ICourseDto
     {
         public required string CourseTitle { get ; set ; }
     }
