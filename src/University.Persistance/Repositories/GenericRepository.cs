@@ -22,7 +22,7 @@ namespace University.Persistance.Repositories
         {
 
              await _dbContext.AddAsync(entity);
-             await _dbContext.SaveChangesAsync();
+             //await _dbContext.SaveChangesAsync();
              return entity;
         }
 
@@ -32,7 +32,7 @@ namespace University.Persistance.Repositories
             if(entity != null)
             {
                 _dbContext.Remove(entity);
-                await _dbContext.SaveChangesAsync();
+                //await _dbContext.SaveChangesAsync();
                 return entity;
             }
             else
@@ -54,7 +54,7 @@ namespace University.Persistance.Repositories
         public async Task<T> UpdateAsync(T entity)
         {
             _dbContext.Attach(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            //await _dbContext.SaveChangesAsync();
             return entity;
         }
 
