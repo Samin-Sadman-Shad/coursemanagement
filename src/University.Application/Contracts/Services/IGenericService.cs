@@ -17,7 +17,7 @@ namespace University.Application.Services.Contract
         Task<List<TGetDto>> GetAllAsync();
         Task<TGetDto?> GetByIdAsync(Guid id);
         Task<TGetDto> CreateAsync(TCreateDto dto);
-        Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id, Staff UpdatedBy);
+        Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id);
         Task<TGetDto> DeleteAsync(Guid id, Staff deletedBy);
 
     }

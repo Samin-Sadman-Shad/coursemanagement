@@ -8,14 +8,14 @@ using University.Application.Utils;
 
 namespace University.Application.Models.DTOs.CreditWorkDTOs.Validators
 {
-    internal class UpdateCreditWorkHeadingValidator:AbstractValidator<UpdateCreditWorkHeadingDto>
+    public class UpdateCreditWorkHeadingValidator:AbstractValidator<UpdateCreditWorkHeadingDto>
     {
         public UpdateCreditWorkHeadingValidator()
         {
             RuleFor(cw => cw.Heading)
                .NotEmpty()
                .MaximumLength(10)
-               .WithMessage("{PropertyName} can not exceed 10 characters")
+               .WithMessage(CONST_STRING.PROPERTY_ERROR_MAX_LENGTH)
                .Must(heading => heading.All(char.IsLetter))
                .WithMessage(CONST_STRING.PROPERTY_ERROR_LETTERS_ONLY);
         }

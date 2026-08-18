@@ -5,14 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using University.Application.Contracts.DTOs;
 using University.Application.Models.DTOs.Common;
+using University.Application.Models.DTOs.CreditWorkDTOs;
+using University.Application.Models.DTOs.StudentDTOs;
 using University.Domain.Entities.BaseEntities;
 
-namespace University.Application.Models.DTOs.CreditEnrollmentDto
+namespace University.Application.Models.DTOs.CreditWorkEnrollmentDto
 {
     public class CreateCreditWorkEnrollmentDto:BaseCreateDto
     {
-        public required CreditWork CreditWork { get; set; }
-        public required Student Student { get; set; }
+        public required GetCreditWorkDto CreditWork { get; set; }
+        public required GetStudentDto Student { get; set; }
 
     }
 }

@@ -26,9 +26,9 @@ namespace University.Application.Services
 
         protected abstract TGetDto ToGetDto(TEntity entity);
         protected abstract TEntity ToEntity(TCreateDto dto);
-        protected abstract TEntity ApplyUpdate(TEntity entity, TUpdateDto dto, Staff updatedBy);
+        protected abstract TEntity ApplyUpdate(TEntity entity, TUpdateDto dto);
 
-        public async Task<TGetDto> CreateAsync(TCreateDto dto)
+        public virtual async Task<TGetDto> CreateAsync(TCreateDto dto)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace University.Application.Services
             throw new Exception($"Problem with fetching {nameof(TEntity)} with id {id}");
         }
 
-        public async Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id, Staff updatedBy)
+        public virtual async Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace University.Application.Services
                 {
                     throw new Exception("No Entity found");
                 }
-                ApplyUpdate(existingEntity, dto, updatedBy);
+                ApplyUpdate(existingEntity, dto);
                 await _repository.UpdateAsync(existingEntity);
                 return ToGetDto(existingEntity);
             }

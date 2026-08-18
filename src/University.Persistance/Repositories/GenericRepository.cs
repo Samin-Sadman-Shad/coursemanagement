@@ -57,5 +57,11 @@ namespace University.Persistance.Repositories
             await _dbContext.SaveChangesAsync();
             return entity;
         }
+
+        public async Task<bool> ExistsAsync(Guid id)
+        {
+            var entity = await GetByIdAsync(id);
+            return entity is not null;
+        }
     }
 }

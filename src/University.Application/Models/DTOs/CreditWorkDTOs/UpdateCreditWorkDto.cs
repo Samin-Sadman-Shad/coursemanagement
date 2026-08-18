@@ -8,10 +8,10 @@ using University.Application.Models.DTOs.Common;
 
 namespace University.Application.Models.DTOs.CreditWorkDTOs
 {
-    public class UpdateCreditWorkDto:BaseUpdateDto
+    public class UpdateCreditWorkDto:BaseUpdateDto, ICreditWorkDto
     {
-        public string? Heading { get; set; }
-        public int? Code { get; set; }
+        public required string Heading { get; set; } 
+        public required int Code { get; set; }
         public string? Description { get; set; }
     }
 }

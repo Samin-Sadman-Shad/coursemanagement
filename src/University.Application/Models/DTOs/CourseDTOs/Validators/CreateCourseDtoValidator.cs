@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace University.Application.Models.DTOs.CourseDTOs.Validators
 {
-    internal class CreateCourseDtoValidator:AbstractValidator<CreateCourseDto>
+    public class CreateCourseDtoValidator:AbstractValidator<CreateCourseDto>
     {
         public CreateCourseDtoValidator()
         {

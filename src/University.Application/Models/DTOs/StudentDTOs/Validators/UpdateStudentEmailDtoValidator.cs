@@ -8,7 +8,7 @@ using University.Application.Utils;
 
 namespace University.Application.Models.DTOs.StudentDTOs.Validators
 {
-    internal class UpdateStudentEmailDtoValidator:AbstractValidator<UpdateStudentEmailDto>
+    public class UpdateStudentEmailDtoValidator:AbstractValidator<UpdateStudentEmailDto>
     {
         public UpdateStudentEmailDtoValidator()
         {

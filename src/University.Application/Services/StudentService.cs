@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using University.Application.Contracts.DTOs;
 using University.Application.Contracts.Persistance;
 using University.Application.Contracts.Services;
 using University.Application.Models.DTOs.StudentDTOs;
+using University.Application.Models.DTOs.StudentDTOs.Validators;
 using University.Application.Services.Contract;
 using University.Domain.Entities.BaseEntities;
 
@@ -32,12 +34,23 @@ namespace University.Application.Services
             return dto.MapToStudent();
         }
 
-        protected override Student ApplyUpdate(Student entity, UpdateStudentEmailDto dto, Staff updatedBy)
+        protected override Student ApplyUpdate(Student entity, UpdateStudentEmailDto dto)
         {
             entity.Email = dto.Email;
             entity.LastModifiedAt = dto.LastModifiedAt;
-            entity.LastModifiedBy = updatedBy;
+            entity.LastModifiedBy = dto.LastModifiedBy;
             return entity;
+        }
+
+        public async override Task<GetStudentDto> CreateAsync(CreateStudentDto dto)
+        {
+            var validator = new CreateStudentDtoValidator();
+            var validationResult = await validator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                throw new InvalidDataContractException();
+            }
+            return await base.CreateAsync(dto);
         }
 
         public async Task<List<GetStudentDto>> GetPeersByStudentIdAsync(Guid studentId)

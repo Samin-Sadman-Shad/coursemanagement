@@ -8,7 +8,7 @@ using University.Application.Utils;
 
 namespace University.Application.Models.DTOs.CreditWorkDTOs.Validators
 {
-    internal class UpdateCreditWorkCodeDtoValidator:AbstractValidator<UpdateCreditWorkCodeDto>
+    public class UpdateCreditWorkCodeDtoValidator:AbstractValidator<UpdateCreditWorkCodeDto>
     {
         public UpdateCreditWorkCodeDtoValidator()
         {
