@@ -27,9 +27,9 @@ namespace University.Application.Services
             return entity.MapToGetStudentDto();
         }
 
-        protected override Student ToEntity(CreateStudentDto dto, Staff createdBy)
+        protected override Student ToEntity(CreateStudentDto dto)
         {
-            return dto.MapToStudentDto(createdBy, createdBy);
+            return dto.MapToStudent();
         }
 
         protected override Student ApplyUpdate(Student entity, UpdateStudentEmailDto dto, Staff updatedBy)

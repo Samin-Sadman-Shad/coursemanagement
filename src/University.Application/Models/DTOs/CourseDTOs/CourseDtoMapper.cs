@@ -37,15 +37,5 @@ namespace University.Application.Models.DTOs.CourseDTOs
                 LastModifiedAt = createCourseDto.CreatedAt
             };
         }
-
-        public static Course MaptoCourse(this UpdateCourseTitleDto updateCourseDto)
-        {
-            return new Course
-            {
-                Title = updateCourseDto.CourseTitle,
-                LastModifiedBy = updateCourseDto.LastModifiedBy,
-                LastModifiedAt = DateTimeOffset.UtcNow
-            };
-        }
     }
 }

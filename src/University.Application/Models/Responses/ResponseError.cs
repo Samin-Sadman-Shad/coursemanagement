@@ -9,7 +9,7 @@ namespace University.Application.Models.Responses
 {
     public class ResponseError
     {
-        public RepositoryEnum ErrorType { get; set; }
+        //public RepositoryEnum ErrorType { get; set; }
         public string ErrorMessage { get; set; }
     }
 }

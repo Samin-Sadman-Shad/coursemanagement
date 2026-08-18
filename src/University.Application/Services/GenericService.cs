@@ -25,14 +25,14 @@ namespace University.Application.Services
         }
 
         protected abstract TGetDto ToGetDto(TEntity entity);
-        protected abstract TEntity ToEntity(TCreateDto dto, Staff createdBy);
+        protected abstract TEntity ToEntity(TCreateDto dto);
         protected abstract TEntity ApplyUpdate(TEntity entity, TUpdateDto dto, Staff updatedBy);
 
-        public async Task<TGetDto> CreateAsync(TCreateDto dto, Staff createdBy)
+        public async Task<TGetDto> CreateAsync(TCreateDto dto)
         {
             try
             {
-                var entityToBeCreated = ToEntity(dto, createdBy);
+                var entityToBeCreated = ToEntity(dto);
                 await _repository.CreateAsync(entityToBeCreated);
                 return ToGetDto(entityToBeCreated);
             }

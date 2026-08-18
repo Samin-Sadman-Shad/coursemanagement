@@ -22,7 +22,7 @@ namespace University.Application.Models.DTOs.StudentDTOs
             };
         }
 
-        public static Student MapToStudent(this CreateStudentDto createStudentDto, Staff createdBy)
+        public static Student MapToStudent(this CreateStudentDto createStudentDto)
         {
             return new Student
             {
@@ -33,18 +33,6 @@ namespace University.Application.Models.DTOs.StudentDTOs
                 CreatedAt = createStudentDto.CreatedAt,
                 LastModifiedBy = createStudentDto.CreatedBy,
                 LastModifiedAt = createStudentDto.CreatedAt
-            };
-        }
-
-        public static Student MapToStudent(this UpdateStudentDto updateStudentDto)
-        {
-            return new Student
-            {
-                Name = updateStudentDto.Name,
-                Roll = updateStudentDto.Roll,
-                Email = updateStudentDto.Email,
-                LastModifiedBy = updateStudentDto.LastModifiedBy,
-                LastModifiedAt = updateStudentDto.LastModifiedAt 
             };
         }
 
