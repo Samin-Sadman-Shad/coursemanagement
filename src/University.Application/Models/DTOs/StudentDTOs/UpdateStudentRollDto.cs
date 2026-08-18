@@ -8,7 +8,7 @@ using University.Application.Models.DTOs.Common;
 
 namespace University.Application.Models.DTOs.StudentDTOs
 {
-    public class UpdateStudentRollDto:BaseUpdateDto, IStudentUpdateDto
+    public class UpdateStudentRollDto:BaseUpdateDto
     {
         public required int Roll { get; set; }
     }

@@ -8,7 +8,7 @@ using University.Application.Models.DTOs.Common;
 
 namespace University.Application.Models.DTOs.StudentDTOs
 {
-    public class UpdateStudentNameDto:BaseUpdateDto,  IStudentUpdateDto
+    public class UpdateStudentNameDto:BaseUpdateDto
     {
         public required string Name { get; set; }
     }

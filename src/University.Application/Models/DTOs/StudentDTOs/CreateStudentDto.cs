@@ -14,10 +14,5 @@ namespace University.Application.Models.DTOs.StudentDTOs
         public required string Name { get; set; }
         public required int Roll { get; set; }
         public string? Email { get; set; }
-
-        internal Student MapToStudentDto(Staff createdBy1, Staff createdBy2)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

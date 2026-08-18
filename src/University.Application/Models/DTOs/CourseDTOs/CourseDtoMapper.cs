@@ -38,7 +38,7 @@ namespace University.Application.Models.DTOs.CourseDTOs
             };
         }
 
-        public static Course MaptoCourse(this UpdateCourseDto updateCourseDto)
+        public static Course MaptoCourse(this UpdateCourseTitleDto updateCourseDto)
         {
             return new Course
             {
