@@ -63,5 +63,10 @@ namespace University.Persistance.Repositories
             var entity = await GetByIdAsync(id);
             return entity is not null;
         }
+
+        public virtual async Task<T?> GetByIdDetailAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

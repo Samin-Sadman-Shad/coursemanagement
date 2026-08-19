@@ -40,5 +40,14 @@ namespace University.Persistance.Repositories
                 .Where(cw => cw.CoursesOfCreditWork.Any(junction => junction.CourseId == courseId))
                 .ToListAsync();
         }
+
+        public async override Task<CreditWork?> GetByIdDetailAsync(Guid id)
+        {
+            return await _dbContext.CreditWorks
+                .Where(credit => credit.Id == id)
+                .Include(credit => credit.StudentsInCreditWork)
+                .Include(credit => credit.CoursesOfCreditWork)
+                .SingleOrDefaultAsync();
+        }
     }
 }

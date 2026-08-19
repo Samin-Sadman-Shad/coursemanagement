@@ -21,6 +21,8 @@ namespace University.Persistance.DI
             services.AddScoped<ICreditWorkRepository, CreditWorkRepository>();
             services.AddScoped<ICourseEnrollmentRepository, CourseEnrollmentRepository>();
             services.AddScoped<ICreditWorkEnrollmentRepository, CreditWorkEnrollmentRepository>();
+            services.AddScoped<ICourseCreditWorkRegistrationRepository, CourseCreditWorkRegistrationRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

@@ -15,7 +15,7 @@ namespace University.Application.Contracts.Persistance
 
         //all the courses of a gievn class
         Task<List<Course>> GetCoursesByCreditWorkIdAsync(Guid creditWorkId);
-        Task<CourseEnrollment?> GetEnrollment(Guid enrollmentId);
+        //Task<CourseEnrollment?> GetEnrollment(Guid enrollmentId);
 
     }
 }
