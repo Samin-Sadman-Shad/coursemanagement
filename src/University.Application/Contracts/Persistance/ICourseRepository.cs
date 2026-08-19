@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using University.Domain.Entities.BaseEntities;
+using University.Domain.Entities.JunctionEntities;
 
 namespace University.Application.Contracts.Persistance
 {
@@ -14,6 +15,7 @@ namespace University.Application.Contracts.Persistance
 
         //all the courses of a gievn class
         Task<List<Course>> GetCoursesByCreditWorkIdAsync(Guid creditWorkId);
+        Task<CourseEnrollment?> GetEnrollment(Guid enrollmentId);
 
     }
 }

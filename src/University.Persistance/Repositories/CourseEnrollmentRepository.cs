@@ -53,5 +53,26 @@ namespace University.Persistance.Repositories
             }
 
         }
+
+        public async Task<CourseEnrollment?> GetEnrollment(Guid enrollmentId)
+        {
+            return await _dbContext.FindAsync<CourseEnrollment>(enrollmentId);
+        }
+
+        public async Task<bool> DoesEnrollmentExist(Guid enrollmentId)
+        {
+            var entity = await GetEnrollment(enrollmentId);
+            return entity is not null;
+        }
+
+        public async Task<bool> RemoveCourseEnrollment(Guid enrollmentId)
+        {
+            var entity = await GetEnrollment(enrollmentId);
+            if(entity is not null)
+            {
+                _dbContext.Remove(entity);
+            }
+            return await DoesEnrollmentExist(enrollmentId);
+        }
     }
 }

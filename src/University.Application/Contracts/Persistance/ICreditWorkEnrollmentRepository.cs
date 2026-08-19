@@ -7,8 +7,11 @@ using University.Domain.Entities.JunctionEntities;
 
 namespace University.Application.Contracts.Persistance
 {
-    public interface ICreditWorkEnrollmentRepository
+    public interface ICreditWorkEnrollmentRepository:IEnrollment
     {
         Task<CreditWorkEnrollment> CreateCreditWorkEnrollment(CreditWorkEnrollment enrollment);
+        Task<bool> RemoveCreditWorkEnrollment(Guid enrollmentId);
+        Task<CreditWorkEnrollment?> GetEnrollment(Guid enrollmentId);
+
     }
 }

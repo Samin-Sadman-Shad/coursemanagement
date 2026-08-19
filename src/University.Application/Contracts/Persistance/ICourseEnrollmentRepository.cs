@@ -7,8 +7,9 @@ using University.Domain.Entities.JunctionEntities;
 
 namespace University.Application.Contracts.Persistance
 {
-    public interface ICourseEnrollmentRepository
+    public interface ICourseEnrollmentRepository:IEnrollment
     {
         Task<CourseEnrollment> CreateCourseEnrollment(CourseEnrollment enrollment);
+        Task<bool> RemoveCourseEnrollment(Guid enrollmentId);
     }
 }
