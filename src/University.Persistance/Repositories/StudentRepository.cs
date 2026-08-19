@@ -75,7 +75,6 @@ namespace University.Persistance.Repositories
         public override async Task<Student?> GetByIdDetailAsync(Guid id)
         {
             var student = await _dbContext.Students
-                .AsQueryable()
                 .Where(student => student.UserId == id)
                 .Include(student => student.CoursesEnrolled)
                 .Include(student => student.CreditWorksEnrolled)

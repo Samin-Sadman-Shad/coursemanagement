@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <Folder Include="DI\" />
+    <Folder Include="Features\Student\Handlers\Commands\" />
+    <Folder Include="Features\Student\Requests\Commands\" />
   </ItemGroup>
 
 </Project>
