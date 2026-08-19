@@ -14,6 +14,7 @@ namespace University.Application.Contracts.Persistance
         IStudentRepository StudentRepository { get; }
         ICreditWorkRepository CreditWorkRepository { get; }
         ICreditWorkEnrollmentRepository CreditWorkEnrollmentRepository { get; }
+        ICourseCreditWorkRegistrationRepository CourseCreditWorkRegistrationRepository { get;}
 
         Task SaveChangesAsync();
     }

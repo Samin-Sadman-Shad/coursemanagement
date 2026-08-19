@@ -11,11 +11,12 @@ namespace University.Persistance.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         //register for the repositories
-        private  ICourseRepository _courseRepository;
-        private  ICourseEnrollmentRepository _courseEnrollmentRepository;
-        private  IStudentRepository _studentRepository;
-        private  ICreditWorkRepository _creditWorkRepository;
-        private  ICreditWorkEnrollmentRepository _creditWorkEnrollmentRepository;
+        private  ICourseRepository? _courseRepository;
+        private  ICourseEnrollmentRepository? _courseEnrollmentRepository;
+        private  IStudentRepository? _studentRepository;
+        private  ICreditWorkRepository? _creditWorkRepository;
+        private  ICreditWorkEnrollmentRepository? _creditWorkEnrollmentRepository;
+        private ICourseCreditWorkRegistrationRepository? _courseCreditWorkRegistrationRepository;
 
         private  UniversityDbContext _dbContext;
 
@@ -37,6 +38,9 @@ namespace University.Persistance.Repositories
 
         public ICreditWorkEnrollmentRepository CreditWorkEnrollmentRepository => _creditWorkEnrollmentRepository ??=
             new CreditWorkEnrollmentRepository(_dbContext);
+
+        public ICourseCreditWorkRegistrationRepository CourseCreditWorkRegistrationRepository 
+            => _courseCreditWorkRegistrationRepository ??= new CourseCreditWorkRegistrationRepository(_dbContext);
 
         public void Dispose()
         {
