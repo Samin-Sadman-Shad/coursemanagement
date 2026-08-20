@@ -11,8 +11,8 @@ namespace University.Application.Models.DTOs.StudentDTOs
 {
     public class UpdateStudentDto : BaseUpdateDto, IStudentDto
     {
-        public string Name { get; set; } = String.Empty;
-        public int Roll { get  ; set  ; }
+        public required string Name { get; set; } 
+        public required int Roll { get  ; set  ; }
         public string? Email { get ; set ; }
     }
 }

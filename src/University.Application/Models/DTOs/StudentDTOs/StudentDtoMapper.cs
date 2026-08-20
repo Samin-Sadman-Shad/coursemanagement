@@ -59,5 +59,14 @@ namespace University.Application.Models.DTOs.StudentDTOs
             };
         }
 
+        public static void UpdateStudent(this UpdateStudentDto updateStudentDto, Student entity)
+        {
+            entity.Name = updateStudentDto.Name ;
+            entity.Roll = updateStudentDto.Roll ;
+            entity.Email = updateStudentDto.Email ?? entity.Email;
+            entity.LastModifiedAt = updateStudentDto.LastModifiedAt;
+            entity.LastModifiedBy = updateStudentDto.LastModifiedBy;
+        }
+
     }
 }
