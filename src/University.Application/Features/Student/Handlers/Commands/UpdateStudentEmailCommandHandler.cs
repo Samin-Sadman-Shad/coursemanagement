@@ -2,26 +2,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.Student.Requests.Commands;
-using University.Application.Models.DTOs.StudentDTOs;
 using University.Application.Models.DTOs.StudentDTOs.Validators;
 using University.Application.Models.Responses;
 
 namespace University.Application.Features.Student.Handlers.Commands
 {
-    public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand, BaseCommandResponse>
+    public class UpdateStudentEmailCommandHandler : IRequestHandler<UpdateStudentEmailCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateStudentCommandHandler(IUnitOfWork uow)
+        public UpdateStudentEmailCommandHandler(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = uow;
+            _unitOfWork = unitOfWork;
         }
-        public async Task<BaseCommandResponse> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
+        public async Task<BaseCommandResponse> Handle(UpdateStudentEmailCommand request, CancellationToken cancellationToken)
         {
             var response = new BaseCommandResponse
             {
@@ -29,14 +28,14 @@ namespace University.Application.Features.Student.Handlers.Commands
             };
             try
             {
-                var validator = new UpdateStudentDtoValidator();
-                var validationResult = await validator.ValidateAsync(request.UpdateStudentDto, cancellationToken);
+                var validator = new UpdateStudentEmailDtoValidator();
+                var validationResult = await validator.ValidateAsync(request.StudentEmailDto, cancellationToken);
                 if (!validationResult.IsValid)
                 {
                     response.IsSuccessful = false;
                     response.Status = HttpStatusCode.BadRequest;
-
-                    response.Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                    
+                    response.Errors = validationResult.Errors.Select(e=> e.ErrorMessage).ToList();
                     return response;
                 }
                 var studentRepository = _unitOfWork.StudentRepository;
@@ -45,14 +44,14 @@ namespace University.Application.Features.Student.Handlers.Commands
                 {
                     throw new FailToProcessCommandException();
                 }
-                request.UpdateStudentDto.UpdateStudent(entity);
+                entity.Email = request.StudentEmailDto.Email;
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.NoContent;
 
                 return response;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 throw new FailToProcessCommandException(ex);
             }

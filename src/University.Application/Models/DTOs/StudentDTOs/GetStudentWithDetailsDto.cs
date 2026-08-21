@@ -11,7 +11,7 @@ namespace University.Application.Models.DTOs.StudentDTOs
 {
     public class GetStudentWithDetailsDto:GetStudentDto
     {
-        public List<GetCourseDto> Courses { get; set; } = new List<GetCourseDto>();
+        public List<GetCourseWithDetailsDto> Courses { get; set; } = new List<GetCourseWithDetailsDto>();
         public List<GetCreditWorkDto> CreditWorks { get; set; } = new List<GetCreditWorkDto>();
     }
 }

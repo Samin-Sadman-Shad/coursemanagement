@@ -10,9 +10,9 @@ namespace University.Application.Models.DTOs.CourseDTOs
 {
     public static class CourseDtoMapper
     {
-        public static GetCourseDto MapToGetCourseDto(this Course course)
+        public static GetCourseWithDetailsDto MapToGetCourseDto(this Course course)
         {
-            return new GetCourseDto
+            return new GetCourseWithDetailsDto
             {
                 Id = course.Id,
                 CourseTitle = course.Title,
