@@ -13,31 +13,30 @@ using University.Application.Models.Responses;
 
 namespace University.Application.Features.Student.Handlers.Queries
 {
-    public class GetStudentListRequestHandler : IRequestHandler<GetStudentListRequest, BaseQueryListResponse<GetStudentDto>>
+    public class GetStudentsByCreditWorkIdRequestHandler : IRequestHandler<GetStudentsByCreditWorkIdRequest, BaseQueryListResponse<GetStudentDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public GetStudentListRequestHandler(IUnitOfWork uow)
+        public GetStudentsByCreditWorkIdRequestHandler(IUnitOfWork uow)
         {
             _unitOfWork = uow;
         }
-        public async Task<BaseQueryListResponse<GetStudentDto>> Handle(GetStudentListRequest request, CancellationToken cancellationToken)
+        public async Task<BaseQueryListResponse<GetStudentDto>> Handle(GetStudentsByCreditWorkIdRequest request, CancellationToken cancellationToken)
         {
             var response = new BaseQueryListResponse<GetStudentDto>();
             try
             {
                 var studentRepository = _unitOfWork.StudentRepository;
-                var entities = await studentRepository.GetAllAsync();
+                var entities = await studentRepository.GetStudentsByCourseIdAsync(request.CreditWorkId);
                 var records = entities.Select(entity => entity.MapToGetStudentDto()).ToList();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.OK;
                 response.Records = records;
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new FailToProcessQueryException(ex);
             }
-
         }
     }
 }

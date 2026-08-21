@@ -65,8 +65,9 @@ namespace University.Persistance.Repositories
                 .ToListAsync();   
         }
 
-        public async Task<Student?> GetStudentByRollAsync(int rollNo)
+        public async Task<Student?> GetStudentByRollAsync(int? rollNo)
         {
+            if (rollNo is null) return null;
             var student = await _dbContext.Students
                 .FirstOrDefaultAsync(s => s.Roll == rollNo);
             return student;
