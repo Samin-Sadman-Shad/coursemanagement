@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using University.Application.Models.DTOs.CreditWorkDTOs;
 using University.Application.Models.Responses;
 
-namespace University.Application.Features.CreditWork.Requests.Commands
+namespace University.Application.Features.CreditWork.Requests.Queries
 {
-    public class CreateCreditWorkCommand:IRequest<CreateCommandResponse<GetCreditWorkDto>>
+    public class GetCreditWorksByCourseIdRequest: IRequest<BaseQueryListResponse<GetCreditWorkDto>>
     {
-        public required CreateCreditWorkDto CreateCreditWorkDto { get; set; }
+        public Guid CourseId { get; set; }
     }
 }
