@@ -1,6 +1,7 @@
 using University.Application.DI;
 using University.Persistance.DI;
 using Microsoft.OpenApi.Models;
+using University.API.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +12,11 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 //register swagger generation service
-builder.Services.AddSwaggerGen(option =>
-{
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "University Management API", Version = "v1" });
-});
+//builder.Services.AddSwaggerGen(option =>
+//{
+//    option.SwaggerDoc("v1", new OpenApiInfo { Title = "University Management API", Version = "v1" });
+//});
+builder.Services.ConfigSwagger();
 
 builder.Services.AddPersistanceServices();
 builder.Services.AddApplicationServices();
