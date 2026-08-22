@@ -84,7 +84,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpGet("name/{name}")]
+        [HttpGet("name")]
         public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetByName([FromQuery]string name)
         {
             var request = new GetStudentsByNameRequest { SerachName = name };
@@ -106,7 +106,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpGet("roll/{roll}")]
+        [HttpGet("roll")]
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> GetByRoll([FromQuery]int roll)
         {
             var request = new GetStudentByPersonalInfoRequest { Roll = roll, Email = null };
@@ -128,7 +128,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpGet("email/{email}")]
+        [HttpGet("email")]
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> GetByEmail([FromQuery] string email)
         {
             var request = new GetStudentByPersonalInfoRequest { Roll = null, Email = email };
