@@ -15,4 +15,8 @@
     <ProjectReference Include="..\University.Domain\University.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\CourseEnrollment\Requests\Queries\" />
+  </ItemGroup>
+
 </Project>

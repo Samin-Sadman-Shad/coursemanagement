@@ -9,8 +9,8 @@ using University.Application.Models.Responses;
 
 namespace University.Application.Features.Course.Requests.Queries
 {
-    public class GetCourseWithDetailsRequest:IRequest<BaseQueryResponse<GetCourseWithDetailsDto>>
+    public class GetCourseListByStudentIdRequest:IRequest<BaseQueryListResponse<GetCourseDto>>
     {
-        public Guid CourseId {  get; set; }
+        public Guid StudentId { get; set; }
     }
 }
