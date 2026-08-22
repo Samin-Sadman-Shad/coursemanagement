@@ -49,12 +49,13 @@ namespace University.Persistance.Repositories
             var entity = _dbContext.Set<CourseCreditWork>()
                 .Where(cc => cc.CourseId == courseId && cc.CreditWorkId == creditWorkId)
                 .SingleOrDefault();
-            var entityId = entity.Id;
+            
             if(entity is null)
             {
                 throw new ArgumentException("Course is not registered to the credit");
             }
-             _dbContext.Set<CourseCreditWork>().Remove(entity);
+            var entityId = entity.Id;
+            _dbContext.Set<CourseCreditWork>().Remove(entity);
             return await ExistsAsync(entityId);
         }
 

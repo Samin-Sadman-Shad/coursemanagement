@@ -14,5 +14,9 @@ namespace University.Application.Contracts.Persistance
 
         //student request for own credit works
         Task<List<CreditWork>> GetCreditWorksByStudentIdAsync(Guid studentId);
+
+        Task<CreditWork> UpdateCreditWorkCode(CreditWork creditWork, int updatedCode);
+        Task<CreditWork> UpdateCreditWorkHeading(CreditWork creditWorkHeading, string updatedHeading);
+        Task<CreditWork> UpdateCreditWorkDescription(CreditWork creditWork, string description);
     }
 }

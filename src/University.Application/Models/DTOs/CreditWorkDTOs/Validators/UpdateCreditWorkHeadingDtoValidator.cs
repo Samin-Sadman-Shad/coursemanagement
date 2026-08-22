@@ -8,9 +8,9 @@ using University.Application.Utils;
 
 namespace University.Application.Models.DTOs.CreditWorkDTOs.Validators
 {
-    public class UpdateCreditWorkHeadingValidator:AbstractValidator<UpdateCreditWorkHeadingDto>
+    public class UpdateCreditWorkHeadingDtoValidator:AbstractValidator<UpdateCreditWorkHeadingDto>
     {
-        public UpdateCreditWorkHeadingValidator()
+        public UpdateCreditWorkHeadingDtoValidator()
         {
             RuleFor(cw => cw.Heading)
                .NotEmpty()

@@ -9,7 +9,7 @@ using University.Application.Models.Responses;
 
 namespace University.Application.Features.CreditWork.Requests.Commands
 {
-    public class UpdateCreditWorkHeadingRequest: IRequest<BaseCommandResponse>
+    public class UpdateCreditWorkHeadingCommand: IRequest<BaseCommandResponse>
     {
         public Guid CreditWorkId { get; set; }
         public required UpdateCreditWorkHeadingDto CreditWorkDto { get; set; }

@@ -51,5 +51,14 @@ namespace University.Application.Models.DTOs.CreditWorkDTOs
                 CreatedAt = createCreditWorkDto.CreatedAt
             };
         }
+
+        public static void UpdateCreditWork(this UpdateCreditWorkDto updateCreditWorkDto, CreditWork entity)
+        {
+            entity.Code = updateCreditWorkDto.Code;
+            entity.Heading = updateCreditWorkDto.Heading;
+            entity.Description = updateCreditWorkDto.Description;
+            entity.LastModifiedBy = updateCreditWorkDto.LastModifiedBy;
+            entity.LastModifiedAt = updateCreditWorkDto.LastModifiedAt;
+        }
     }
 }

@@ -49,5 +49,26 @@ namespace University.Persistance.Repositories
                 .Include(credit => credit.CoursesOfCreditWork)
                 .SingleOrDefaultAsync();
         }
+
+        public async Task<CreditWork> UpdateCreditWorkCode(CreditWork creditWork, int updatedCode)
+        {
+            creditWork.Code = updatedCode;
+            _dbContext.Attach(creditWork).State = EntityState.Modified;
+            return creditWork;
+        }
+
+        public async Task<CreditWork> UpdateCreditWorkHeading(CreditWork creditWork, string updatedHeading)
+        {
+            creditWork.Heading = updatedHeading;
+            _dbContext.Attach(creditWork).State = EntityState.Modified;
+            return creditWork;
+        }
+
+        public async Task<CreditWork> UpdateCreditWorkDescription(CreditWork creditWork, string description)
+        {
+            creditWork.Description = description;
+            _dbContext.Attach(creditWork).State = EntityState.Modified;
+            return creditWork;
+        }
     }
 }

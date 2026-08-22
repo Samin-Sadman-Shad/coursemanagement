@@ -10,6 +10,6 @@ namespace University.Application.Features.CreditWork.Requests.Commands
 {
     public class DeleteCreditWorkCommand:IRequest<BaseCommandResponse>
     {
-        public Guid Id { get; set; }
+        public Guid CreditWorkId { get; set; }
     }
 }

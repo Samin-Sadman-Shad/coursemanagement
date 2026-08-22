@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,30 +8,31 @@ using System.Text;
 using System.Threading.Tasks;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
-using University.Application.Features.Student.Requests.Commands;
-using University.Application.Models.DTOs.StudentDTOs;
+using University.Application.Features.CreditWork.Requests.Commands;
+using University.Application.Models.DTOs.CreditWorkDTOs;
+using University.Application.Models.DTOs.CreditWorkDTOs.Validators;
 using University.Application.Models.DTOs.StudentDTOs.Validators;
 using University.Application.Models.Responses;
 
-namespace University.Application.Features.Student.Handlers.Commands
+namespace University.Application.Features.CreditWork.Handlers.Commands
 {
-    public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand, BaseCommandResponse>
+    public class UpdateCreditWorkCommandHandler : IRequestHandler<UpdateCreditWorkCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateStudentCommandHandler(IUnitOfWork uow)
+        public UpdateCreditWorkCommandHandler(IUnitOfWork uow)
         {
             _unitOfWork = uow;
         }
-        public async Task<BaseCommandResponse> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
+        public async Task<BaseCommandResponse> Handle(UpdateCreditWorkCommand request, CancellationToken cancellationToken)
         {
             var response = new BaseCommandResponse
             {
-                RecordId = request.StudentId
+                RecordId = request.CreditWorkId
             };
             try
             {
-                var validator = new UpdateStudentDtoValidator();
-                var validationResult = await validator.ValidateAsync(request.UpdateStudentDto, cancellationToken);
+                var validator = new UpdateCreditWorkDtoValidator();
+                var validationResult = await validator.ValidateAsync(request.CreditWorkDto, cancellationToken);
                 if (!validationResult.IsValid)
                 {
                     response.IsSuccessful = false;
@@ -39,13 +41,13 @@ namespace University.Application.Features.Student.Handlers.Commands
                     response.Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                     return response;
                 }
-                var studentRepository = _unitOfWork.StudentRepository;
-                var entity = await studentRepository.GetByIdAsync(request.StudentId);
+                var creditWorkRepository = _unitOfWork.CreditWorkRepository;
+                var entity = await creditWorkRepository.GetByIdAsync(request.CreditWorkId);
                 if (entity is null)
                 {
                     throw new NotFoundException();
                 }
-                request.UpdateStudentDto.UpdateStudent(entity);
+                request.CreditWorkDto.UpdateCreditWork(entity);
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.NoContent;
@@ -56,7 +58,6 @@ namespace University.Application.Features.Student.Handlers.Commands
             {
                 throw new FailToProcessCommandException(ex);
             }
-
         }
     }
 }

@@ -14,5 +14,7 @@ namespace University.Application.Utils
         public static string PROPERTY_ERROR_LETTERS_ONLY = "{PropertyName can contains only letters}";
         public static string PROPERTY_ERROR_ALPHA_NUMERIC_ONLY = "The {PropertyName} can contains only alphanumeric characters";
         public static string PROPERTY_ERROR_VALID_EMAIL = "{PropertyName} is not a valid email address";
+
+        public static string PROPERTY_ERROR_MIN_LENGTH = "{PropertyName} can not be less than {ComparisonValue} characters";
     }
 }
