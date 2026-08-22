@@ -11,6 +11,6 @@ namespace University.Application.Features.Student.Requests.Commands
 {
     public class CreateStudentCommand:IRequest<CreateCommandResponse<GetStudentDto>>
     {
-        public required CreateStudentDto createStudentDto { get; set; }
+        public required CreateStudentDto CreateStudentDto { get; set; }
     }
 }

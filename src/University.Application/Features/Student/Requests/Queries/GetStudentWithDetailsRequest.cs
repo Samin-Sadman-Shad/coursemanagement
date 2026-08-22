@@ -11,7 +11,7 @@ namespace University.Application.Features.Student.Requests.Queries
 {
     public class GetStudentWithDetailsRequest:IRequest<BaseQueryResponse<GetStudentWithDetailsDto>>
     {
-        public Guid studentId { get; set; }
+        public Guid StudentId { get; set; }
 
     }
 }

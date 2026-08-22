@@ -27,7 +27,7 @@ namespace University.Application.Features.Student.Handlers.Queries
             try
             {
                 var studentRepository = _unitOfWork.StudentRepository;
-                var student = await studentRepository.GetByIdDetailAsync(request.studentId);
+                var student = await studentRepository.GetByIdDetailAsync(request.StudentId);
                 if(student is not null)
                 {
                     response.Status = HttpStatusCode.Accepted;

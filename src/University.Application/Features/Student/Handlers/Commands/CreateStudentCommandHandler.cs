@@ -28,7 +28,7 @@ namespace University.Application.Features.Student.Handlers.Commands
             try
             {
                 var studentRepository = _unitOfWork.StudentRepository;
-                var dto = request.createStudentDto;
+                var dto = request.CreateStudentDto;
                 var validator = new CreateStudentDtoValidator();
                 var validationResult = await validator.ValidateAsync(dto);
                 if (!validationResult.IsValid)
