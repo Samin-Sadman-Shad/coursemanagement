@@ -27,7 +27,7 @@ namespace University.Application.Models.DTOs.StudentDTOs
         public static GetStudentWithDetailsDto MapToGetStudentWithDetailsDto(this Student student)
         {
             var courses = student.CoursesEnrolled.Select(enroll => enroll.Course)
-                .Select<Course, GetCourseWithDetailsDto>(course => course.MapToGetCourseDto()).ToList();
+                .Select<Course, GetCourseDto>(course => course.MapToGetCourseDto()).ToList();
 
             var creditWorks = student.CreditWorksEnrolled.Select(enroll => enroll.CreditWork)
                 .Select(creditWork => creditWork.MapToGetCreditWorkDto()).ToList();

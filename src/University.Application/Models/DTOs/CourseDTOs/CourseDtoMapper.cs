@@ -10,7 +10,7 @@ namespace University.Application.Models.DTOs.CourseDTOs
 {
     public static class CourseDtoMapper
     {
-        public static GetCourseWithDetailsDto MapToGetCourseDto(this Course course)
+        public static GetCourseWithDetailsDto MapToGetCourseWithDetailsDto(this Course course)
         {
             return new GetCourseWithDetailsDto
             {
@@ -23,6 +23,15 @@ namespace University.Application.Models.DTOs.CourseDTOs
                 //    Description = cw.Description,
                 //    MaxScore = cw.MaxScore
                 //}).ToList()
+            };
+        }
+
+        public static GetCourseDto MapToGetCourseDto(this Course course)
+        {
+            return new GetCourseDto
+            {
+                Id = course.Id,
+                CourseTitle = course.Title,
             };
         }
 

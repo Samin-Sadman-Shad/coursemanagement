@@ -9,7 +9,7 @@ using University.Application.Models.Responses;
 
 namespace University.Application.Features.CreditWork.Requests.Queries
 {
-    public class GetCreditWorkWithDetails:IRequest<BaseQueryResponse<GetCreditWorkWithDetailsDto>>
+    public class GetCreditWorkWithDetailsRequest:IRequest<BaseQueryResponse<GetCreditWorkWithDetailsDto>>
     {
         public Guid CreditWorkId { get; set; }
     }
