@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using University.Application.Contracts.Identity;
@@ -20,16 +23,145 @@ namespace University.Identity.Services
             SignInManager<ApplicationUser> signInManager,
             JwtSettingsOptions jwtSettings)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _jwtSettings= jwtSettings;
+        }
+        public async Task<AuthResponse> Login(AuthRequest request)
+        {
+            var response = new AuthResponse();
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if(user is null)
+            {
+                response.IsRegistered = false;
+                response.AuthError = "No user with this email has registered";
+                return response;
+            }
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, true, false);
+            if(result is null)
+            {
+                response.IsRegistered = false;
+                response.IsAllowedToLogin = false;
+                response.AuthError = "User can not sign in";
+            }
+            else if (result.Succeeded)
+            {
+                var jwt = await GenerateTokenAsync(user);
+                response.Id = user.Id;
+                response.UserName = user.UserName;
+                response.Email = user.Email;
+                response.Token = new JwtSecurityTokenHandler().WriteToken(jwt);
+                response.IsRegistered = true;
+                response.IsAllowedToLogin = true;
+
+                return response;
+            }
+            else if (result.IsNotAllowed)
+            {
+                response.IsAllowedToLogin = false;
+                response.AuthError = "User is not allowed";
+            }
+            else if (result.IsLockedOut)
+            {
+                response.IsAllowedToLogin = false;
+                response.AuthError = "User is not allowed";
+            }
+            return response;
             
         }
-        public Task<AuthResponse> Login(AuthRequest request)
+
+        public async Task<RegistrationResponse> Register(RegistrationRequest request)
         {
-            throw new NotImplementedException();
+            var response = new RegistrationResponse();
+            var validator = new RegistrationRequestValidator();
+            var validationResult = await validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                response.IsSuccessful = false;
+                response.Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return response;
+            }
+            var userByName = await _userManager.FindByNameAsync(request.UserName);
+            if(userByName is not null)
+            {
+                response.IsSuccessful = false;
+                response.Errors.Add("User with this username already registered");
+                return response;
+            }
+
+            var userByEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (userByEmail is not null)
+            {
+                response.IsSuccessful = false;
+                response.Errors.Add("User with this email already registered");
+                return response;
+            }
+
+            var user = new ApplicationUser
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.UserName ?? request.FirstName + request.LastName,
+            };
+            var passwordHash = _userManager.PasswordHasher.HashPassword(user, request.Password);
+            user.PasswordHash = passwordHash;
+
+            var result = await _userManager.CreateAsync(user);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, request.Role.ToString());
+                response.IsSuccessful = true;
+                response.UserId = user.Id;
+                return response;
+            }
+            else
+            {
+                response.IsSuccessful = false;
+                response.Errors = result.Errors.Select(e => e.Description).ToList();
+                return response;
+            }
         }
 
-        public Task<RegistrationResponse> Register(RegistrationRequest request)
+        private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(user.UserName))
+                throw new InvalidOperationException("User username is required.");
+
+            if (string.IsNullOrWhiteSpace(user.Email))
+                throw new InvalidOperationException("User email is required.");
+            //generate user claims
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var roleClaims = new List<Claim>();
+            foreach (var role in roles) //add roles from the request
+            {
+                roleClaims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var claims = new Claim[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub,  user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
+                new Claim(CustomClaimTypes.Uid, user.Id)
+            }.Union(userClaims).Union(roleClaims);
+
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+
+            //generate the token
+            JwtSecurityToken token = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes),
+                signingCredentials: signingCredentials);
+
+            return token;
         }
     }
 }

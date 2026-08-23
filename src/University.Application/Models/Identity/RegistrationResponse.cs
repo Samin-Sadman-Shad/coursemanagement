@@ -8,10 +8,10 @@ namespace University.Application.Models.Identity
 {
     public class RegistrationResponse
     {
-        public Guid UserId { get; set; }
+        public string UserId { get; set; } = String.Empty;
         public bool IsSuccessful { get; set; }
-        private string? _error;
-        public string? Error
+        private List<string> _errors = new List<string>();
+        public List<string> Errors
         {
             get
             {
@@ -21,7 +21,7 @@ namespace University.Application.Models.Identity
                 }
                 else
                 {
-                    return _error;
+                    return _errors;
                 }
             }
             set
@@ -32,7 +32,7 @@ namespace University.Application.Models.Identity
                 }
                 else
                 {
-                    _error = value;
+                    _errors = value;
                 }
             }
         }

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Models.Identity;
+using University.Identity.Models;
 
 namespace University.Identity.Configurations
 {
@@ -17,12 +19,12 @@ namespace University.Identity.Configurations
                 new IdentityRole
                 {
                     Id = "9FAA56A1-53A5-4920-AB1D-C877494EC832",
-                    Name = "STAFF",
+                    Name = RoleEnum.STAFF.ToString(),
                 },
                 new IdentityRole
                 {
                     Id = "05269E2A-75EE-4DB1-B1C1-4CD0B728EB53",
-                    Name = "STUDENT"
+                    Name = RoleEnum.STUDENT.ToString()
                 }
              );
         }

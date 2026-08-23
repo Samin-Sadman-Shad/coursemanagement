@@ -14,5 +14,7 @@ namespace University.Application.Models.Identity
         public required string Password { get; set; }
 
         public required string UserName { get; set; }
+
+        public required RoleEnum Role { get; set; }
     }
 }
