@@ -5,14 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using University.Application.Contracts.DTOs;
+using University.Application.Contracts.Persistance;
 using University.Application.Utils;
 
 namespace University.Application.Models.DTOs.CreditWorkDTOs.Validators
 {
     public class ICreditWorkDtoValidator:AbstractValidator<ICreditWorkDto>
     {
-        public ICreditWorkDtoValidator()
+        private IUnitOfWork _unitOfWork { get; set; }
+        public ICreditWorkDtoValidator(IUnitOfWork uow)
         {
+            _unitOfWork = uow;
             RuleFor(cw => cw.Heading)
                 .NotEmpty()
                 .MaximumLength(10)
@@ -22,7 +25,14 @@ namespace University.Application.Models.DTOs.CreditWorkDTOs.Validators
 
             RuleFor(cw => cw.Code)
                 .NotEmpty()
-                .WithMessage(CONST_STRING.PROPERTY_ERROR_EMPTY);
+                .WithMessage(CONST_STRING.PROPERTY_ERROR_EMPTY)
+                .MustAsync(async (dto, code, cancellation) =>
+                    {
+                        var exist = await _unitOfWork.CreditWorkRepository.DoesCreditWorkTitleExistAsync(dto.Heading, code);
+                        return !exist;
+                    }
+                )
+            .WithMessage(CONST_STRING.PROPERTY_ERROR_DUPLICATE);
 
             RuleFor(cw => cw.Description)
                 .MaximumLength(100)

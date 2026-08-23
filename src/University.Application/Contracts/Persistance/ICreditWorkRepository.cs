@@ -18,5 +18,10 @@ namespace University.Application.Contracts.Persistance
         Task<CreditWork> UpdateCreditWorkCode(CreditWork creditWork, int updatedCode);
         Task<CreditWork> UpdateCreditWorkHeading(CreditWork creditWorkHeading, string updatedHeading);
         Task<CreditWork> UpdateCreditWorkDescription(CreditWork creditWork, string description);
+
+        Task<bool> DoesCreditWorkTitleExistAsync(string heading, int code, Guid? excludeId = null);
+
+        Task<string> GetCreditWorkHeading(Guid creditWorkId);
+        Task<string> GetCreditWorkCode(Guid creditWorkId);
     }
 }

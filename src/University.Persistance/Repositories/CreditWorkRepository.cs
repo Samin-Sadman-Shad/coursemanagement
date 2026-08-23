@@ -70,5 +70,28 @@ namespace University.Persistance.Repositories
             _dbContext.Attach(creditWork).State = EntityState.Modified;
             return creditWork;
         }
+
+        public async Task<bool> DoesCreditWorkTitleExistAsync(string heading, int code, Guid? excludeId = null)
+        {
+            return  await _dbContext.CreditWorks
+                .Where(cw => excludeId == null || cw.Id != excludeId)
+                .AnyAsync(cw => cw.Heading == heading && cw.Code == code);
+        }
+
+        public async Task<string> GetCreditWorkHeading(Guid creditWorkId)
+        {
+            var cw = await _dbContext.CreditWorks
+                .Where(c => c.Id == creditWorkId)
+                .SingleAsync();
+            return cw.Heading;
+        }
+
+        public async Task<string> GetCreditWorkCode(Guid creditWorkId)
+        {
+            var cw = await _dbContext.CreditWorks
+                    .Where(c => c.Id == creditWorkId)
+                    .SingleAsync();
+            return cw.Code.ToString();
+        }
     }
 }

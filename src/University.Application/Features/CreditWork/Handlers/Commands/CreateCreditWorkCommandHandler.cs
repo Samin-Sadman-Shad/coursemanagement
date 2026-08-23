@@ -26,7 +26,7 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
             var response = new CreateCommandResponse<GetCreditWorkDto>();
             try
             {
-                var validator = new CreateCreditWorkDtoValidator();
+                var validator = new CreateCreditWorkDtoValidator(_unitOfWork);
                 var validationResult = await validator.ValidateAsync(request.CreateCreditWorkDto, cancellationToken);
                 if (!validationResult.IsValid)
                 {

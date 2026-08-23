@@ -29,7 +29,7 @@ namespace University.Application.Features.Student.Handlers.Commands
             {
                 var studentRepository = _unitOfWork.StudentRepository;
                 var dto = request.CreateStudentDto;
-                var validator = new CreateStudentDtoValidator();
+                var validator = new CreateStudentDtoValidator(_unitOfWork);
                 var validationResult = await validator.ValidateAsync(dto);
                 if (!validationResult.IsValid)
                 {

@@ -44,12 +44,12 @@ namespace University.Application.Services
 
         public async override Task<GetStudentDto> CreateAsync(CreateStudentDto dto)
         {
-            var validator = new CreateStudentDtoValidator();
-            var validationResult = await validator.ValidateAsync(dto);
-            if (!validationResult.IsValid)
-            {
-                throw new InvalidDataContractException();
-            }
+            //var validator = new CreateStudentDtoValidator();
+            //var validationResult = await validator.ValidateAsync(dto);
+            //if (!validationResult.IsValid)
+            //{
+            //    throw new InvalidDataContractException();
+            //}
             return await base.CreateAsync(dto);
         }
 

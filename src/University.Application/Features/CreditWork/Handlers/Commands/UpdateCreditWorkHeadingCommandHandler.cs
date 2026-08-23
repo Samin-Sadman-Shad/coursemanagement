@@ -29,7 +29,7 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
             };
             try
             {
-                var validator = new UpdateCreditWorkHeadingDtoValidator();
+                var validator = new UpdateCreditWorkHeadingDtoValidator(_unitOfWork, request.CreditWorkId);
                 var validationResult = await validator.ValidateAsync(request.CreditWorkDto, cancellationToken);
                 if (!validationResult.IsValid)
                 {

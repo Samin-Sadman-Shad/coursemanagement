@@ -29,7 +29,7 @@ namespace University.Application.Features.Student.Handlers.Commands
             };
             try
             {
-                var validator = new UpdateStudentDtoValidator();
+                var validator = new UpdateStudentDtoValidator(_unitOfWork);
                 var validationResult = await validator.ValidateAsync(request.UpdateStudentDto, cancellationToken);
                 if (!validationResult.IsValid)
                 {

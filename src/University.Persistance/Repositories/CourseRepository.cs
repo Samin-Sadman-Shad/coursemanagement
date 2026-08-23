@@ -50,5 +50,12 @@ namespace University.Persistance.Repositories
             return course;
 
         }
+
+        public async Task<bool> DoesCourseNameExistsAsync(string courseName, Guid? ExcludedId)
+        {
+            return await _dbContext.Courses
+                .Where(c => ExcludedId == null || c.Id != ExcludedId)
+                .AnyAsync(c => c.Title == courseName);
+        }
     }
 }

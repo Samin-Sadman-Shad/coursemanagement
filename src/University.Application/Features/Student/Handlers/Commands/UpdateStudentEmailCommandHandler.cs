@@ -28,7 +28,7 @@ namespace University.Application.Features.Student.Handlers.Commands
             };
             try
             {
-                var validator = new UpdateStudentEmailDtoValidator();
+                var validator = new UpdateStudentEmailDtoValidator(_unitOfWork);
                 var validationResult = await validator.ValidateAsync(request.StudentEmailDto, cancellationToken);
                 if (!validationResult.IsValid)
                 {

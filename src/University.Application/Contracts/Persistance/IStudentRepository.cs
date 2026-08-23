@@ -24,5 +24,7 @@ namespace University.Application.Contracts.Persistance
         Task<List<Student>> GetStudentsByNameAsync(string name);
 
         Task<Student?> GetStudentByRollAsync(int? rollNo);
+
+        Task<bool> DoesEmailExistAsync(string email, Guid? excludeUserId = null);
     }
 }

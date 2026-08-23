@@ -31,7 +31,7 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
             };
             try
             {
-                var validator = new UpdateCreditWorkDtoValidator();
+                var validator = new UpdateCreditWorkDtoValidator(_unitOfWork);
                 var validationResult = await validator.ValidateAsync(request.CreditWorkDto, cancellationToken);
                 if (!validationResult.IsValid)
                 {

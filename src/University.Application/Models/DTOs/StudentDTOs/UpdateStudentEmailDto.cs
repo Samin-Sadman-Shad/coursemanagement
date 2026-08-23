@@ -10,6 +10,7 @@ namespace University.Application.Models.DTOs.StudentDTOs
 {
     public class UpdateStudentEmailDto:BaseUpdateDto
     {
+        public Guid StudentId { get; set; }
         public required string Email { get; set; }
     }
 }

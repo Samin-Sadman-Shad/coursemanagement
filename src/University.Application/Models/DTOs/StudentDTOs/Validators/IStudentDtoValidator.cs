@@ -5,14 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using University.Application.Contracts.DTOs;
+using University.Application.Contracts.Persistance;
 using University.Application.Utils;
 
 namespace University.Application.Models.DTOs.StudentDTOs.Validators
 {
     public class IStudentDtoValidator:AbstractValidator<IStudentDto>
     {
-        public IStudentDtoValidator()
+        private readonly IUnitOfWork _unitOfWork;
+        public IStudentDtoValidator(IUnitOfWork uow)
         {
+            _unitOfWork = uow;
             RuleFor(dto => dto.Name)
                 .NotEmpty()
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_EMPTY)
@@ -23,7 +26,14 @@ namespace University.Application.Models.DTOs.StudentDTOs.Validators
 
             RuleFor(dto => dto.Email)
                 .EmailAddress()
-                .WithMessage(CONST_STRING.PROPERTY_ERROR_VALID_EMAIL);
+                .WithMessage(CONST_STRING.PROPERTY_ERROR_VALID_EMAIL)
+                .MustAsync(async (email, token) =>
+                {
+                    var emailExist = await _unitOfWork.StudentRepository.DoesEmailExistAsync(email);
+                    return !emailExist;
+                })
+                .WithMessage(CONST_STRING.PROPERTY_ERROR_DUPLICATE)
+                .When(dto => !string.IsNullOrWhiteSpace(dto.Email));
 
             RuleFor(dto => dto.Roll)
                 .NotEmpty()

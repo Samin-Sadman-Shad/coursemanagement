@@ -83,5 +83,12 @@ namespace University.Persistance.Repositories
             return student;
 
         }
+
+        public async Task<bool> DoesEmailExistAsync(string email, Guid? excludeUserId = null)
+        {
+            return await _dbContext.Students
+                .Where(s => excludeUserId == null || s.UserId != excludeUserId)
+                .AnyAsync(s => s.Email == email);
+        }
     }
 }
