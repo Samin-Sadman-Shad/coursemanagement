@@ -16,8 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\CourseCreditWorkRegistration\Handlers\Commands\" />
     <Folder Include="Features\CourseEnrollment\Requests\Queries\" />
-    <Folder Include="Features\CreditWork\Handlers\Commands\" />
+    <Folder Include="Features\CreditWorkEnrollment\Handlers\" />
   </ItemGroup>
 
 </Project>
