@@ -37,14 +37,8 @@ namespace University.Identity.Services
                 response.AuthError = "No user with this email has registered";
                 return response;
             }
-            var result = await _signInManager.PasswordSignInAsync(user, request.Password, true, false);
-            if(result is null)
-            {
-                response.IsRegistered = false;
-                response.IsAllowedToLogin = false;
-                response.AuthError = "User can not sign in";
-            }
-            else if (result.Succeeded)
+            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+             if (result.Succeeded)
             {
                 var jwt = await GenerateTokenAsync(user);
                 response.Id = user.Id;
@@ -70,6 +64,15 @@ namespace University.Identity.Services
             
         }
 
+        public Task<LogoutResponse> Logout()
+        {
+            return Task.FromResult(new LogoutResponse
+            {
+                IsSuccessful = true,
+                Message = "Logout successful."
+            });
+        }
+
         public async Task<RegistrationResponse> Register(RegistrationRequest request)
         {
             var response = new RegistrationResponse();
@@ -81,13 +84,13 @@ namespace University.Identity.Services
                 response.Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 return response;
             }
-            var userByName = await _userManager.FindByNameAsync(request.UserName);
-            if(userByName is not null)
-            {
-                response.IsSuccessful = false;
-                response.Errors.Add("User with this username already registered");
-                return response;
-            }
+            //var userByName = await _userManager.FindByNameAsync(request.UserName); //only email is unique
+            //if(userByName is not null)
+            //{
+            //    response.IsSuccessful = false;
+            //    response.Errors.Add("User with this username already registered");
+            //    return response;
+            //}
 
             var userByEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userByEmail is not null)
@@ -104,10 +107,8 @@ namespace University.Identity.Services
                 LastName = request.LastName,
                 UserName = request.UserName ?? request.FirstName + request.LastName,
             };
-            var passwordHash = _userManager.PasswordHasher.HashPassword(user, request.Password);
-            user.PasswordHash = passwordHash;
 
-            var result = await _userManager.CreateAsync(user);
+            var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, request.Role.ToString());
@@ -141,12 +142,11 @@ namespace University.Identity.Services
 
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub,  user.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub,  user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-                new Claim(CustomClaimTypes.Uid, user.Id)
             }.Union(userClaims).Union(roleClaims);
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
