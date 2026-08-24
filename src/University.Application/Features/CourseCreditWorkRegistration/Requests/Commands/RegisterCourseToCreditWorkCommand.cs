@@ -9,7 +9,7 @@ using University.Application.Models.Responses;
 
 namespace University.Application.Features.CourseCreditWorkRegistration.Requests.Commands
 {
-    public class RegisterCourseToCreditWorkCommand:IRequest<CreateCommandResponse<GetCourseToCreditWorkMapDto>>
+    public class RegisterCourseToCreditWorkCommand:IRequest<BaseCommandResponse>
     {
         public required CourseCreditWorkRegistrationDto courseCreditWorkDto { get; set; }
     }

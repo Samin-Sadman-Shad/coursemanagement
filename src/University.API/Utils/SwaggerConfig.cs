@@ -36,7 +36,7 @@ namespace University.API.Utils
                         new List<string>()
                     }
                 });
-                c.SwaggerDoc("v2", new OpenApiInfo { Title = "LeaveManagement", Version = "v2" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "UniversityManagement API", Version = "v1" });
                 c.CustomSchemaIds(GenerateSchemaId);
             });
             return services;

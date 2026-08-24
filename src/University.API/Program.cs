@@ -13,7 +13,12 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .Enrich.FromLogContext()
     .Enrich.WithMachineName()
     .Enrich.WithProperty("Application", "University.Api")
-    .WriteTo.Console(new CompactJsonFormatter()));
+    //.WriteTo.Console(new CompactJsonFormatter()));
+    .WriteTo.Console
+    (
+        outputTemplate:
+        "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+    ));
 
 // Add services to the container.
 
@@ -51,7 +56,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(ui =>
     {
         //access swagger
-        ui.SwaggerEndpoint("/swagger/v1/swagger.json", "University API"); 
+        ui.SwaggerEndpoint("/swagger/v1/swagger.json", "UniversityManagement API"); 
     });
 }
 

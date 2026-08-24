@@ -37,7 +37,7 @@ namespace University.API.Controllers
             return ToActionResult(response);
         }
 
-        [HttpGet]
+        [HttpGet("class")]
         public async Task<ActionResult<BaseQueryListResponse<GetCourseDto>>> GetByCreditWorkId([FromQuery]Guid creditWorkId)
         {
             var request = new GetCourseListByCreditWorkIdRequest { CreditWorkId = creditWorkId };
@@ -45,7 +45,7 @@ namespace University.API.Controllers
             return ToActionResult(response);
         }
 
-        [HttpGet]
+        [HttpGet("student")]
         public async Task<ActionResult<BaseQueryListResponse<GetCourseDto>>> GetByStudentId([FromQuery]Guid studentId)
         {
             var request = new GetCourseListByStudentIdRequest { StudentId = studentId };
