@@ -12,7 +12,7 @@ namespace University.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController : ControllerBase
+    public class StudentController : ApiControllerBase
     {
         private readonly IMediator _mediator;
         public StudentController(IMediator mediator)
@@ -24,18 +24,8 @@ namespace University.API.Controllers
         [HttpGet]
         public async Task<ActionResult< BaseQueryListResponse<GetStudentDto>>> Get()
         {
-            var response = new BaseQueryListResponse<GetStudentDto>();
-            try
-            {
-                response = await _mediator.Send(new GetStudentListRequest());
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(50, response);
-            }           
+            var response = await _mediator.Send(new GetStudentListRequest());
+            return ToActionResult(response);           
             
         }
 
@@ -44,44 +34,17 @@ namespace University.API.Controllers
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> Get(Guid id)
         {
             var request = new GetStudentWithDetailsRequest { StudentId = id };
-            var response = new BaseQueryResponse<GetStudentWithDetailsDto>();
-            try
-            {
-                response = await _mediator.Send(request);
-                if (response is null)
-                {
-                    return StatusCode(500);
-                }
-                return Ok(response);
-            }
-            catch(Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(50, response);
-            }
+            var response = await _mediator.Send(request);
+            return ToActionResult(response);
+
         }
 
         [HttpGet("peers/{id:Guid}")]
         public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetPeers([FromRoute]Guid id)
         {
             var request = new GetPeersByStudentIdRequest { StudentId = id };
-            var response = new BaseQueryListResponse<GetStudentDto>();
-            try
-            {
-                response = await _mediator.Send(request);
-                if(response is null)
-                {
-                    return StatusCode(500);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            var response = await _mediator.Send(request);
+            return ToActionResult(response);
         }
 
         [HttpGet("name")]
@@ -89,21 +52,9 @@ namespace University.API.Controllers
         {
             var request = new GetStudentsByNameRequest { SerachName = name };
             var response = new BaseQueryListResponse<GetStudentDto>();
-            try
-            {
-                response = await _mediator.Send(request);
-                if (response is null)
-                {
-                    return StatusCode(500);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(request);
+            return ToActionResult(response);
+
         }
 
         [HttpGet("roll")]
@@ -111,21 +62,8 @@ namespace University.API.Controllers
         {
             var request = new GetStudentByPersonalInfoRequest { Roll = roll, Email = null };
             var response = new BaseQueryResponse<GetStudentWithDetailsDto>();
-            try
-            {
-                response = await _mediator.Send(request);
-                if (response is null)
-                {
-                    return StatusCode(500);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(50, response);
-            }
+            response = await _mediator.Send(request);
+            return ToActionResult(response);
         }
 
         [HttpGet("email")]
@@ -133,21 +71,10 @@ namespace University.API.Controllers
         {
             var request = new GetStudentByPersonalInfoRequest { Roll = null, Email = email };
             var response = new BaseQueryResponse<GetStudentWithDetailsDto>();
-            try
-            {
-                response = await _mediator.Send(request);
-                if (response is null)
-                {
-                    return StatusCode(500);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(50, response);
-            }
+
+            response = await _mediator.Send(request);
+
+            return ToActionResult(response);
         }
 
         // POST api/<StudentController>
@@ -156,21 +83,11 @@ namespace University.API.Controllers
         {
             var command = new CreateStudentCommand { CreateStudentDto = studentDto };
             var response = new CreateCommandResponse<GetStudentDto>();
-            try
-            {
-                response = await _mediator.Send(command);
-                if(response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                return CreatedAtAction(nameof(Post), new { id = response.RecordId }, response.Record);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+
+            return ToActionResult(response);
+
+            
         }
 
         // PUT api/<StudentController>/5
@@ -183,25 +100,8 @@ namespace University.API.Controllers
                 UpdateStudentDto = studentDto 
             };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if(response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                else if(response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound(response);
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
         }
 
         [HttpPatch("email/{id:Guid}")]
@@ -213,25 +113,10 @@ namespace University.API.Controllers
                 StudentEmailDto = studentDto
             };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if (response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                else if (response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound(response);
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
+            
         }
 
         [HttpPatch("name/{id:Guid}")]
@@ -244,25 +129,9 @@ namespace University.API.Controllers
                 StudentNameDto = studentDto
             };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if (response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                else if (response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound(response);
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
+
         }
 
         [HttpPatch("roll/{id:Guid}")]
@@ -274,25 +143,9 @@ namespace University.API.Controllers
                 StudentRollDto = studentDto
             };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if (response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                else if (response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound(response);
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
+            
         }
 
         // DELETE api/<StudentController>/5
@@ -301,25 +154,9 @@ namespace University.API.Controllers
         {
             var command = new DeleteStudentCommand { StudentId=id };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if(response is null)
-                {
-                    return BadRequest();
-                }
-                if(response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound();
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
         }
     }
 }

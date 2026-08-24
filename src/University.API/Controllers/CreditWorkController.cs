@@ -15,7 +15,7 @@ namespace University.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CreditWorkController : ControllerBase
+    public class CreditWorkController : ApiControllerBase
     {
         private readonly IMediator _mediator;
         public CreditWorkController(IMediator mediator)
@@ -27,17 +27,9 @@ namespace University.API.Controllers
         public async Task<ActionResult<BaseQueryListResponse<GetCreditWorkDto>>> Get()
         {
             var response = new BaseQueryListResponse<GetCreditWorkDto>();
-            try
-            {
-                response = await _mediator.Send(new GetCreditWorkListRequest());
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(50, response);
-            }
+            response = await _mediator.Send(new GetCreditWorkListRequest());
+            return ToActionResult(response);
+            
         }
 
         // GET api/<CreditWorkController>/5
@@ -46,55 +38,27 @@ namespace University.API.Controllers
         {
             var request = new GetCreditWorkWithDetailsRequest { CreditWorkId = id };
             var response = new BaseQueryResponse<GetCreditWorkWithDetailsDto>();
-            try
-            {
-                response = await _mediator.Send(request);
-                if (response is null)
-                {
-                    return StatusCode(500);
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(50, response);
-            }
+            response = await _mediator.Send(request);
+            return ToActionResult(response);
+            
         }
 
         [HttpGet]
         public async Task<ActionResult<BaseQueryListResponse<GetCreditWorkDto>>> GetByStudentId([FromQuery]Guid studentId)
         {
             var response = new BaseQueryListResponse<GetCreditWorkDto>();
-            try
-            {
-                response = await _mediator.Send(new GetCreditWorksByStudentIdRequest { StudentId= studentId});
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(50, response);
-            }
+            response = await _mediator.Send(new GetCreditWorksByStudentIdRequest { StudentId = studentId });
+            return ToActionResult(response);
+            
         }
 
         [HttpGet]
         public async Task<ActionResult<BaseQueryListResponse<GetCreditWorkDto>>> GetByCourseId([FromQuery] Guid courseId)
         {
             var response = new BaseQueryListResponse<GetCreditWorkDto>();
-            try
-            {
-                response = await _mediator.Send(new GetCreditWorksByCourseIdRequest { CourseId = courseId });
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(50, response);
-            }
+            response = await _mediator.Send(new GetCreditWorksByCourseIdRequest { CourseId = courseId });
+            return ToActionResult(response);
+           
         }
 
         // POST api/<CreditWorkController>
@@ -103,21 +67,9 @@ namespace University.API.Controllers
         {
             var request = new CreateCreditWorkCommand { CreateCreditWorkDto = creditWorkDto };
             var response = new CreateCommandResponse<GetCreditWorkDto>();
-            try
-            {
-                response = await _mediator.Send(request);
-                if (response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                return CreatedAtAction(nameof(Post), new { id = response.RecordId }, response.Record);
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(request);
+            return ToActionResult(response);
+            
         }
 
         // PUT api/<CreditWorkController>/5
@@ -126,25 +78,9 @@ namespace University.API.Controllers
         {
             var command = new UpdateCreditWorkCommand { CreditWorkId = id , CreditWorkDto=creditWorkDto};
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if (response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                else if (response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound(response);
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
+            
         }
 
         [HttpPatch("code/{id:Guid}")]
@@ -152,25 +88,9 @@ namespace University.API.Controllers
         {
             var command = new UpdateCreditWorkCodeCommand { CreditWorkId = id, CreditWorkDto = creditWorkDto };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if (response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                else if (response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound(response);
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
+            
         }
 
         [HttpPatch("heading/{id:Guid}")]
@@ -178,25 +98,9 @@ namespace University.API.Controllers
         {
             var command = new UpdateCreditWorkHeadingCommand { CreditWorkId = id, CreditWorkDto = creditWorkDto };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if (response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                else if (response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound(response);
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
+            
         }
 
         [HttpPatch("description/{id:Guid}")]
@@ -204,25 +108,8 @@ namespace University.API.Controllers
         {
             var command = new UpdateCreditWorkDescriptionCommand { CreditWorkId = id, CreditWorkDto = creditWorkDto };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if (response is null || response.Status == HttpStatusCode.BadRequest)
-                {
-                    return BadRequest(response);
-                }
-                else if (response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound(response);
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
         }
 
         // DELETE api/<CreditWorkController>/5
@@ -231,25 +118,8 @@ namespace University.API.Controllers
         {
             var command = new DeleteCreditWorkCommand { CreditWorkId = id };
             var response = new BaseCommandResponse();
-            try
-            {
-                response = await _mediator.Send(command);
-                if (response is null)
-                {
-                    return BadRequest();
-                }
-                if (response.Status == HttpStatusCode.NotFound)
-                {
-                    return NotFound();
-                }
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                response.Status = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
-                return StatusCode(500, response);
-            }
+            response = await _mediator.Send(command);
+            return ToActionResult(response);
         }
     }
 }
