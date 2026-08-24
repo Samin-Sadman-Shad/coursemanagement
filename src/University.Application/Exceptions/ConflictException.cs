@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace University.Application.Exceptions
 {
-    public class NotFoundException:ApplicationException
+    public class ConflictException: ApplicationException
     {
-        public NotFoundException():base()
+        public ConflictException(string message):base(message)
         {
             
         }

@@ -13,7 +13,7 @@ namespace University.Application.Models.DTOs.CourseDTOs.Validators
     public class ICourseDtoValidator:AbstractValidator<ICourseDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ICourseDtoValidator(IUnitOfWork uow, Guid courseId)
+        public ICourseDtoValidator(IUnitOfWork uow)
         {
             _unitOfWork = uow;
 
@@ -25,7 +25,7 @@ namespace University.Application.Models.DTOs.CourseDTOs.Validators
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_ALPHA_NUMERIC_ONLY)
                 .MustAsync(async (dto, title, token) =>
                 {
-                    var nameExists = await _unitOfWork.CourseRepository.DoesCourseNameExistsAsync(title, courseId);
+                    var nameExists = await _unitOfWork.CourseRepository.DoesCourseNameExistsAsync(title);
                     return !nameExists;
                 })
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_DUPLICATE);

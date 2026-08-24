@@ -65,14 +65,19 @@ namespace University.Persistance.Repositories
             return entity is not null;
         }
 
-        public async Task<bool> RemoveCourseEnrollment(Guid enrollmentId)
+        public CourseEnrollment RemoveCourseEnrollment(CourseEnrollment enrollment)
         {
-            var entity = await GetEnrollment(enrollmentId);
-            if(entity is not null)
-            {
-                _dbContext.Remove(entity);
-            }
-            return await DoesEnrollmentExist(enrollmentId);
+            _dbContext.Remove(enrollment);
+            return enrollment;
+            //return await DoesEnrollmentExist(enrollmentId);
         }
+
+        public async Task<bool> ExistsAsync(Guid enrollmentId)
+        {
+            return await _dbContext.Set<CourseEnrollment>()
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == enrollmentId);
+        }
+        
     }
 }

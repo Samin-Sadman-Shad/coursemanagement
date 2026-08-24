@@ -10,31 +10,49 @@ namespace University.Application.Models.DTOs.CreditWorkEnrollmentDto.Validators
 {
     public class CreateCreditWorkEnrollmentDtoValidator:AbstractValidator<CreateCreditWorkEnrollmentDto>
     {
-        private readonly ICreditWorkRepository _creditWorkRepository;
-        private readonly IStudentRepository _studentRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CreateCreditWorkEnrollmentDtoValidator(ICreditWorkRepository cwRepo, IStudentRepository stRepo)
+        public CreateCreditWorkEnrollmentDtoValidator(IUnitOfWork uow)
         {
-            _creditWorkRepository = cwRepo;
-            _studentRepository = stRepo;
+            _unitOfWork = uow;
+            var _creditWorkRepository = _unitOfWork.CreditWorkRepository;
+            var _studentRepository = _unitOfWork.StudentRepository;
 
-            RuleFor(enrollment => enrollment.CreditWork)
+            //RuleFor(enrollment => enrollment.CreditWork)
+            //    .NotEmpty()
+            //    .MustAsync(async (creditWork, token) =>
+            //    {
+            //        var creditWorkId = creditWork.Id;
+            //        return await _creditWorkRepository.ExistsAsync(creditWorkId);
+            //    })
+            //    .WithMessage("CreditWork not found");
+
+            //RuleFor(enrollment => enrollment.Student)
+            //    .NotEmpty()
+            //    .MustAsync(async (student, token) =>
+            //    {
+            //        var studentId = student.Id;
+            //        return await _studentRepository.ExistsAsync(studentId);
+            //    })
+            //    .WithMessage("Student not found");
+
+            RuleFor(dto => dto.CreditWorkId)
                 .NotEmpty()
-                .MustAsync(async (creditWork, token) =>
-                {
-                    var creditWorkId = creditWork.Id;
-                    return await _creditWorkRepository.ExistsAsync(creditWorkId);
-                })
+                .MustAsync(async (id, token) => await _creditWorkRepository.ExistsAsync(id))
                 .WithMessage("CreditWork not found");
 
-            RuleFor(enrollment => enrollment.Student)
+            RuleFor(dto => dto.StudentId)
                 .NotEmpty()
-                .MustAsync(async (student, token) =>
-                {
-                    var studentId = student.Id;
-                    return await _studentRepository.ExistsAsync(studentId);
-                })
+                .MustAsync(async (id, token) => await _studentRepository.ExistsAsync(id))
                 .WithMessage("Student not found");
+            RuleFor(dto => dto)
+                .MustAsync(async (dto, token) =>
+                {
+                    var exist = await _unitOfWork.CreditWorkEnrollmentRepository
+                    .ExistsAsync(dto.StudentId, dto.CreditWorkId);
+                    return !exist;
+                })
+                .WithMessage("Student is already enrolled in this credit work.");
         }
 
     }

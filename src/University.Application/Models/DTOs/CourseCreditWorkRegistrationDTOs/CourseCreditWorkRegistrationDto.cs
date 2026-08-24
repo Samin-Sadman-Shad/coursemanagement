@@ -10,7 +10,7 @@ namespace University.Application.Models.DTOs.CourseCreditWorkRegistrationDTOs
 {
     public class CourseCreditWorkRegistrationDto
     {
-        public required GetCourseWithDetailsDto course {  get; set; }
-        public required GetCreditWorkDto creditWork { get; set; }
+        public required Guid CourseId { get; set; }
+        public required Guid CreditWorkId { get; set; }
     }
 }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using University.Application.Models.DTOs.CreditWorkDTOs;
+using University.Application.Models.DTOs.StudentDTOs;
 using University.Domain.Entities.BaseEntities;
 
 namespace University.Application.Models.DTOs.CourseDTOs
@@ -12,17 +13,20 @@ namespace University.Application.Models.DTOs.CourseDTOs
     {
         public static GetCourseWithDetailsDto MapToGetCourseWithDetailsDto(this Course course)
         {
+            var courses = course.CreditWorksInCourse
+                .Select(cw => cw.CreditWork)
+                .Select(creditwork => creditwork.MapToGetCreditWorkDto())
+                .ToList();
+            var students = course.StudentsInCourse
+                .Select(enrollment => enrollment.Student)
+                .Select(student => student.MapToGetStudentDto())
+                .ToList();
             return new GetCourseWithDetailsDto
             {
                 Id = course.Id,
                 CourseTitle = course.Title,
-                //CreditWorks = course.CreditWorks.Select(cw => new CreditWorkDto
-                //{
-                //    Id = cw.Id,
-                //    Title = cw.Title,
-                //    Description = cw.Description,
-                //    MaxScore = cw.MaxScore
-                //}).ToList()
+                CreditWorks = courses,
+                Students = students
             };
         }
 
@@ -45,6 +49,13 @@ namespace University.Application.Models.DTOs.CourseDTOs
                 LastModifiedBy = createCourseDto.CreatedBy,
                 LastModifiedAt = createCourseDto.CreatedAt
             };
+        }
+
+        public static void UpdateCourse(this UpdateCourseTitleDto updateCourseDto, Course entity)
+        {
+            entity.Title = updateCourseDto.CourseTitle;
+            entity.LastModifiedBy = updateCourseDto.LastModifiedBy;
+            entity.LastModifiedAt = updateCourseDto.LastModifiedAt;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace University.Application.Contracts.Persistance
         Task<List<Course>> GetCoursesByCreditWorkIdAsync(Guid creditWorkId);
         //Task<CourseEnrollment?> GetEnrollment(Guid enrollmentId);
 
-        Task<bool> DoesCourseNameExistsAsync(string courseName, Guid? ExcludedId);
+        Task<bool> DoesCourseNameExistsAsync(string courseName);
 
     }
 }

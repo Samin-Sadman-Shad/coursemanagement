@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,14 +34,35 @@ namespace University.Persistance.Repositories
             return entity is not null;
         }
 
-        public async Task<bool> RemoveCreditWorkEnrollment(Guid enrollmentId)
+        //public async Task<bool> RemoveCreditWorkEnrollment(Guid enrollmentId)
+        //{
+        //    var entity = await GetEnrollment(enrollmentId);
+        //    if(entity is not null)
+        //    {
+        //        _dbContext.Remove(entity);
+        //    }
+        //    return await DoesEnrollmentExist(enrollmentId);
+        //}
+
+        public CreditWorkEnrollment RemoveCreditWorkEnrollment(CreditWorkEnrollment enrollment) 
         {
-            var entity = await GetEnrollment(enrollmentId);
-            if(entity is not null)
-            {
-                _dbContext.Remove(entity);
-            }
-            return await DoesEnrollmentExist(enrollmentId);
+            _dbContext.Remove(enrollment);
+            return enrollment;
+        } 
+
+        public async Task<bool> ExistsAsync(Guid enrollmentId)
+        {
+            return await _dbContext.Set<CreditWorkEnrollment>()
+                .AsNoTracking().AnyAsync(e => e.Id == enrollmentId);
         }
+
+
+        public async Task<bool> ExistsAsync(Guid studentId, Guid creditWorkId)
+        {
+            return await _dbContext.Set<CreditWorkEnrollment>()
+                .AsNoTracking()
+                .AnyAsync(e => e.StudentId == studentId && e.CreditWorkId == creditWorkId);
+        }
+
     }
 }

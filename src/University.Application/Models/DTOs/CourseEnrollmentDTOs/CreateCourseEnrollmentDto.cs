@@ -13,7 +13,9 @@ namespace University.Application.Models.DTOs.CourseEnrollmentDTOs
 {
     public class CreateCourseEnrollmentDto:BaseCreateDto
     {
-        public required GetStudentDto Student { get; set; }
-        public required GetCourseWithDetailsDto Course { get; set; }
+        //public required GetStudentDto Student { get; set; }
+        //public required GetCourseWithDetailsDto Course { get; set; }
+        public required Guid StudentId { get; set; }
+        public required Guid CourseId { get; set; }
     }
 }

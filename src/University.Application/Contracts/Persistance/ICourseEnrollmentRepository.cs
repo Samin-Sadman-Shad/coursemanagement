@@ -10,6 +10,9 @@ namespace University.Application.Contracts.Persistance
     public interface ICourseEnrollmentRepository:IEnrollment
     {
         Task<CourseEnrollment> CreateCourseEnrollment(CourseEnrollment enrollment);
-        Task<bool> RemoveCourseEnrollment(Guid enrollmentId);
+        CourseEnrollment RemoveCourseEnrollment(CourseEnrollment enrollment);
+        Task<bool> ExistsAsync(Guid enrollmentId);
+
+        Task<CourseEnrollment?> GetEnrollment(Guid enrollmentId);
     }
 }

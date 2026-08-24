@@ -8,7 +8,7 @@ namespace University.Application.Models.Identity
 {
     public class RegistrationResponse
     {
-        public string UserId { get; set; } = String.Empty;
+        public Guid UserId { get; set; } 
         public bool IsSuccessful { get; set; }
         private List<string> _errors = new List<string>();
         public List<string> Errors

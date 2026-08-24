@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,32 +39,57 @@ namespace University.Persistance.Repositories
             return entity;
         }
 
-        public async Task<bool> UnregisterCourseFromCreditWork(Guid courseId, Guid creditWorkId)
-        {
-            var course = await _dbContext.FindAsync<Course>(courseId);
-            var creditWork = await _dbContext.FindAsync<CreditWork>(creditWorkId);
-            if (creditWork is null || course is null)
-            {
-                throw new ArgumentException("Either courseId or CrediWorkId is not valid");
-            }
-            var entity = _dbContext.Set<CourseCreditWork>()
-                .Where(cc => cc.CourseId == courseId && cc.CreditWorkId == creditWorkId)
-                .SingleOrDefault();
+        //public async Task<bool> UnregisterCourseFromCreditWork(Guid courseId, Guid creditWorkId)
+        //{
+        //    var course = await _dbContext.FindAsync<Course>(courseId);
+        //    var creditWork = await _dbContext.FindAsync<CreditWork>(creditWorkId);
+        //    if (creditWork is null || course is null)
+        //    {
+        //        throw new ArgumentException("Either courseId or CrediWorkId is not valid");
+        //    }
+        //    var entity = _dbContext.Set<CourseCreditWork>()
+        //        .Where(cc => cc.CourseId == courseId && cc.CreditWorkId == creditWorkId)
+        //        .SingleOrDefault();
             
-            if(entity is null)
-            {
-                throw new ArgumentException("Course is not registered to the credit");
-            }
-            var entityId = entity.Id;
-            _dbContext.Set<CourseCreditWork>().Remove(entity);
-            return await ExistsAsync(entityId);
-        }
+        //    if(entity is null)
+        //    {
+        //        throw new ArgumentException("Course is not registered to the credit");
+        //    }
+        //    var entityId = entity.Id;
+        //    _dbContext.Set<CourseCreditWork>().Remove(entity);
+        //    return await ExistsAsync(entityId);
+        //}
 
         public async Task<bool> ExistsAsync(Guid id)
         {
-            var entity = await _dbContext.Set<CourseCreditWork>().FindAsync(id);
-            return entity is not null;
+            var entity = await _dbContext.Set<CourseCreditWork>()
+                .AsNoTracking()
+                .AnyAsync(ccw => ccw.Id == id);
+            return entity ;
         }
 
+        public async Task<bool> ExistsAsync(Guid courseId, Guid creditWorkId)
+        {
+            return await _dbContext.CreditWorksInCourses
+                .AsNoTracking()
+                .AnyAsync(ccw => ccw.CourseId == courseId && ccw.CreditWorkId == creditWorkId);
+        }
+
+        public async Task<CourseCreditWork> UnregisterCourseFromCreditWork(Guid registrationId)
+        {
+            var courseCreditWork = await GetByIdAsync(registrationId);
+            if(courseCreditWork == null)
+            {
+                throw new ArgumentException("Course credit work mapping not found");
+            }
+             _dbContext.CreditWorksInCourses.Remove(courseCreditWork);
+            return courseCreditWork;
+        }
+
+        public async Task<CourseCreditWork?> GetByIdAsync(Guid id)
+        {
+            return await _dbContext.CreditWorksInCourses
+                .FirstOrDefaultAsync(ccw => ccw.Id == id);
+        }
     }
 }

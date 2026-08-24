@@ -11,7 +11,7 @@ namespace University.Application.Models.DTOs.CourseDTOs.Validators
     public class CreateCourseDtoValidator:AbstractValidator<CreateCourseDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CreateCourseDtoValidator(IUnitOfWork uow, Guid courseId)
+        public CreateCourseDtoValidator(IUnitOfWork uow)
         {
             _unitOfWork = uow;
             //RuleFor(c => c.CourseTitle)
@@ -20,7 +20,7 @@ namespace University.Application.Models.DTOs.CourseDTOs.Validators
             //    .WithMessage("The {PropertyName} can not excced 20 characters")
             //    .Must(title => title.All(char.IsLetterOrDigit))
             //    .WithMessage("The {PropertyName} can contains only alphanumeric characters");
-            Include(new ICourseDtoValidator(_unitOfWork, courseId));
+            Include(new ICourseDtoValidator(_unitOfWork));
         }
     }
 }

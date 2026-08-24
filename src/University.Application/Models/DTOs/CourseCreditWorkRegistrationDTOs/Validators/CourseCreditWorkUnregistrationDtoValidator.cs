@@ -10,18 +10,12 @@ namespace University.Application.Models.DTOs.CourseCreditWorkRegistrationDTOs.Va
 {
     public class CourseCreditWorkUnregistrationDtoValidator:AbstractValidator<CourseCreditWorkUnregistrationDto>
     {
-        private readonly ICourseRepository _courseRepository;
-        private readonly ICreditWorkRepository _creditWorkRepository;
         private readonly ICourseCreditWorkRegistrationRepository _courseCreditRegistrationRepository;
-        public CourseCreditWorkUnregistrationDtoValidator(ICourseRepository courseRepository, 
-            ICreditWorkRepository creditWorkRepository,
-            ICourseCreditWorkRegistrationRepository courseCreditRegistrationRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public CourseCreditWorkUnregistrationDtoValidator(IUnitOfWork uow)
         {
-            _courseRepository = courseRepository;
-            _creditWorkRepository = creditWorkRepository;
-            _courseCreditRegistrationRepository = courseCreditRegistrationRepository;
-
-            Include(new CourseCreditWorkRegistrationDtoValidator(_courseRepository, _creditWorkRepository));
+            _unitOfWork = uow;
+            _courseCreditRegistrationRepository = _unitOfWork.CourseCreditWorkRegistrationRepository;
 
             RuleFor(unregister => unregister.RegistrationId)
                 .NotEmpty()

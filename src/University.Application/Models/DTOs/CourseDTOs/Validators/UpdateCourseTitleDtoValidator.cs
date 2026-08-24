@@ -11,10 +11,10 @@ namespace University.Application.Models.DTOs.CourseDTOs.Validators
     public class UpdateCourseTitleDtoValidator:AbstractValidator<UpdateCourseTitleDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateCourseTitleDtoValidator(IUnitOfWork uow, Guid courseId)
+        public UpdateCourseTitleDtoValidator(IUnitOfWork uow)
         {
             _unitOfWork = uow;
-            Include(new ICourseDtoValidator(_unitOfWork, courseId));
+            Include(new ICourseDtoValidator(_unitOfWork));
         }
     }
 }

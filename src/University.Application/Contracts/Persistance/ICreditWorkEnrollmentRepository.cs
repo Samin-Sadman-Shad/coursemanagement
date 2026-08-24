@@ -10,8 +10,12 @@ namespace University.Application.Contracts.Persistance
     public interface ICreditWorkEnrollmentRepository:IEnrollment
     {
         Task<CreditWorkEnrollment> CreateCreditWorkEnrollment(CreditWorkEnrollment enrollment);
-        Task<bool> RemoveCreditWorkEnrollment(Guid enrollmentId);
+        //Task<bool> RemoveCreditWorkEnrollment(Guid enrollmentId);
+        CreditWorkEnrollment RemoveCreditWorkEnrollment(CreditWorkEnrollment enrollment);
         Task<CreditWorkEnrollment?> GetEnrollment(Guid enrollmentId);
+
+        Task<bool> ExistsAsync(Guid studentId, Guid creditWorkId);
+        Task<bool> ExistsAsync(Guid enrollmentId);
 
     }
 }
