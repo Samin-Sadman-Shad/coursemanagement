@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Common.Behaviors;
 
 namespace University.Application.DI
 {
@@ -12,7 +13,12 @@ namespace University.Application.DI
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddMediatR(cfg => 
+                {
+                    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                    cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
+                } 
+            );
             return services;
         }
     }

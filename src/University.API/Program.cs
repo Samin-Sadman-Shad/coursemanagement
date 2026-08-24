@@ -1,9 +1,19 @@
+using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Formatting.Compact;
+using University.API.Utils;
 using University.Application.DI;
 using University.Persistance.DI;
-using Microsoft.OpenApi.Models;
-using University.API.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithProperty("Application", "University.Api")
+    .WriteTo.Console(new CompactJsonFormatter()));
 
 // Add services to the container.
 
@@ -22,6 +32,15 @@ builder.Services.AddPersistanceServices();
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging(options =>
+{
+    options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set("TraceId", httpContext.TraceIdentifier);
+    };
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
