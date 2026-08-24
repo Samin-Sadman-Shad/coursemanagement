@@ -12,7 +12,8 @@ namespace University.Application.Contracts.Persistance
         Task<CourseCreditWork> RegisterCourseToCreditWork(Guid courseId, Guid creditWorkId);
 
         //Task<bool> UnregisterCourseFromCreditWork(Guid courseId, Guid creditWorkId);
-        Task<CourseCreditWork> UnregisterCourseFromCreditWork(Guid registrationId);
+        //Task<CourseCreditWork> UnregisterCourseFromCreditWork(Guid registrationId);
+        CourseCreditWork UnregisterCourseFromCreditWork(CourseCreditWork courseCreditWork);
 
         Task<bool> ExistsAsync(Guid id);
 

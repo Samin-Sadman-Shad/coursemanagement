@@ -75,14 +75,20 @@ namespace University.Persistance.Repositories
                 .AnyAsync(ccw => ccw.CourseId == courseId && ccw.CreditWorkId == creditWorkId);
         }
 
-        public async Task<CourseCreditWork> UnregisterCourseFromCreditWork(Guid registrationId)
+        //public async Task<CourseCreditWork> UnregisterCourseFromCreditWork(Guid registrationId)
+        //{
+        //    var courseCreditWork = await GetByIdAsync(registrationId);
+        //    if(courseCreditWork == null)
+        //    {
+        //        throw new ArgumentException("Course credit work mapping not found");
+        //    }
+        //     _dbContext.CreditWorksInCourses.Remove(courseCreditWork);
+        //    return courseCreditWork;
+        //}
+
+        public CourseCreditWork UnregisterCourseFromCreditWork(CourseCreditWork courseCreditWork)
         {
-            var courseCreditWork = await GetByIdAsync(registrationId);
-            if(courseCreditWork == null)
-            {
-                throw new ArgumentException("Course credit work mapping not found");
-            }
-             _dbContext.CreditWorksInCourses.Remove(courseCreditWork);
+            _dbContext.CreditWorksInCourses.Remove(courseCreditWork);
             return courseCreditWork;
         }
 

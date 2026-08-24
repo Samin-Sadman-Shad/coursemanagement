@@ -15,18 +15,23 @@ namespace University.Application.Models.Responses
         public string? Message { get ; set ; }
 
         private List<string> _errors = new List<string>();
+        //public List<string> Errors
+        //{
+        //    get
+        //    {
+        //        if (!IsSuccessful) return _errors;
+        //        else throw new InvalidOperationException("Access denied. Errors are not available for a successful response");
+        //    }
+        //    set
+        //    {
+        //        if (!IsSuccessful) _errors = value;
+        //        else throw new InvalidOperationException("Access denied. Errors are not available for a successful response");
+        //    }
+        //}
         public List<string> Errors
         {
-            get
-            {
-                if (!IsSuccessful) return _errors;
-                else throw new InvalidOperationException("Access denied. Errors are not available for a successful response");
-            }
-            set
-            {
-                if (!IsSuccessful) _errors = value;
-                else throw new InvalidOperationException("Access denied. Errors are not available for a successful response");
-            }
+            get => IsSuccessful ? new List<string>() : _errors;
+            set => _errors = value;
         }
 
         public virtual List<BaseQueryDto> Records { get; set; } = new List<BaseQueryDto>();
@@ -39,18 +44,23 @@ namespace University.Application.Models.Responses
         public string? Message { get; set; }
 
         private List<string> _errors = new List<string>();
+        //public List<string> Errors
+        //{
+        //    get
+        //    {
+        //        if (!IsSuccessful) return _errors;
+        //        else throw new InvalidOperationException("Access denied. Errors are not available for a successful response");
+        //    }
+        //    set
+        //    {
+        //        if (!IsSuccessful) _errors = value;
+        //        else throw new InvalidOperationException("Access denied. Errors are not available for a successful response");
+        //    }
+        //}
         public List<string> Errors
         {
-            get
-            {
-                if (!IsSuccessful) return _errors;
-                else throw new InvalidOperationException("Access denied. Errors are not available for a successful response");
-            }
-            set
-            {
-                if (!IsSuccessful) _errors = value;
-                else throw new InvalidOperationException("Access denied. Errors are not available for a successful response");
-            }
+            get => IsSuccessful ? new List<string>() : _errors;
+            set => _errors = value;
         }
         public List<T> Records { get; set; } = new List<T>();
     }

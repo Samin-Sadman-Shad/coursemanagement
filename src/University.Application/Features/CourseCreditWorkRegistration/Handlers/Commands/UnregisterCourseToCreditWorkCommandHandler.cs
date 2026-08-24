@@ -12,7 +12,7 @@ using University.Application.Models.Responses;
 
 namespace University.Application.Features.CourseCreditWorkRegistration.Handlers.Commands
 {
-    internal class UnregisterCourseToCreditWorkCommandHandler
+    public class UnregisterCourseToCreditWorkCommandHandler
         : IRequestHandler<UnregisterCourseToCreditWorkCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -32,12 +32,12 @@ namespace University.Application.Features.CourseCreditWorkRegistration.Handlers.
                 if (courseCreditWork is null)
                 {
                     response.IsSuccessful = false;
-                    response.Status = System.Net.HttpStatusCode.NotFound;
+                    response.Status = HttpStatusCode.NotFound;
                     response.RecordId = request.CourseCreditWorkId;
                     return response;
                 }
 
-                await _unitOfWork.CourseCreditWorkRegistrationRepository.UnregisterCourseFromCreditWork(request.CourseCreditWorkId);
+                 _unitOfWork.CourseCreditWorkRegistrationRepository.UnregisterCourseFromCreditWork(courseCreditWork);
                 await _unitOfWork.SaveChangesAsync();
 
                 response.IsSuccessful = true;

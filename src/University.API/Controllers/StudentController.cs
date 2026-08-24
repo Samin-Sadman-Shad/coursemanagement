@@ -40,7 +40,7 @@ namespace University.API.Controllers
         }
 
         // GET api/<StudentController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:Guid}")]
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> Get(Guid id)
         {
             var request = new GetStudentWithDetailsRequest { StudentId = id };
@@ -62,7 +62,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpGet("peers/{id}")]
+        [HttpGet("peers/{id:Guid}")]
         public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetPeers([FromRoute]Guid id)
         {
             var request = new GetPeersByStudentIdRequest { StudentId = id };
@@ -174,7 +174,7 @@ namespace University.API.Controllers
         }
 
         // PUT api/<StudentController>/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> Put(Guid id, [FromBody] UpdateStudentDto studentDto)
         {
             var command = new UpdateStudentCommand 
@@ -204,7 +204,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpPatch("email/{id}")]
+        [HttpPatch("email/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateEmail([FromRoute]Guid id, [FromBody] UpdateStudentEmailDto studentDto)
         {
             var command = new UpdateStudentEmailCommand
@@ -234,7 +234,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpPatch("name/{id}")]
+        [HttpPatch("name/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateName([FromRoute]Guid id, [FromBody]UpdateStudentNameDto studentDto)
         {
 
@@ -265,7 +265,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpPatch("roll/{id}")]
+        [HttpPatch("roll/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateRoll([FromRoute]Guid Id, [FromBody]UpdateStudentRollDto studentDto)
         {
             var command = new UpdateStudentRollCommand
@@ -296,7 +296,7 @@ namespace University.API.Controllers
         }
 
         // DELETE api/<StudentController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> Delete(Guid id)
         {
             var command = new DeleteStudentCommand { StudentId=id };

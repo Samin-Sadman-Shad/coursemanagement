@@ -41,7 +41,7 @@ namespace University.API.Controllers
         }
 
         // GET api/<CreditWorkController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:Guid}")]
         public async Task<ActionResult<BaseQueryResponse<GetCreditWorkWithDetailsDto>>> Get(Guid id)
         {
             var request = new GetCreditWorkWithDetailsRequest { CreditWorkId = id };
@@ -121,7 +121,7 @@ namespace University.API.Controllers
         }
 
         // PUT api/<CreditWorkController>/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> Put(Guid id, [FromBody] UpdateCreditWorkDto creditWorkDto)
         {
             var command = new UpdateCreditWorkCommand { CreditWorkId = id , CreditWorkDto=creditWorkDto};
@@ -147,7 +147,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpPatch("code/{id}")]
+        [HttpPatch("code/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateCode([FromRoute]Guid id, [FromBody] UpdateCreditWorkCodeDto creditWorkDto)
         {
             var command = new UpdateCreditWorkCodeCommand { CreditWorkId = id, CreditWorkDto = creditWorkDto };
@@ -173,7 +173,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpPatch("heading/{id}")]
+        [HttpPatch("heading/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateHeading([FromRoute] Guid id, UpdateCreditWorkHeadingDto creditWorkDto)
         {
             var command = new UpdateCreditWorkHeadingCommand { CreditWorkId = id, CreditWorkDto = creditWorkDto };
@@ -199,7 +199,7 @@ namespace University.API.Controllers
             }
         }
 
-        [HttpPatch("description/{id}")]
+        [HttpPatch("description/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateDescription([FromRoute] Guid id, UpdateCreditWorkDescriptionDto creditWorkDto)
         {
             var command = new UpdateCreditWorkDescriptionCommand { CreditWorkId = id, CreditWorkDto = creditWorkDto };
@@ -226,7 +226,7 @@ namespace University.API.Controllers
         }
 
         // DELETE api/<CreditWorkController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> Delete(Guid id)
         {
             var command = new DeleteCreditWorkCommand { CreditWorkId = id };

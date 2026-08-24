@@ -60,6 +60,7 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Commands
                 var createdEntity = await _unitOfWork.CourseEnrollmentRepository.CreateCourseEnrollment(enrollment);
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
+                response.Status = HttpStatusCode.Created;
                 response.RecordId = createdEntity.Id;
                 return response;
             }
