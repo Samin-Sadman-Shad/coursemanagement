@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: university-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: universitydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: bind
+        source: E:\Samin\Projects\university_postgres
+        target: /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: University.Api/Dockerfile
+    container_name: university-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes: {}   # no named volumes needed — the bind mount above doesn't require a top-level entry

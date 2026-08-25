@@ -50,7 +50,7 @@ namespace University.API.Controllers
         }
 
         [HttpPost("set-password")]
-        public async Task<IActionResult> SetPassword([FromBody] SetPasswordRequest request)
+        public async Task<ActionResult<SetPasswordResponse>> SetPassword([FromBody] SetPasswordRequest request)
         {
             var response = await _authService.SetPassword(request);
             return response.IsSuccessful ? Ok(response) : BadRequest(response);
