@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,26 +28,13 @@ namespace University.Identity.DI
 
             var identityConnectionString = configuration.GetConnectionString("IdentityDbConnectionString");
 
-            services.AddDbContext<UniversityIdentityDbContext>(options =>
+            services.AddDbContext<UniversityIdentityDbContext>((sp, options) =>
             {
-                //options.UseSqlServer(configuration.GetConnectionString("IdentityDbConnectionString"),
-                //    sqlOptionBuilder =>
-                //    {
-                //        sqlOptionBuilder.MigrationsAssembly(typeof(LeaveManagementIdentityDbContext).Assembly.FullName);
-                //    });
-                options.UseNpgsql(identityConnectionString, 
-                    options =>
-                    {
-                        options.EnableRetryOnFailure(
-                            maxRetryCount: 5,
-                            maxRetryDelay: TimeSpan.FromSeconds(10),
-                            errorCodesToAdd: null
-                            );
-                        options.MigrationsAssembly(typeof(UniversityIdentityDbContext).Assembly.FullName);
-                    }
-
-                );
-                
+                options.UseNpgsql(sp.GetRequiredService<NpgsqlConnection>(), npgsqlOptions =>
+                {
+                    //npgsqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorCodesToAdd: null);
+                    npgsqlOptions.MigrationsAssembly(typeof(UniversityIdentityDbContext).Assembly.FullName);
+                });
             });
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -58,6 +46,7 @@ namespace University.Identity.DI
 
             //everytime user tries to login, new service will be created
             services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IUserService, UserService>();
 
             var jwtKey = configuration["JwtSettings:Key"]
                 ?? throw new InvalidOperationException(

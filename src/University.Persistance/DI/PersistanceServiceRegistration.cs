@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,12 @@ namespace University.Persistance.DI
         public static IServiceCollection AddPersistanceServices(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("UniversityDbConnectionString");
-            services.AddDbContext<UniversityDbContext>(options =>
+
+            services.AddScoped<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
+
+            services.AddDbContext<UniversityDbContext>( (sp, options) =>
             {
-                options.UseNpgsql(connectionString);
+                options.UseNpgsql(sp.GetRequiredService<NpgsqlConnection>());
             }); 
             //postgres provider added later
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

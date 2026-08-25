@@ -57,3 +57,5 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+/src/University.Application/Features/Student/Handlers/Queries/GetStudentByEmailRequestHandler.cs
+/src/University.Application/Features/Student/Requests/Queries/GetStudentByEmailRequest.cs

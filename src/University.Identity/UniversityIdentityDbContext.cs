@@ -12,7 +12,7 @@ namespace University.Identity
 {
     public class UniversityIdentityDbContext:IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
-        public UniversityIdentityDbContext():base()
+        public UniversityIdentityDbContext(DbContextOptions<UniversityIdentityDbContext> options) :base(options)
         {
             
         }
