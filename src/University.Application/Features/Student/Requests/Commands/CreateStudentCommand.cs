@@ -9,7 +9,7 @@ using University.Application.Models.Responses;
 
 namespace University.Application.Features.Student.Requests.Commands
 {
-    public class CreateStudentCommand:IRequest<CreateCommandResponse<GetStudentDto>>
+    public class CreateStudentCommand:IRequest<CreateStudentResponse>
     {
         public required CreateStudentDto CreateStudentDto { get; set; }
     }

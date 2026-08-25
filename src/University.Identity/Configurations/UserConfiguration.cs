@@ -16,27 +16,21 @@ namespace University.Identity.Configurations
         {
             var samin = new ApplicationUser
             {
-                Id = "0765A886-A723-42A6-956C-37A43A9AFEB3",
-                FirstName = "Samin Sadman",
-                LastName = "Shad",
+                Id = Guid.Parse("0765A886-A723-42A6-956C-37A43A9AFEB3"),
                 UserName = "samin_sadman",
                 Email = "samin_sadman.buet@gmail.com",
                 EmailConfirmed = true,
             };
             var sample_student_1 = new ApplicationUser
             {
-                Id = "F52D3DE7-CC4C-4B71-97B0-8545A8F80C8A",
-                FirstName = "sample student",
-                LastName = "one",
+                Id = Guid.Parse("F52D3DE7-CC4C-4B71-97B0-8545A8F80C8A"),
                 UserName = "sample_student_1",
                 Email = "sample_student1.buet@gmail.com",
                 EmailConfirmed = true,
             };
             var sample_student_2 = new ApplicationUser
             {
-                Id = "CD594973-8439-47F8-82FA-8B097A6EE5B7",
-                FirstName = "sample student",
-                LastName = "two",
+                Id = Guid.Parse("CD594973-8439-47F8-82FA-8B097A6EE5B7"),
                 UserName = "sample_student_2",
                 Email = "sample_student2.buet@gmail.com",
                 EmailConfirmed = true,

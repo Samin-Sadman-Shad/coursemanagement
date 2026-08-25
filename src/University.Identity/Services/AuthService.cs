@@ -103,15 +103,13 @@ namespace University.Identity.Services
             var user = new ApplicationUser
             {
                 Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
                 UserName = request.UserName ?? request.FirstName + request.LastName,
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, request.Role.ToString());
+                await _userManager.AddToRoleAsync(user, RoleEnum.STAFF.ToString());
                 response.IsSuccessful = true;
                 response.UserId = user.Id;
                 return response;
@@ -122,6 +120,29 @@ namespace University.Identity.Services
                 response.Errors = result.Errors.Select(e => e.Description).ToList();
                 return response;
             }
+        }
+
+        public async Task<SetPasswordResponse> SetPassword(SetPasswordRequest request)
+        {
+            var response = new SetPasswordResponse();
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user is null)
+            {
+                response.IsSuccessful = false;
+                response.Errors.Add("Invalid user or token.");
+                return response;
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                response.IsSuccessful = false;
+                response.Errors = result.Errors.Select(e => e.Description).ToList();
+                return response;
+            }
+
+            response.IsSuccessful = true;
+            return response;
         }
 
         private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
@@ -142,11 +163,9 @@ namespace University.Identity.Services
 
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub,  user.Id),
+                new Claim(JwtRegisteredClaimNames.Sub,  user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
-                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email)
             }.Union(userClaims).Union(roleClaims);
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));

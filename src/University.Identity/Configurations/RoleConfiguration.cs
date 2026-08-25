@@ -11,19 +11,19 @@ using University.Identity.Models;
 
 namespace University.Identity.Configurations
 {
-    public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+    public class RoleConfiguration : IEntityTypeConfiguration<ApplicationRole>
     {
-        public void Configure(EntityTypeBuilder<IdentityRole> builder)
+        public void Configure(EntityTypeBuilder<ApplicationRole> builder)
         {
             builder.HasData(
-                new IdentityRole
+                new ApplicationRole
                 {
-                    Id = "9FAA56A1-53A5-4920-AB1D-C877494EC832",
+                    Id = Guid.Parse("9FAA56A1-53A5-4920-AB1D-C877494EC832"),
                     Name = RoleEnum.STAFF.ToString(),
                 },
-                new IdentityRole
+                new ApplicationRole
                 {
-                    Id = "05269E2A-75EE-4DB1-B1C1-4CD0B728EB53",
+                    Id = Guid.Parse("05269E2A-75EE-4DB1-B1C1-4CD0B728EB53"),
                     Name = RoleEnum.STUDENT.ToString()
                 }
              );

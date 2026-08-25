@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +19,9 @@ namespace University.Application.Contracts.Persistance
         ICourseCreditWorkRegistrationRepository CourseCreditWorkRegistrationRepository { get;}
 
         Task SaveChangesAsync();
+
+        Task BeginTransactionAsync();
+
+        Task RollbackAsync();
     }
 }

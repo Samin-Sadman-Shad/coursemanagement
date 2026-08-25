@@ -3,6 +3,7 @@
     <Project Path="src/University.API/University.API.csproj" />
     <Project Path="src/University.Application/University.Application.csproj" />
     <Project Path="src/University.Domain/University.Domain.csproj" />
+    <Project Path="src/University.Identity/University.Identity.csproj" />
     <Project Path="src/University.Persistance/University.Persistance.csproj" />
   </Folder>
 </Solution>

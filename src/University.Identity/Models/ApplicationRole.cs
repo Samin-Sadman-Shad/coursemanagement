@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace University.Identity.Models
 {
-    public class ApplicationUser:IdentityUser<Guid>
+    public class ApplicationRole:IdentityRole<Guid>
     {
-        //public string FirstName { get; set; } = String.Empty;
-        //public string LastName { get; set; } = String.Empty;
     }
 }

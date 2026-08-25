@@ -25,6 +25,7 @@ namespace University.Application.Models.DTOs.StudentDTOs.Validators
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_LETTERS_ONLY);
 
             RuleFor(dto => dto.Email)
+                .NotEmpty()
                 .EmailAddress()
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_VALID_EMAIL)
                 .MustAsync(async (email, token) =>

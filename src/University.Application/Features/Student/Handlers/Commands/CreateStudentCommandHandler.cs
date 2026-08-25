@@ -11,34 +11,42 @@ using University.Application.Models.DTOs.StudentDTOs;
 using University.Application.Models.DTOs.StudentDTOs.Validators;
 using University.Application.Models.Responses;
 using University.Application.Exceptions;
+using University.Application.Contracts.Identity;
 
 namespace University.Application.Features.Student.Handlers.Commands
 {
-    public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand, CreateCommandResponse<GetStudentDto>>
+    public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand, CreateStudentResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CreateStudentCommandHandler(IUnitOfWork unitOfWork)
+        private readonly IUserService _userService;
+        public CreateStudentCommandHandler(IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
+            _userService = userService;
         }
 
-        public async Task<CreateCommandResponse<GetStudentDto>> Handle(CreateStudentCommand request, CancellationToken cancellationToken)
+        public async Task<CreateStudentResponse> Handle(CreateStudentCommand request, CancellationToken cancellationToken)
         {
-            var response = new CreateCommandResponse<GetStudentDto>();
+            var response = new CreateStudentResponse();
+
+            var studentRepository = _unitOfWork.StudentRepository;
+            var dto = request.CreateStudentDto;
+            var validator = new CreateStudentDtoValidator(_unitOfWork);
+            var validationResult = await validator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                response.IsSuccessful = false;
+                response.Status = HttpStatusCode.BadRequest;
+                response.Errors = validationResult.Errors.Select(error => error.ErrorMessage).ToList();
+                return response;
+            }
+
+            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var studentRepository = _unitOfWork.StudentRepository;
-                var dto = request.CreateStudentDto;
-                var validator = new CreateStudentDtoValidator(_unitOfWork);
-                var validationResult = await validator.ValidateAsync(dto);
-                if (!validationResult.IsValid)
-                {
-                    response.IsSuccessful = false;
-                    response.Status = HttpStatusCode.BadRequest;
-                    response.Errors = validationResult.Errors.Select(error => error.ErrorMessage).ToList();
-                    return response;
-                }
+                var (userId, resetToken) = await _userService.CreateStudentAccountAsync(dto.Email, dto.Name);
                 var entity = dto.MapToStudent();
+                entity.UserId = userId;
                 var entityCreated = await studentRepository.CreateAsync(entity);
                 await _unitOfWork.SaveChangesAsync();
                 if (entityCreated is null)
@@ -49,13 +57,10 @@ namespace University.Application.Features.Student.Handlers.Commands
                 response.RecordId = entityCreated.UserId;
                 response.Record = entity.MapToGetStudentDto();
                 response.Status = HttpStatusCode.Created;
+                response.PasswordResetToken = resetToken;
                 return response;
             }
-            catch(Exception ex)
-            {
-                throw new FailToProcessCommandException(ex);
-            }
-
+            catch { await _unitOfWork.RollbackAsync(); throw; }
 
         }
     }

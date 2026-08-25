@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using University.Application.Contracts.Persistance;
+using University.Identity;
 using University.Persistance.Context;
 
 namespace University.Persistance.Repositories
@@ -19,10 +23,13 @@ namespace University.Persistance.Repositories
         private ICourseCreditWorkRegistrationRepository? _courseCreditWorkRegistrationRepository;
 
         private  UniversityDbContext _dbContext;
+        private readonly UniversityIdentityDbContext _identityDbContext;
+        private IDbContextTransaction? _transaction;
 
-        public UnitOfWork(UniversityDbContext dbContext)
+        public UnitOfWork(UniversityDbContext dbContext, UniversityIdentityDbContext identityDbContext)
         {
             _dbContext = dbContext;
+            _identityDbContext= identityDbContext;
         }
 
         //instantiated first time the caller uses the property
@@ -48,9 +55,25 @@ namespace University.Persistance.Repositories
             GC.SuppressFinalize(this);
         }
 
+        public async Task BeginTransactionAsync()
+        {
+            _transaction = await _dbContext.Database.BeginTransactionAsync();
+            await _identityDbContext.Database.UseTransactionAsync(_transaction.GetDbTransaction());
+        }
+
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
+            await _identityDbContext.SaveChangesAsync();
+            await _transaction!.CommitAsync();
         }
+
+        public Task RollbackAsync() => _transaction?.RollbackAsync() ?? Task.CompletedTask;
+
+        //public DbConnection Connection => _dbContext.Database.GetDbConnection();
+        //public Task<IDbContextTransaction> BeginTransactionAsync()
+        //{
+        //    return _dbContext.Database.BeginTransaction();
+        //} 
     }
 }

@@ -12,5 +12,6 @@ namespace University.Application.Contracts.Identity
         Task<AuthResponse> Login(AuthRequest request);
         Task<RegistrationResponse> Register(RegistrationRequest request);
         Task<LogoutResponse> Logout();
+        Task<SetPasswordResponse> SetPassword(SetPasswordRequest request);
     }
 }

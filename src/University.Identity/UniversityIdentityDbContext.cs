@@ -10,7 +10,7 @@ using University.Identity.Models;
 
 namespace University.Identity
 {
-    public class UniversityIdentityDbContext:IdentityDbContext<ApplicationUser>
+    public class UniversityIdentityDbContext:IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         public UniversityIdentityDbContext():base()
         {

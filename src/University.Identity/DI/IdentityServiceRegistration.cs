@@ -34,19 +34,27 @@ namespace University.Identity.DI
                 //    {
                 //        sqlOptionBuilder.MigrationsAssembly(typeof(LeaveManagementIdentityDbContext).Assembly.FullName);
                 //    });
-                options.UseNpgsql(identityConnectionString, options =>
-                options.EnableRetryOnFailure(
-                    maxRetryCount: 5,
-                    maxRetryDelay: TimeSpan.FromSeconds(10),
-                    errorCodesToAdd: null
-                    )
+                options.UseNpgsql(identityConnectionString, 
+                    options =>
+                    {
+                        options.EnableRetryOnFailure(
+                            maxRetryCount: 5,
+                            maxRetryDelay: TimeSpan.FromSeconds(10),
+                            errorCodesToAdd: null
+                            );
+                        options.MigrationsAssembly(typeof(UniversityIdentityDbContext).Assembly.FullName);
+                    }
+
                 );
                 
             });
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<UniversityIdentityDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<UniversityIdentityDbContext>()
+            .AddDefaultTokenProviders();
 
             //everytime user tries to login, new service will be created
             services.AddTransient<IAuthService, AuthService>();

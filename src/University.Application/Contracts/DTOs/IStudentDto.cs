@@ -11,6 +11,6 @@ namespace University.Application.Contracts.DTOs
     {
         public string Name { get; set; }
         public int Roll { get; set; }    
-        public string? Email { get; set; }
+        public string Email { get; set; }
     }
 }

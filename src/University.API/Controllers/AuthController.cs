@@ -49,6 +49,11 @@ namespace University.API.Controllers
             return Ok(await _authService.Logout());
         }
 
-
+        [HttpPost("set-password")]
+        public async Task<IActionResult> SetPassword([FromBody] SetPasswordRequest request)
+        {
+            var response = await _authService.SetPassword(request);
+            return response.IsSuccessful ? Ok(response) : BadRequest(response);
+        }
     }
 }

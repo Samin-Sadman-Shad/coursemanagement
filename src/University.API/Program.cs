@@ -13,11 +13,12 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .Enrich.FromLogContext()
     .Enrich.WithMachineName()
     .Enrich.WithProperty("Application", "University.Api")
-    //.WriteTo.Console(new CompactJsonFormatter()));
+    //.WriteTo.Console(new CompactJsonFormatter()));  => this one is for production
     .WriteTo.Console
     (
         outputTemplate:
-        "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+        "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"  
+        // changed to this to make log clean for by debug purpose
     ));
 
 // Add services to the container.

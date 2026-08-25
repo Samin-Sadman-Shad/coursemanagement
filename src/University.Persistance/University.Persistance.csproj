@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\University.Application\University.Application.csproj" />
+    <ProjectReference Include="..\University.Identity\University.Identity.csproj" />
   </ItemGroup>
 
 </Project>
