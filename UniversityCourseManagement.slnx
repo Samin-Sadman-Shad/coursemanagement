@@ -10,4 +10,7 @@
     <Project Path="src/University.Identity/University.Identity.csproj" />
     <Project Path="src/University.Persistance/University.Persistance.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/University.Tests/University.Tests.csproj" />
+  </Folder>
 </Solution>
