@@ -22,12 +22,10 @@ namespace University.Application.Features.Student.Handlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        private readonly ICurrentUserService _currentUserService;
-        public GetStudentByPersonalInfoRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
+        public GetStudentByPersonalInfoRequestHandler(IUnitOfWork uow, IUserService userService)
         {
             _unitOfWork = uow;
             _userService = userService;
-            _currentUserService = currentUserService;
         }
         public async Task<BaseQueryResponse<GetStudentWithDetailsDto>> Handle(GetStudentByPersonalInfoRequest request, CancellationToken cancellationToken)
         {
@@ -45,12 +43,13 @@ namespace University.Application.Features.Student.Handlers.Queries
                     student = await studentRepository.GetStudentByRollAsync(request.Roll);
                 }
 
-                var currentStaffId = _currentUserService.UserId;
-                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                if (staff is null)
-                {
-                    staff = new StaffDto();
-                }
+                //var currentStaffId = _currentUserService.UserId;
+                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                //if (staff is null)
+                //{
+                //    staff = new StaffDto();
+                //}
+                var staff = await _userService.GetStaffByIdAsync(student!.CreatedById) ?? new StaffDto();
 
                 if (student is not null)
                 {

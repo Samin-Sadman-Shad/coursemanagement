@@ -20,12 +20,10 @@ namespace University.Application.Features.Course.Handlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        private readonly ICurrentUserService _currentUserService;
-        public GetCourseListByCreditWorkIdRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
+        public GetCourseListByCreditWorkIdRequestHandler(IUnitOfWork uow, IUserService userService)
         {
             _unitOfWork = uow;
             _userService = userService;
-            _currentUserService = currentUserService;
         }
         public async Task<BaseQueryListResponse<GetCourseDto>> Handle(GetCourseListByCreditWorkIdRequest request, 
             CancellationToken cancellationToken)
@@ -43,14 +41,22 @@ namespace University.Application.Features.Course.Handlers.Queries
                     return response;
                 }
 
-                var currentStaffId = _currentUserService.UserId;
-                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                if (staff is null)
+                //var currentStaffId = _currentUserService.UserId;
+                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                //if (staff is null)
+                //{
+                //    staff = new StaffDto();
+                //}
+
+                var dtos = new List<GetCourseDto>();
+                foreach (var entity in entities)
                 {
-                    staff = new StaffDto();
+                    var staff = await _userService.GetStaffByIdAsync(entity.CreatedById) ?? new StaffDto();
+                    var dto = entity.MapToGetCourseDto(staff);
+                    dtos.Add(dto);
                 }
 
-                var dtos = entities.Select(e => e.MapToGetCourseDto(staff)).ToList();
+                //var dtos = entities.Select(e => e.MapToGetCourseDto(staff)).ToList();
                 response.IsSuccessful = true;
                 response.Records = dtos;
                 response.Status = System.Net.HttpStatusCode.OK;

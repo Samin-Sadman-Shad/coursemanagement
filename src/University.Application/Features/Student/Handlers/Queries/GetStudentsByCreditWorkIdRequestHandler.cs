@@ -20,28 +20,35 @@ namespace University.Application.Features.Student.Handlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        private readonly ICurrentUserService _currentUserService;
-        public GetStudentsByCreditWorkIdRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
+        public GetStudentsByCreditWorkIdRequestHandler(IUnitOfWork uow, IUserService userService)
         {
             _unitOfWork = uow;
             _userService = userService;
-            _currentUserService = currentUserService;
         }
         public async Task<BaseQueryListResponse<GetStudentDto>> Handle(GetStudentsByCreditWorkIdRequest request, CancellationToken cancellationToken)
         {
             var response = new BaseQueryListResponse<GetStudentDto>();
             try
             {
-                var currentStaffId = _currentUserService.UserId;
-                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                if (staff is null)
-                {
-                    staff = new StaffDto();
-                }
+                //var currentStaffId = _currentUserService.UserId;
+                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                //if (staff is null)
+                //{
+                //    staff = new StaffDto();
+                //}
 
                 var studentRepository = _unitOfWork.StudentRepository;
                 var entities = await studentRepository.GetStudentsByCourseIdAsync(request.CreditWorkId);
-                var records = entities.Select(entity => entity.MapToGetStudentDto(staff)).ToList();
+
+                var records = new List<GetStudentDto>();
+                foreach (var entity in entities)
+                {
+                    var staff = await _userService.GetStaffByIdAsync(entity.CreatedById) ?? new StaffDto();
+                    var dto = entity.MapToGetStudentDto(staff);
+                    records.Add(dto);
+                }
+
+                //var records = entities.Select(entity => entity.MapToGetStudentDto(staff)).ToList();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.OK;
                 response.Records = records;

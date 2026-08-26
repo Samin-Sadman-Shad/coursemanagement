@@ -20,12 +20,10 @@ namespace University.Application.Features.Course.Handlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        private readonly ICurrentUserService _currentUserService;
-        public GetCourseWithDetailsRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
+        public GetCourseWithDetailsRequestHandler(IUnitOfWork uow, IUserService userService)
         {
             _unitOfWork = uow;
             _userService = userService;
-            _currentUserService = currentUserService;
         }
         public async Task<BaseQueryResponse<GetCourseWithDetailsDto>> Handle(GetCourseWithDetailsRequest request, CancellationToken cancellationToken)
         {
@@ -42,12 +40,14 @@ namespace University.Application.Features.Course.Handlers.Queries
                     return response;
                 }
 
-                var currentStaffId = _currentUserService.UserId;
-                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                if (staff is null)
-                {
-                    staff = new StaffDto();
-                }
+                //var currentStaffId = _currentUserService.UserId;
+                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                //if (staff is null)
+                //{
+                //    staff = new StaffDto();
+                //}
+
+                var staff = await _userService.GetStaffByIdAsync(entity!.CreatedById) ?? new StaffDto();
 
                 var dto = entity.MapToGetCourseWithDetailsDto(staff);
                 response.IsSuccessful = true;

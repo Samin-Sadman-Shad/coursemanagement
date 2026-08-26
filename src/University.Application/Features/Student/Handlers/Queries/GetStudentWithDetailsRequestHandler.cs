@@ -20,12 +20,10 @@ namespace University.Application.Features.Student.Handlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        private readonly ICurrentUserService _currentUserService;
-        public GetStudentWithDetailsRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
+        public GetStudentWithDetailsRequestHandler(IUnitOfWork uow, IUserService userService)
         {
             _unitOfWork = uow;
             _userService = userService;
-            _currentUserService = currentUserService;
         }
         public async Task<BaseQueryResponse<GetStudentWithDetailsDto>> 
             Handle(GetStudentWithDetailsRequest request, CancellationToken cancellationToken)
@@ -34,16 +32,19 @@ namespace University.Application.Features.Student.Handlers.Queries
             try
             {
 
-                var currentStaffId = _currentUserService.UserId;
-                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                if (staff is null)
-                {
-                    staff = new StaffDto();
-                }
+                //var currentStaffId = _currentUserService.UserId;
+                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                //if (staff is null)
+                //{
+                //    staff = new StaffDto();
+                //}
 
                 var studentRepository = _unitOfWork.StudentRepository;
                 var student = await studentRepository.GetByIdDetailAsync(request.StudentId);
-                if(student is not null)
+
+                var staff = await _userService.GetStaffByIdAsync(student!.CreatedById) ?? new StaffDto();
+
+                if (student is not null)
                 {
                     response.Status = HttpStatusCode.Accepted;
                     var record = student.MapToGetStudentWithDetailsDto(staff);

@@ -14,6 +14,7 @@ using University.Application.Models.DTOs.CreditWorkEnrollmentDto;
 using University.Application.Models.DTOs.Staff;
 using University.Application.Models.DTOs.StudentDTOs;
 using University.Application.Models.Responses;
+using University.Domain.Entities.BaseEntities;
 
 namespace University.Application.Features.CreditWorkEnrollment.Handlers.Queries
 {
@@ -21,13 +22,11 @@ namespace University.Application.Features.CreditWorkEnrollment.Handlers.Queries
         : IRequestHandler<GetCreditWorkEnrollmentRequest, BaseQueryResponse<GetCreditWorkEnrollmentDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
         private readonly IUserService _userService;
 
-        public GetCreditWorkEnrollmentRequestHandler(IUnitOfWork unitOfWork, ICurrentUserService currenrUser, IUserService userService)
+        public GetCreditWorkEnrollmentRequestHandler(IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
-            _currentUserService = currenrUser;
             _userService = userService;
         }
 
@@ -45,16 +44,18 @@ namespace University.Application.Features.CreditWorkEnrollment.Handlers.Queries
                     return response;
                 }
 
-                var staffId = _currentUserService.UserId;
-                var staff = await _userService.GetStaffByIdAsync(staffId) ?? new StaffDto();
-                var createdAt = DateTimeOffset.UtcNow;
+                //var staffId = _currentUserService.UserId;
+                //var staff = await _userService.GetStaffByIdAsync(staffId) ?? new StaffDto();
+                //var createdAt = DateTimeOffset.UtcNow;
+
+                var staff = await _userService.GetStaffByIdAsync(entity!.CreatedById) ?? new StaffDto();
 
                 var dto = new GetCreditWorkEnrollmentDto
                 {
                     CreditWorkDto = entity.CreditWork.MapToGetCreditWorkDto(staff),
                     StudentDto = entity.Student.MapToGetStudentDto(staff),
                     CreatedBy = staff,
-                    CreatedAt = createdAt,
+                    CreatedAt = entity.CreatedAt,
                 };
 
                 response.IsSuccessful = true;

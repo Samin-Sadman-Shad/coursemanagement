@@ -20,13 +20,11 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Queries
     public class GetCourseEnrollmentRequestHandler : IRequestHandler<GetCourseEnrollmentRequest, BaseQueryResponse<GetCourseEnrollmentDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
         private readonly IUserService _userService;
 
-        public GetCourseEnrollmentRequestHandler(IUnitOfWork unitOfWork, ICurrentUserService currenrUser, IUserService userService)
+        public GetCourseEnrollmentRequestHandler(IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
-            _currentUserService = currenrUser;
             _userService = userService;
         }
 
@@ -44,8 +42,10 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Queries
                     return response;
                 }
 
-                var staffId = _currentUserService.UserId;
-                var staff = await _userService.GetStaffByIdAsync(staffId) ?? new StaffDto();
+                //var staffId = _currentUserService.UserId;
+                //var staff = await _userService.GetStaffByIdAsync(staffId) ?? new StaffDto();
+
+                var staff = await _userService.GetStaffByIdAsync(entity!.CreatedById) ?? new StaffDto();
 
                 var dto = new GetCourseEnrollmentDto
                 {
@@ -53,7 +53,7 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Queries
                     CourseDto = entity.Course.MapToGetCourseDto(staff),
                     EnrolledBy = staff,
                     CreatedBy = staff,
-                    CreatedAt = DateTime.UtcNow,
+                    CreatedAt = entity.CreatedAt,
                 };
 
                 response.IsSuccessful = true;

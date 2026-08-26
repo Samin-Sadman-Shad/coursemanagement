@@ -12,6 +12,7 @@ using University.Application.Features.CreditWork.Requests.Queries;
 using University.Application.Models.DTOs.CreditWorkDTOs;
 using University.Application.Models.DTOs.Staff;
 using University.Application.Models.Responses;
+using University.Domain.Entities.BaseEntities;
 
 namespace University.Application.Features.CreditWork.Handlers.Queries
 {
@@ -20,12 +21,10 @@ namespace University.Application.Features.CreditWork.Handlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        private readonly ICurrentUserService _currentUserService;
-        public GetCreditWorkWithDetailsRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
+        public GetCreditWorkWithDetailsRequestHandler(IUnitOfWork uow, IUserService userService)
         {
             _unitOfWork = uow;
             _userService = userService;
-            _currentUserService = currentUserService;
         }
         public async Task<BaseQueryResponse<GetCreditWorkWithDetailsDto>> Handle(GetCreditWorkWithDetailsRequest request, CancellationToken cancellationToken)
         {
@@ -42,14 +41,16 @@ namespace University.Application.Features.CreditWork.Handlers.Queries
                     return response;
                 }
 
-                var currentStaffId = _currentUserService.UserId;
-                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                if (staff is null)
-                {
-                    staff = new StaffDto();
-                }
+                //var currentStaffId = _currentUserService.UserId;
+                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                //if (staff is null)
+                //{
+                //    staff = new StaffDto();
+                //}
 
+                var staff = await _userService.GetStaffByIdAsync(entity!.CreatedById) ?? new StaffDto();
                 var dto = entity.MapToGetCreditWorkWithDetailsDto(staff);
+
                 response.IsSuccessful = true;
                 response.Status = System.Net.HttpStatusCode.OK;
                 response.Record = dto;
