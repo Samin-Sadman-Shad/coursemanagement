@@ -86,8 +86,6 @@ namespace University.API.Controllers
             response = await _mediator.Send(command);
 
             return ToActionResult(response);
-
-            
         }
 
         // PUT api/<StudentController>/5
@@ -116,7 +114,6 @@ namespace University.API.Controllers
 
             response = await _mediator.Send(command);
             return ToActionResult(response);
-            
         }
 
         [HttpPatch("name/{id:Guid}")]
@@ -131,7 +128,6 @@ namespace University.API.Controllers
             var response = new BaseCommandResponse();
             response = await _mediator.Send(command);
             return ToActionResult(response);
-
         }
 
         [HttpPatch("roll/{id:Guid}")]
@@ -144,8 +140,7 @@ namespace University.API.Controllers
             };
             var response = new BaseCommandResponse();
             response = await _mediator.Send(command);
-            return ToActionResult(response);
-            
+            return ToActionResult(response);           
         }
 
         // DELETE api/<StudentController>/5
