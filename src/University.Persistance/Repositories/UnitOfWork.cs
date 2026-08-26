@@ -65,10 +65,23 @@ namespace University.Persistance.Repositories
         {
             await _dbContext.SaveChangesAsync();
             await _identityDbContext.SaveChangesAsync();
-            await _transaction!.CommitAsync();
+            if (_transaction is not null)
+            {
+                await _transaction.CommitAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
         }
 
-        public Task RollbackAsync() => _transaction?.RollbackAsync() ?? Task.CompletedTask;
+        public async Task RollbackAsync()
+        {
+            if (_transaction is not null)
+            {
+                await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
+        }
 
         //public DbConnection Connection => _dbContext.Database.GetDbConnection();
         //public Task<IDbContextTransaction> BeginTransactionAsync()

@@ -21,7 +21,7 @@ namespace University.Application.Models.DTOs.StudentDTOs.Validators
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_EMPTY)
                 .MaximumLength(50)
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_MAX_LENGTH)
-                .Must(name => name.All(char.IsLetter))
+                .Must(name => name.All( c=> char.IsLetter(c) ||  char.IsWhiteSpace(c)) )
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_LETTERS_ONLY);
 
             RuleFor(dto => dto.Email)

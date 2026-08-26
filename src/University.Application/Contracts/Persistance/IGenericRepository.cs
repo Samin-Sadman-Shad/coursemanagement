@@ -13,9 +13,10 @@ namespace University.Application.Contracts.Persistance
         Task<T?> GetByIdAsync(Guid id);
         Task<T?> GetByIdDetailAsync(Guid id);
         Task<T> CreateAsync(T entity);
-        Task<T> UpdateAsync(T entity);
+        T Update(T entity);
         Task<T> DeleteAsync(Guid id);
 
         Task<bool> ExistsAsync(Guid id);
+
     }
 }

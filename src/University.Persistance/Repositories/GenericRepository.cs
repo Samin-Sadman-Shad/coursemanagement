@@ -51,7 +51,7 @@ namespace University.Persistance.Repositories
             return await _dbContext.FindAsync<T>(id);
         }
 
-        public async Task<T> UpdateAsync(T entity)
+        public T Update(T entity)
         {
             _dbContext.Attach(entity).State = EntityState.Modified;
             //await _dbContext.SaveChangesAsync();

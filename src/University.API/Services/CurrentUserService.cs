@@ -17,8 +17,9 @@ namespace University.API.Services
         {
             get
             {
-                var value= _httpContextAccessor.HttpContext?.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-                if(!Guid.TryParse(value, out Guid userId))
+                //var value= _httpContextAccessor.HttpContext?.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+                var value = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!Guid.TryParse(value, out Guid userId))
                 {
                     throw new UnauthorizedAccessException(
                     "Authenticated user ID is not available.");

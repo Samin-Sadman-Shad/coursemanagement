@@ -64,6 +64,7 @@ namespace University.Application.Features.Course.Handlers.Commands
                 {
                     throw new FailToProcessCommandException();
                 }
+                await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = System.Net.HttpStatusCode.Created;
                 response.RecordId = createdCourse.Id;

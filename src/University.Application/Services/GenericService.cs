@@ -91,14 +91,13 @@ namespace University.Application.Services
                     throw new Exception("No Entity found");
                 }
                 ApplyUpdate(existingEntity, dto);
-                await _repository.UpdateAsync(existingEntity);
+                 _repository.Update(existingEntity);
                 return ToGetDto(existingEntity);
             }
             catch (Exception ex)
             {
                 throw new Exception($"Problem with updating {nameof(TEntity)} with id {id}", ex);
             }
-
 
         }
     }

@@ -62,6 +62,7 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
                 {
                     throw new FailToProcessCommandException();
                 }
+                await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = System.Net.HttpStatusCode.Created;
                 response.RecordId = creditedEntity.Id;

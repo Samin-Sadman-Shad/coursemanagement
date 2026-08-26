@@ -54,6 +54,8 @@ namespace University.Application.Features.Student.Handlers.Commands
                 entity.LastModifiedById = currentStaffId;
                 entity.LastModifiedAt = updatedAt;
 
+                 studentRepository.Update(entity);
+
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.NoContent;

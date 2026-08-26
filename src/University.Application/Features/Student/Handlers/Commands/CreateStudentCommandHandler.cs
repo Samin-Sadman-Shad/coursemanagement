@@ -62,11 +62,12 @@ namespace University.Application.Features.Student.Handlers.Commands
                 entity.UserId = userId;
 
                 var entityCreated = await studentRepository.CreateAsync(entity);
-                await _unitOfWork.SaveChangesAsync();
+                
                 if (entityCreated is null)
                 {
                     throw new FailToProcessCommandException();
                 }
+                await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.RecordId = entityCreated.UserId;
                 response.Record = entity.MapToGetStudentDto(staff);

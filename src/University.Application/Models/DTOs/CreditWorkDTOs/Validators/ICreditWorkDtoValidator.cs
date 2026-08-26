@@ -18,7 +18,7 @@ namespace University.Application.Models.DTOs.CreditWorkDTOs.Validators
             _unitOfWork = uow;
             RuleFor(cw => cw.Heading)
                 .NotEmpty()
-                .MaximumLength(10)
+                .MaximumLength(20)
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_MAX_LENGTH)
                 .Must(heading => heading.All(char.IsLetter))
                 .WithMessage(CONST_STRING.PROPERTY_ERROR_LETTERS_ONLY);

@@ -20,11 +20,15 @@ namespace University.Identity.Services
         }
         public async Task<(Guid UserId, string ResetToken)> CreateStudentAccountAsync(string email, string name)
         {
+            var username = string.Join(
+                ".",
+                name.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            );
             var user = new ApplicationUser
             {
                 Id = Guid.NewGuid(),
                 Email = email,
-                UserName = name,
+                UserName = username.ToLowerInvariant(),
                 EmailConfirmed = false
             };
             var result = await _userManager.CreateAsync(user);
