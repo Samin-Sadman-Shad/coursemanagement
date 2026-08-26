@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Contracts.API;
+using University.Application.Contracts.Identity;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.CreditWork.Requests.Commands;
@@ -17,9 +19,11 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
         : IRequestHandler<UpdateCreditWorkHeadingCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateCreditWorkHeadingCommandHandler(IUnitOfWork uow)
+        private readonly ICurrentUserService _currentUserService;
+        public UpdateCreditWorkHeadingCommandHandler(IUnitOfWork uow,  ICurrentUserService currentUserService)
         {
             _unitOfWork = uow;
+            _currentUserService = currentUserService;
         }
         public async Task<BaseCommandResponse> Handle(UpdateCreditWorkHeadingCommand request, CancellationToken cancellationToken)
         {
@@ -45,6 +49,12 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
                 {
                     throw new NotFoundException();
                 }
+
+                var currentStaffId = _currentUserService.UserId;
+                var updatedAt = DateTimeOffset.UtcNow;
+                entity.LastModifiedById = currentStaffId;
+                entity.LastModifiedAt = updatedAt;
+
                 await creditWorkRepository.UpdateCreditWorkHeading(entity, request.CreditWorkDto.Heading);
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;

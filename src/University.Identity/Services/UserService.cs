@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using University.Application.Contracts.Identity;
+using University.Application.Models.DTOs.Staff;
 using University.Application.Models.Identity;
 using University.Identity.Models;
 
@@ -35,6 +36,16 @@ namespace University.Identity.Services
             return (user.Id, token);
         }
 
+        public async Task<StaffDto?> GetStaffByIdAsync(Guid staffId)
+        {
+            var user = await _userManager.FindByIdAsync(staffId.ToString());
+            if(user is null) return null;
+            return new StaffDto
+            {
+                UserName = user.UserName ?? user.Email ?? string.Empty, 
+                Email = user.Email ?? string.Empty
+             };
+        }
 
     }
 }

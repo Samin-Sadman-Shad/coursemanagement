@@ -6,11 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Contracts.API;
+using University.Application.Contracts.Identity;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.CreditWork.Requests.Commands;
 using University.Application.Models.DTOs.CreditWorkDTOs;
 using University.Application.Models.DTOs.CreditWorkDTOs.Validators;
+using University.Application.Models.DTOs.Staff;
 using University.Application.Models.DTOs.StudentDTOs.Validators;
 using University.Application.Models.Responses;
 
@@ -19,9 +22,13 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
     public class UpdateCreditWorkCommandHandler : IRequestHandler<UpdateCreditWorkCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateCreditWorkCommandHandler(IUnitOfWork uow)
+        private readonly IUserService _userService;
+        private readonly ICurrentUserService _currentUserService;
+        public UpdateCreditWorkCommandHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
         {
             _unitOfWork = uow;
+            _userService = userService;
+            _currentUserService = currentUserService;
         }
         public async Task<BaseCommandResponse> Handle(UpdateCreditWorkCommand request, CancellationToken cancellationToken)
         {
@@ -47,7 +54,16 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
                 {
                     throw new NotFoundException();
                 }
-                request.CreditWorkDto.UpdateCreditWork(entity);
+
+                var currentStaffId = _currentUserService.UserId;
+                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                if (staff is null)
+                {
+                    staff = new StaffDto();
+                }
+                var updateddAt = DateTimeOffset.UtcNow;
+
+                request.CreditWorkDto.UpdateCreditWork(entity, currentStaffId, updateddAt);
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.NoContent;

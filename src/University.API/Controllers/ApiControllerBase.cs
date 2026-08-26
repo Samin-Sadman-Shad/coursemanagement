@@ -7,17 +7,17 @@ namespace University.API.Controllers
     [ApiController]
     public abstract class ApiControllerBase:ControllerBase
     {
-        protected ActionResult<BaseCommandResponse> ToActionResult(BaseCommandResponse response)
-        {
-            return response.Status switch
-            {
-                HttpStatusCode.Created => StatusCode((int)HttpStatusCode.Created, response),
-                HttpStatusCode.NoContent => StatusCode((int)HttpStatusCode.NoContent, response),
-                HttpStatusCode.NotFound => NotFound(response),
-                HttpStatusCode.BadRequest => BadRequest(response),
-                _ => Ok(response)
-            };
-        }
+        //protected ActionResult<BaseCommandResponse> ToActionResult(BaseCommandResponse response)
+        //{
+        //    return response.Status switch
+        //    {
+        //        HttpStatusCode.Created => StatusCode((int)HttpStatusCode.Created, response),
+        //        HttpStatusCode.NoContent => StatusCode((int)HttpStatusCode.NoContent, response),
+        //        HttpStatusCode.NotFound => NotFound(response),
+        //        HttpStatusCode.BadRequest => BadRequest(response),
+        //        _ => Ok(response)
+        //    };
+        //}
 
         protected ActionResult<TResponse> ToActionResult<TResponse>(TResponse response)
         where TResponse : IBaseResponse

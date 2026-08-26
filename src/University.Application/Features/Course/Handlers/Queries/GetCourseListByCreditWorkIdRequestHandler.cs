@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Contracts.API;
+using University.Application.Contracts.Identity;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.Course.Requests.Queries;
 using University.Application.Models.DTOs.CourseDTOs;
+using University.Application.Models.DTOs.Staff;
 using University.Application.Models.Responses;
 
 namespace University.Application.Features.Course.Handlers.Queries
@@ -16,9 +19,13 @@ namespace University.Application.Features.Course.Handlers.Queries
         : IRequestHandler<GetCourseListByCreditWorkIdRequest, BaseQueryListResponse<GetCourseDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public GetCourseListByCreditWorkIdRequestHandler(IUnitOfWork uow)
+        private readonly IUserService _userService;
+        private readonly ICurrentUserService _currentUserService;
+        public GetCourseListByCreditWorkIdRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
         {
             _unitOfWork = uow;
+            _userService = userService;
+            _currentUserService = currentUserService;
         }
         public async Task<BaseQueryListResponse<GetCourseDto>> Handle(GetCourseListByCreditWorkIdRequest request, 
             CancellationToken cancellationToken)
@@ -35,7 +42,15 @@ namespace University.Application.Features.Course.Handlers.Queries
                     response.Message = "No credit works found";
                     return response;
                 }
-                var dtos = entities.Select(e => e.MapToGetCourseDto()).ToList();
+
+                var currentStaffId = _currentUserService.UserId;
+                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                if (staff is null)
+                {
+                    staff = new StaffDto();
+                }
+
+                var dtos = entities.Select(e => e.MapToGetCourseDto(staff)).ToList();
                 response.IsSuccessful = true;
                 response.Records = dtos;
                 response.Status = System.Net.HttpStatusCode.OK;

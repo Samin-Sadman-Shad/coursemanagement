@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Models.DTOs.CourseDTOs;
 using University.Application.Models.DTOs.CourseEnrollmentDTOs;
 using University.Application.Models.Responses;
 
 namespace University.Application.Features.CourseEnrollment.Requests.Commands
 {
-    public class CreateCourseEnrollmentCommand:IRequest<BaseCommandResponse>
+    public class CreateCourseEnrollmentCommand:IRequest<CreateCommandResponse<GetCourseEnrollmentDto>>
     {
         public required CreateCourseEnrollmentDto CourseEnrollmentDto { get; set; }
     }

@@ -13,5 +13,7 @@ namespace University.Application.Models.DTOs.CreditWorkEnrollmentDto
     {
         public GetStudentDto? StudentDto { get; set; }
         public GetCreditWorkDto? CreditWorkDto { get; set; }
+
+        //public required StaffDto EnrolledBy { get; set; }
     }
 }

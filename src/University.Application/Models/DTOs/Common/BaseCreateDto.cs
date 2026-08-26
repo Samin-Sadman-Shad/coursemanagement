@@ -10,7 +10,7 @@ namespace University.Application.Models.DTOs.Common
 {
     public class BaseCreateDto:ICreateDto
     {
-        public required Staff CreatedBy { get; set; }
-        public DateTimeOffset CreatedAt { get; set; }
+        //public required Staff CreatedBy { get; set; }
+        //public DateTimeOffset CreatedAt { get; set; }
     }
 }

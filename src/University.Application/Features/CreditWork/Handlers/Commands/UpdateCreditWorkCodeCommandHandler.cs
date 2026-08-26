@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Contracts.API;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.CreditWork.Requests.Commands;
@@ -17,9 +18,11 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
         : IRequestHandler<UpdateCreditWorkCodeCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateCreditWorkCodeCommandHandler(IUnitOfWork uow)
+        private readonly ICurrentUserService _currentUserService;
+        public UpdateCreditWorkCodeCommandHandler(IUnitOfWork uow, ICurrentUserService currentUserService)
         {
             _unitOfWork = uow;
+            _currentUserService = currentUserService;
         }
         public async Task<BaseCommandResponse> Handle(UpdateCreditWorkCodeCommand request, CancellationToken cancellationToken)
         {
@@ -45,6 +48,12 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
                 {
                     throw new NotFoundException();
                 }
+
+                var currentStaffId = _currentUserService.UserId;
+                var updatedAt = DateTimeOffset.UtcNow;
+                entity.LastModifiedById = currentStaffId;
+                entity.LastModifiedAt = updatedAt;
+
                 await creditWorkRepository.UpdateCreditWorkCode(entity, request.CreditWorkDto.Code);
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;

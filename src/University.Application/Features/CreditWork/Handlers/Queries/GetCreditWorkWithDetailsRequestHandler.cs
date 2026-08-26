@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Contracts.API;
+using University.Application.Contracts.Identity;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.CreditWork.Requests.Queries;
 using University.Application.Models.DTOs.CreditWorkDTOs;
+using University.Application.Models.DTOs.Staff;
 using University.Application.Models.Responses;
 
 namespace University.Application.Features.CreditWork.Handlers.Queries
@@ -16,9 +19,13 @@ namespace University.Application.Features.CreditWork.Handlers.Queries
         IRequestHandler<GetCreditWorkWithDetailsRequest, BaseQueryResponse<GetCreditWorkWithDetailsDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public GetCreditWorkWithDetailsRequestHandler(IUnitOfWork uow)
+        private readonly IUserService _userService;
+        private readonly ICurrentUserService _currentUserService;
+        public GetCreditWorkWithDetailsRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
         {
             _unitOfWork = uow;
+            _userService = userService;
+            _currentUserService = currentUserService;
         }
         public async Task<BaseQueryResponse<GetCreditWorkWithDetailsDto>> Handle(GetCreditWorkWithDetailsRequest request, CancellationToken cancellationToken)
         {
@@ -34,7 +41,15 @@ namespace University.Application.Features.CreditWork.Handlers.Queries
                     response.Message = "No credit works found";
                     return response;
                 }
-                var dto = entity.MapToGetCreditWorkWithDetailsDto();
+
+                var currentStaffId = _currentUserService.UserId;
+                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                if (staff is null)
+                {
+                    staff = new StaffDto();
+                }
+
+                var dto = entity.MapToGetCreditWorkWithDetailsDto(staff);
                 response.IsSuccessful = true;
                 response.Status = System.Net.HttpStatusCode.OK;
                 response.Record = dto;

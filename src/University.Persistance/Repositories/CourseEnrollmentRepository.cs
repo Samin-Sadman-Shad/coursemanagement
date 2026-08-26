@@ -38,9 +38,8 @@ namespace University.Persistance.Repositories
                         StudentId = enrollment.StudentId,
                         Student = enrollment.Student,
                         EnrolledAt = enrollment.EnrolledAt,
-                        StaffId = enrollment.StaffId,
-                        EnrolledBy = enrollment.EnrolledBy,
-                        CreatedBy = enrollment.CreatedBy,
+                        EnrolledById = enrollment.EnrolledById,
+                        CreatedById = enrollment.CreatedById,
                         CreatedAt = enrollment.CreatedAt,
                     };
                     await _dbContext.AddAsync<CreditWorkEnrollment>(creditEnrollment);

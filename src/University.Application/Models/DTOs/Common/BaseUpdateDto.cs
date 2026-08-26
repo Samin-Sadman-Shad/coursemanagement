@@ -10,7 +10,7 @@ namespace University.Application.Models.DTOs.Common
 {
     public class BaseUpdateDto: IUpdateDto
     {
-        public required Staff LastModifiedBy { get; set; }
-        public DateTimeOffset LastModifiedAt { get; set; }
+        //public required Staff LastModifiedBy { get; set; }
+        //public DateTimeOffset LastModifiedAt { get; set; }
     }
 }

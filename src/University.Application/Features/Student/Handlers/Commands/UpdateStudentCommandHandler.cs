@@ -5,9 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Contracts.API;
+using University.Application.Contracts.Identity;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.Student.Requests.Commands;
+using University.Application.Models.DTOs.Staff;
 using University.Application.Models.DTOs.StudentDTOs;
 using University.Application.Models.DTOs.StudentDTOs.Validators;
 using University.Application.Models.Responses;
@@ -17,9 +20,13 @@ namespace University.Application.Features.Student.Handlers.Commands
     public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateStudentCommandHandler(IUnitOfWork uow)
+        private readonly IUserService _userService;
+        private readonly ICurrentUserService _currentUserService;
+        public UpdateStudentCommandHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUserService)
         {
             _unitOfWork = uow;
+            _userService = userService;
+            _currentUserService = currentUserService;
         }
         public async Task<BaseCommandResponse> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
         {
@@ -45,7 +52,16 @@ namespace University.Application.Features.Student.Handlers.Commands
                 {
                     throw new NotFoundException();
                 }
-                request.UpdateStudentDto.UpdateStudent(entity);
+
+                var currentStaffId = _currentUserService.UserId;
+                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                if (staff is null)
+                {
+                    staff = new StaffDto();
+                }
+                var updatedAt = DateTimeOffset.UtcNow;
+
+                request.UpdateStudentDto.UpdateStudent(entity, currentStaffId, updatedAt);
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.NoContent;

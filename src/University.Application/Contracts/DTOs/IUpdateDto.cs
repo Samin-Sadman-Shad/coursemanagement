@@ -9,7 +9,7 @@ namespace University.Application.Contracts.DTOs
 {
     public interface IUpdateDto : IBaseDto
     {
-        public Staff LastModifiedBy { get; set; }
-        public DateTimeOffset LastModifiedAt { get; set; }
+        //public Staff LastModifiedBy { get; set; }
+        //public DateTimeOffset LastModifiedAt { get; set; }
     }
 }

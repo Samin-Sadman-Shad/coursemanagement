@@ -1,7 +1,9 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Formatting.Compact;
+using University.API.Services;
 using University.API.Utils;
+using University.Application.Contracts.API;
 using University.Application.DI;
 using University.Identity.DI;
 using University.Persistance.DI;
@@ -38,6 +40,7 @@ builder.Services.ConfigSwagger();
 builder.Services.AddPersistanceServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 var app = builder.Build();
 

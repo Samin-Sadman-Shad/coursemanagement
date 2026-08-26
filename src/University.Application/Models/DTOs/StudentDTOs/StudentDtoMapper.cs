@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using University.Application.Models.DTOs.CourseDTOs;
 using University.Application.Models.DTOs.CreditWorkDTOs;
+using University.Application.Models.DTOs.Staff;
 using University.Domain.Entities.BaseEntities;
 
 namespace University.Application.Models.DTOs.StudentDTOs
 {
     internal static class StudentDtoMapper
     {
-        public static GetStudentDto MapToGetStudentDto(this Student student)
+        public static GetStudentDto MapToGetStudentDto(this Student student, StaffDto staff)
         {
             return new GetStudentDto
             {
@@ -19,18 +20,18 @@ namespace University.Application.Models.DTOs.StudentDTOs
                 Name = student.Name,
                 Roll = student.Roll,
                 Email = student.Email,
-                EnrolledAt = student.CreatedAt,
-                EnrolledBy = student.CreatedBy 
+                CreatedAt = student.CreatedAt,
+                CreatedBy = staff 
             };
         }
 
-        public static GetStudentWithDetailsDto MapToGetStudentWithDetailsDto(this Student student)
+        public static GetStudentWithDetailsDto MapToGetStudentWithDetailsDto(this Student student, StaffDto staff)
         {
             var courses = student.CoursesEnrolled.Select(enroll => enroll.Course)
-                .Select<Course, GetCourseDto>(course => course.MapToGetCourseDto()).ToList();
+                .Select<Course, GetCourseDto>(course => course.MapToGetCourseDto(staff)).ToList();
 
             var creditWorks = student.CreditWorksEnrolled.Select(enroll => enroll.CreditWork)
-                .Select(creditWork => creditWork.MapToGetCreditWorkDto()).ToList();
+                .Select(creditWork => creditWork.MapToGetCreditWorkDto(staff)).ToList();
 
             return new GetStudentWithDetailsDto
             {
@@ -38,34 +39,34 @@ namespace University.Application.Models.DTOs.StudentDTOs
                 Name = student.Name,
                 Roll = student.Roll,
                 Email = student.Email,
-                EnrolledAt = student.CreatedAt,
-                EnrolledBy = student.CreatedBy,
+                CreatedAt = student.CreatedAt,
+                CreatedBy = staff,
                 Courses = courses,
                 CreditWorks = creditWorks
             };
         }
 
-        public static Student MapToStudent(this CreateStudentDto createStudentDto)
+        public static Student MapToStudent(this CreateStudentDto createStudentDto, Guid staffId, DateTimeOffset dateTime)
         {
             return new Student
             {
                 Name = createStudentDto.Name,
                 Roll = createStudentDto.Roll,
                 Email = createStudentDto.Email,
-                CreatedBy = createStudentDto.CreatedBy,
-                CreatedAt = createStudentDto.CreatedAt,
-                LastModifiedBy = createStudentDto.CreatedBy,
-                LastModifiedAt = createStudentDto.CreatedAt
+                CreatedAt = dateTime,
+                CreatedById = staffId,
+                LastModifiedById = staffId,
+                LastModifiedAt = dateTime
             };
         }
 
-        public static void UpdateStudent(this UpdateStudentDto updateStudentDto, Student entity)
+        public static void UpdateStudent(this UpdateStudentDto updateStudentDto, Student entity, Guid staffId, DateTimeOffset dateTime)
         {
             entity.Name = updateStudentDto.Name ;
             entity.Roll = updateStudentDto.Roll ;
             entity.Email = updateStudentDto.Email ?? entity.Email;
-            entity.LastModifiedAt = updateStudentDto.LastModifiedAt;
-            entity.LastModifiedBy = updateStudentDto.LastModifiedBy;
+            entity.LastModifiedAt = dateTime;
+            entity.LastModifiedById = staffId;
         }
 
     }

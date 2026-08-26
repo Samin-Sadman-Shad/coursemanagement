@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using University.Application.Contracts.API;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.Student.Requests.Commands;
@@ -16,9 +17,11 @@ namespace University.Application.Features.Student.Handlers.Commands
     public class UpdateStudentNameCommandHandler : IRequestHandler<UpdateStudentNameCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateStudentNameCommandHandler(IUnitOfWork unitOfWork)
+        private readonly ICurrentUserService _currentUserService;
+        public UpdateStudentNameCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
+            _currentUserService = currentUserService;
         }
         public async Task<BaseCommandResponse> Handle(UpdateStudentNameCommand request, CancellationToken cancellationToken)
         {
@@ -44,7 +47,14 @@ namespace University.Application.Features.Student.Handlers.Commands
                 {
                     throw new FailToProcessCommandException();
                 }
+
                 entity.Name = request.StudentNameDto.Name;
+
+                var currentStaffId = _currentUserService.UserId;
+                var updatedAt = DateTimeOffset.UtcNow;
+                entity.LastModifiedById = currentStaffId;
+                entity.LastModifiedAt = updatedAt;
+
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.NoContent;

@@ -2,9 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net;
+using University.Application.Contracts.API;
 using University.Application.Contracts.Persistance;
 using University.Application.Exceptions;
 using University.Application.Features.Student.Requests.Commands;
@@ -16,9 +17,11 @@ namespace University.Application.Features.Student.Handlers.Commands
     public class UpdateStudentEmailCommandHandler : IRequestHandler<UpdateStudentEmailCommand, BaseCommandResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UpdateStudentEmailCommandHandler(IUnitOfWork unitOfWork)
+        private readonly ICurrentUserService _currentUserService;
+        public UpdateStudentEmailCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
+            _currentUserService = currentUserService;
         }
         public async Task<BaseCommandResponse> Handle(UpdateStudentEmailCommand request, CancellationToken cancellationToken)
         {
@@ -45,6 +48,12 @@ namespace University.Application.Features.Student.Handlers.Commands
                     throw new FailToProcessCommandException();
                 }
                 entity.Email = request.StudentEmailDto.Email;
+
+                var currentStaffId = _currentUserService.UserId;
+                var updatedAt = DateTimeOffset.UtcNow;
+                entity.LastModifiedById = currentStaffId;
+                entity.LastModifiedAt = updatedAt;
+
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.NoContent;

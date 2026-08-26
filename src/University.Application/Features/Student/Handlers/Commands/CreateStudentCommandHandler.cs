@@ -12,6 +12,8 @@ using University.Application.Models.DTOs.StudentDTOs.Validators;
 using University.Application.Models.Responses;
 using University.Application.Exceptions;
 using University.Application.Contracts.Identity;
+using University.Application.Contracts.API;
+using University.Application.Models.DTOs.Staff;
 
 namespace University.Application.Features.Student.Handlers.Commands
 {
@@ -19,10 +21,12 @@ namespace University.Application.Features.Student.Handlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        public CreateStudentCommandHandler(IUnitOfWork unitOfWork, IUserService userService)
+        private readonly ICurrentUserService _currentUserService;
+        public CreateStudentCommandHandler(IUnitOfWork unitOfWork, IUserService userService, ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;
+            _currentUserService = currentUserService;
         }
 
         public async Task<CreateStudentResponse> Handle(CreateStudentCommand request, CancellationToken cancellationToken)
@@ -44,9 +48,19 @@ namespace University.Application.Features.Student.Handlers.Commands
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var (userId, resetToken) = await _userService.CreateStudentAccountAsync(dto.Email, dto.Name);
-                var entity = dto.MapToStudent();
+
+                var currentStaffId = _currentUserService.UserId;
+                var staff = await _userService.GetStaffByIdAsync(currentStaffId);
+                if (staff is null)
+                {
+                    staff = new StaffDto();
+                }
+                var createdAt = DateTimeOffset.UtcNow;
+
+                var entity = dto.MapToStudent(currentStaffId, createdAt);                              
+                var (userId, resetToken) = await _userService.CreateStudentAccountAsync(dto.Email, dto.Name);            
                 entity.UserId = userId;
+
                 var entityCreated = await studentRepository.CreateAsync(entity);
                 await _unitOfWork.SaveChangesAsync();
                 if (entityCreated is null)
@@ -55,7 +69,9 @@ namespace University.Application.Features.Student.Handlers.Commands
                 }
                 response.IsSuccessful = true;
                 response.RecordId = entityCreated.UserId;
-                response.Record = entity.MapToGetStudentDto();
+                response.Record = entity.MapToGetStudentDto(staff);
+                response.Record.CreatedBy = staff;
+
                 response.Status = HttpStatusCode.Created;
                 response.PasswordResetToken = resetToken;
                 return response;

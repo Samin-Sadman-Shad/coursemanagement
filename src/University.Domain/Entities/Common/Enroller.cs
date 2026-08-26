@@ -11,8 +11,8 @@ namespace University.Domain.Entities.Common
     public class Enroller: BaseEntity
     {
         public DateTimeOffset EnrolledAt { get; set; }
-        public required Guid StaffId { get; set; }
-        [ForeignKey(nameof(StaffId))]
-        public required Staff EnrolledBy { get; set; }
+        public required Guid EnrolledById { get; set; }
+        //[ForeignKey(nameof(StaffId))]
+        //public required Staff EnrolledBy { get; set; }
     }
 }

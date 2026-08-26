@@ -9,7 +9,7 @@ namespace University.Application.Contracts.DTOs
 {
     public interface ICreateDto:IBaseDto
     {
-        public  Staff CreatedBy { get; set; }
-        public DateTimeOffset CreatedAt { get; set; }
+        //public  Staff CreatedBy { get; set; }
+        //public DateTimeOffset CreatedAt { get; set; }
     }
 }

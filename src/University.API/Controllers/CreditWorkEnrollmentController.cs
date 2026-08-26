@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using University.Application.Features.CourseEnrollment.Requests.Queries;
 using University.Application.Features.CreditWorkEnrollment.Requests.Commands;
+using University.Application.Features.CreditWorkEnrollment.Requests.Requests;
+using University.Application.Models.DTOs.CourseEnrollmentDTOs;
 using University.Application.Models.DTOs.CreditWorkEnrollmentDto;
 using University.Application.Models.Responses;
 
@@ -18,8 +21,19 @@ namespace University.API.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult<BaseQueryResponse<GetCreditWorkEnrollmentDto>>> GetEnrollmentById(Guid id)
+        {
+            var command = new GetCreditWorkEnrollmentRequest
+            {
+                CreditWorkEnrollmentId = id
+            };
+            var response = await _mediator.Send(command);
+            return ToActionResult(response);
+        }
+
         [HttpPost]
-        public async Task<ActionResult<BaseCommandResponse>> 
+        public async Task<ActionResult<CreateCommandResponse<GetCreditWorkEnrollmentDto>>> 
             EnrollStudentInCreditWork([FromBody]CreateCreditWorkEnrollmentDto creditWorkEnrollmentDto)
         {
             var command = new CreateCreditWorkEnrollmentCommand { CreditWorkEnrollmentDto = creditWorkEnrollmentDto };
