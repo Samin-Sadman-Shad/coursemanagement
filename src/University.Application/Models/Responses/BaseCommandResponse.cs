@@ -12,7 +12,7 @@ namespace University.Application.Models.Responses
         public Guid RecordId { get; set; }
         public bool IsSuccessful { get; set; }
         public string? Message { get; set; }
-        private List<string> _errors = new List<string>();
+        protected List<string> _errors = new List<string>();
         public HttpStatusCode Status {  get; set; }
         //public List<string> Errors
         //{

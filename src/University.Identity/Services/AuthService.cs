@@ -107,19 +107,36 @@ namespace University.Identity.Services
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, RoleEnum.STAFF.ToString());
-                response.IsSuccessful = true;
-                response.UserId = user.Id;
-                return response;
-            }
-            else
+
+            if (!result.Succeeded)
             {
                 response.IsSuccessful = false;
-                response.Errors = result.Errors.Select(e => e.Description).ToList();
+                response.Errors = result.Errors
+                    .Select(e => e.Description)
+                    .ToList();
+
                 return response;
             }
+
+            var roleResult = await _userManager.AddToRoleAsync(
+                user,
+                RoleEnum.STAFF.ToString());
+
+            if (!roleResult.Succeeded)
+            {
+                response.IsSuccessful = false;
+                response.Errors = roleResult.Errors
+                    .Select(e => e.Description)
+                    .ToList();
+
+                return response;
+            }
+
+            response.IsSuccessful = true;
+            response.Status = System.Net.HttpStatusCode.Created;
+            response.UserId = user.Id;
+
+            return response;
         }
 
         public async Task<SetPasswordResponse> SetPassword(SetPasswordRequest request)

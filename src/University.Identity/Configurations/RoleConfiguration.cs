@@ -16,17 +16,21 @@ namespace University.Identity.Configurations
         public void Configure(EntityTypeBuilder<ApplicationRole> builder)
         {
             builder.HasData(
-                new ApplicationRole
-                {
-                    Id = Guid.Parse("9FAA56A1-53A5-4920-AB1D-C877494EC832"),
-                    Name = RoleEnum.STAFF.ToString(),
-                },
-                new ApplicationRole
-                {
-                    Id = Guid.Parse("05269E2A-75EE-4DB1-B1C1-4CD0B728EB53"),
-                    Name = RoleEnum.STUDENT.ToString()
-                }
-             );
+             new ApplicationRole
+             {
+                 Id = Guid.Parse("9FAA56A1-53A5-4920-AB1D-C877494EC832"),
+                 Name = "STAFF",
+                 NormalizedName = "STAFF",
+                 ConcurrencyStamp = "dddddddd-dddd-dddd-dddd-dddddddddddd"
+             },
+             new ApplicationRole
+             {
+                 Id = Guid.Parse("05269E2A-75EE-4DB1-B1C1-4CD0B728EB53"),
+                 Name = "STUDENT",
+                 NormalizedName = "STUDENT",
+                 ConcurrencyStamp = "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"
+             }
+            );
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using University.Application.Contracts.Identity;
 using University.Application.Models.Identity;
 
@@ -9,7 +10,7 @@ namespace University.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : ApiControllerBase
     {
         private readonly IAuthService _authService;
         public AuthController(IAuthService authService)
@@ -36,11 +37,12 @@ namespace University.API.Controllers
         public async Task<ActionResult<RegistrationResponse>> Register([FromBody] RegistrationRequest request)
         {
             var response = await _authService.Register(request);
-            if (!response.IsSuccessful)
-            {
-                return BadRequest(response);
-            }
-            return Ok(await _authService.Register(request));
+            //if (!response.IsSuccessful)
+            //{
+            //    return BadRequest(response);
+            //}
+            //return Ok(await _authService.Register(request));
+            return ToActionResult(response);
         }
 
         [HttpPost("logout")]
