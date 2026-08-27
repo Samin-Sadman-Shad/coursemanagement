@@ -20,6 +20,13 @@ namespace University.Tests.Common
             Roll = 1
         };
 
+        public static Student CreateStudent(string name, Guid? userId = null) => new()
+        {
+            UserId = userId ?? Guid.NewGuid(),
+            Name = name,
+            Roll = 1
+        };
+
         public static CreditWork CreateCreditWork(Guid? id = null) => new()
         {
             Id = id ?? Guid.NewGuid(),
@@ -27,10 +34,23 @@ namespace University.Tests.Common
             Code = 101
         };
 
+        public static CreditWork CreateCreditWork(string heading, Guid? id = null) => new()
+        {
+            Id = id ?? Guid.NewGuid(),
+            Heading = heading,
+            Code = 101
+        };
+
         public static Course CreateCourse(Guid? id = null) => new()
         {
             Id = id ?? Guid.NewGuid(),
-            Title = "Test Course"
+            Title = "Programming"
+        };
+
+        public static Course CreateCourse( string title, Guid? id = null) => new()
+        {
+            Id = id ?? Guid.NewGuid(),
+            Title = title
         };
 
         public static CreditWorkEnrollment CreateCreditWorkEnrollment(

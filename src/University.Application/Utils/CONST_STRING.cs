@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace University.Application.Utils
 {
-    internal static class CONST_STRING
+    public static class CONST_STRING
     {
         public static string PROPERTY_ERROR_EMPTY = "{PropertyName} can not be empty";
         public static string PROPERTY_ERROR_NULL = "{PropertyName} can not be null";
