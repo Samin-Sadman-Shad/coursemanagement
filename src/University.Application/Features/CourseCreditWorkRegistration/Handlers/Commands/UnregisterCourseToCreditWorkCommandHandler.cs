@@ -49,7 +49,6 @@ namespace University.Application.Features.CourseCreditWorkRegistration.Handlers.
             {
                 throw new FailToProcessCommandException(ex);
             }
-
         }
     }
 }

@@ -25,7 +25,6 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Commands
     public class CreateCourseEnrollmentCommandHandler
         : IRequestHandler<CreateCourseEnrollmentCommand, CreateCommandResponse<GetCourseEnrollmentDto>>
     {
-
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
         private readonly IUserService _userService;
@@ -98,7 +97,6 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Commands
             {
                 throw new FailToProcessCommandException(ex);
             }
-
         }
     }
 }

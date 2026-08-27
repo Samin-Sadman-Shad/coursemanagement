@@ -49,13 +49,6 @@ namespace University.Application.Features.Student.Handlers.Queries
                     response.Status = HttpStatusCode.NotFound;
                     return response;
                 }
-
-                //var currentStaffId = _currentUserService.UserId;
-                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                //if (staff is null)
-                //{
-                //    staff = new StaffDto();
-                //}
                 var staff = await _userService.GetStaffByIdAsync(student!.CreatedById) ?? new StaffDto();
 
                 if (student is not null)

@@ -17,6 +17,5 @@ namespace University.Application.Contracts.Persistance
         Task<T> DeleteAsync(Guid id);
 
         Task<bool> ExistsAsync(Guid id);
-
     }
 }

@@ -38,28 +38,6 @@ namespace University.Application.Features.CourseCreditWorkRegistration.Handlers.
                 }
                 var courseCreditWorkRepository = _unitOfWork.CourseCreditWorkRegistrationRepository;
 
-                //var courseRepository = _unitOfWork.CourseRepository;
-                //var creditWorkRepository = _unitOfWork.CreditWorkRepository;
-
-                //var course = await courseRepository.GetByIdAsync(request.courseCreditWorkDto.CourseId)
-                //        ?? throw new NotFoundException(nameof(Course));
-
-                //var creditWork = await creditWorkRepository.GetByIdAsync(request.courseCreditWorkDto.CreditWorkId)
-                //    ?? throw new NotFoundException(nameof(CreditWork));
-
-                //var exists = await courseCreditWorkRepository
-                //    .ExistsAsync(request.courseCreditWorkDto.CourseId, request.courseCreditWorkDto.CreditWorkId);
-                //if (exists)
-                //    throw new ConflictException("CreditWork already registered to this Course.");
-
-                //var junction = new CourseCreditWork
-                //{
-                //    CourseId = course.Id,
-                //    Course = course,
-                //    CreditWorkId = creditWork.Id,
-                //    CreditWork = creditWork
-                //};
-
                 var entity = await courseCreditWorkRepository.RegisterCourseToCreditWork(
                     request.courseCreditWorkDto.CourseId, 
                     request.courseCreditWorkDto.CreditWorkId);
