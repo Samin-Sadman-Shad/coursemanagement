@@ -15,7 +15,10 @@ namespace University.Domain.Entities.BaseEntities
         public Guid Id { get; set; }
         public required string Title { get; set; }
 
-        public List<CourseCreditWork> CreditWorksInCourse { get; set; } = new List<CourseCreditWork>();
-        public List<CourseEnrollment> StudentsInCourse { get; set; } = new List<CourseEnrollment>();
+        public List<CourseCreditWork> CreditWorksInCourse { get; set; } = new();
+        public List<CourseEnrollment> StudentsInCourse { get; set; } = new();
     }
-}
+}    
+
+
+

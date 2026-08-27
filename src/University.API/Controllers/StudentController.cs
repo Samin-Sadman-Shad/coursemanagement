@@ -58,8 +58,7 @@ namespace University.API.Controllers
         public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetByName([FromQuery]string name)
         {
             var request = new GetStudentsByNameRequest { SerachName = name };
-            var response = new BaseQueryListResponse<GetStudentDto>();
-            response = await _mediator.Send(request);
+            var response = await _mediator.Send(request);
             return ToActionResult(response);
 
         }
@@ -69,8 +68,7 @@ namespace University.API.Controllers
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> GetByRoll([FromQuery]int roll)
         {
             var request = new GetStudentByPersonalInfoRequest { Roll = roll, Email = null };
-            var response = new BaseQueryResponse<GetStudentWithDetailsDto>();
-            response = await _mediator.Send(request);
+            var response = await _mediator.Send(request);
             return ToActionResult(response);
         }
 
@@ -79,9 +77,8 @@ namespace University.API.Controllers
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> GetByEmail([FromQuery] string email)
         {
             var request = new GetStudentByPersonalInfoRequest { Roll = null, Email = email };
-            var response = new BaseQueryResponse<GetStudentWithDetailsDto>();
 
-            response = await _mediator.Send(request);
+            var response = await _mediator.Send(request);
 
             return ToActionResult(response);
         }
@@ -91,8 +88,7 @@ namespace University.API.Controllers
         public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetByCreditWorkId([FromQuery] Guid creditWorkId)
         {
             var request = new GetStudentsByCreditWorkIdRequest { CreditWorkId = creditWorkId };
-            var response = new BaseQueryListResponse<GetStudentDto>();
-            response = await _mediator.Send(request);
+            var response = await _mediator.Send(request);
 
             return ToActionResult(response);
         }
@@ -130,8 +126,7 @@ namespace University.API.Controllers
                 StudentId = id,
                 UpdateStudentDto = studentDto 
             };
-            var response = new BaseCommandResponse();
-            response = await _mediator.Send(command);
+            var response = await _mediator.Send(command);
             return ToActionResult(response);
         }
 
@@ -144,9 +139,8 @@ namespace University.API.Controllers
                 StudentId = id,
                 StudentEmailDto = studentDto
             };
-            var response = new BaseCommandResponse();
 
-            response = await _mediator.Send(command);
+            var response = await _mediator.Send(command);
             return ToActionResult(response);
         }
 
@@ -160,8 +154,7 @@ namespace University.API.Controllers
                 StudentId = id,
                 StudentNameDto = studentDto
             };
-            var response = new BaseCommandResponse();
-            response = await _mediator.Send(command);
+            var response = await _mediator.Send(command);
             return ToActionResult(response);
         }
 
@@ -174,8 +167,7 @@ namespace University.API.Controllers
                 StudentId = Id,
                 StudentRollDto = studentDto
             };
-            var response = new BaseCommandResponse();
-            response = await _mediator.Send(command);
+            var response = await _mediator.Send(command);
             return ToActionResult(response);           
         }
 
@@ -185,9 +177,9 @@ namespace University.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>> Delete(Guid id)
         {
             var command = new DeleteStudentCommand { StudentId=id };
-            var response = new BaseCommandResponse();
+            
 
-            response = await _mediator.Send(command);
+            var response = await _mediator.Send(command);
             return ToActionResult(response);
         }
     }

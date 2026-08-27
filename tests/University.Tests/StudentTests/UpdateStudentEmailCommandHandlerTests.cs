@@ -30,7 +30,7 @@ public class UpdateStudentEmailCommandHandlerTests
 
         var dto = new UpdateStudentEmailDto
         {
-            StudentId = studentId,
+            //StudentId = studentId,
             Email = "new@example.com"
         };
 
@@ -88,7 +88,7 @@ public class UpdateStudentEmailCommandHandlerTests
 
         var dto = new UpdateStudentEmailDto
         {
-            StudentId = studentId,
+            //StudentId = studentId,
             Email = "existing@example.com"
         };
 
@@ -132,7 +132,7 @@ public class UpdateStudentEmailCommandHandlerTests
         var studentId = Guid.NewGuid();
         var dto = new UpdateStudentEmailDto
         {
-            StudentId = studentId,
+            //StudentId = studentId,
             Email = "new@example.com"
         };
 

@@ -9,7 +9,7 @@ using University.Domain.Entities.BaseEntities;
 
 namespace University.Application.Models.DTOs.StudentDTOs
 {
-    public class UpdateStudentDto : BaseUpdateDto, IStudentDto
+    public class UpdateStudentDto : BaseUpdateDto
     {
         public required string Name { get; set; } 
         public required int Roll { get  ; set  ; }
