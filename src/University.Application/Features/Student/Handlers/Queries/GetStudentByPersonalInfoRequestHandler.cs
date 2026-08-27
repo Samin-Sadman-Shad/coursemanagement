@@ -43,6 +43,13 @@ namespace University.Application.Features.Student.Handlers.Queries
                     student = await studentRepository.GetStudentByRollAsync(request.Roll);
                 }
 
+                if (student is null)
+                {
+                    response.IsSuccessful = false;
+                    response.Status = HttpStatusCode.NotFound;
+                    return response;
+                }
+
                 //var currentStaffId = _currentUserService.UserId;
                 //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
                 //if (staff is null)

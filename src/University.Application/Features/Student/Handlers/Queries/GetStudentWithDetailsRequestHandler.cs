@@ -31,16 +31,15 @@ namespace University.Application.Features.Student.Handlers.Queries
             var response = new BaseQueryResponse<GetStudentWithDetailsDto>();
             try
             {
-
-                //var currentStaffId = _currentUserService.UserId;
-                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                //if (staff is null)
-                //{
-                //    staff = new StaffDto();
-                //}
-
                 var studentRepository = _unitOfWork.StudentRepository;
                 var student = await studentRepository.GetByIdDetailAsync(request.StudentId);
+
+                if (student is null)
+                {
+                    response.IsSuccessful = false;
+                    response.Status = HttpStatusCode.NotFound;
+                    return response;
+                }
 
                 var staff = await _userService.GetStaffByIdAsync(student!.CreatedById) ?? new StaffDto();
 

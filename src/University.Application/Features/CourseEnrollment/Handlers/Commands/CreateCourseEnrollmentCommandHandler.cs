@@ -83,7 +83,7 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Commands
                 {
                     StudentDto = student.MapToGetStudentDto(staff),
                     CourseDto = course.MapToGetCourseDto(staff),
-                    EnrolledBy = staff,
+                    //EnrolledBy = staff,
                     CreatedBy = staff,
                     CreatedAt = createdAt
                 };

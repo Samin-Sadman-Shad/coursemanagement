@@ -55,7 +55,11 @@ namespace University.Persistance.Repositories
 
         public async Task<CourseEnrollment?> GetEnrollment(Guid enrollmentId)
         {
-            return await _dbContext.FindAsync<CourseEnrollment>(enrollmentId);
+            //return await _dbContext.FindAsync<CourseEnrollment>(enrollmentId)
+            return await _dbContext.CourseEnrollments
+                .Include(enroll => enroll.Student)
+                .Include(enroll => enroll.Course)
+                .FirstOrDefaultAsync(enroll => enroll.Id == enrollmentId);
         }
 
         public async Task<bool> DoesEnrollmentExist(Guid enrollmentId)

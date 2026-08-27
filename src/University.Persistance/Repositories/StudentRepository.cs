@@ -78,10 +78,11 @@ namespace University.Persistance.Repositories
             var student = await _dbContext.Students
                 .Where(student => student.UserId == id)
                 .Include(student => student.CoursesEnrolled)
+                    .ThenInclude(enrollment => enrollment.Course)
                 .Include(student => student.CreditWorksEnrolled)
+                    .ThenInclude(enrollment => enrollment.CreditWork)
                 .SingleOrDefaultAsync();
             return student;
-
         }
 
         public async Task<bool> DoesEmailExistAsync(string email, Guid? excludeUserId = null)

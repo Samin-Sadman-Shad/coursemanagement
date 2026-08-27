@@ -30,12 +30,6 @@ namespace University.Application.Features.Student.Handlers.Queries
             var response = new BaseQueryListResponse<GetStudentDto>();
             try
             {
-                //var currentStaffId = _currentUserService.UserId;
-                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                //if (staff is null)
-                //{
-                //    staff = new StaffDto();
-                //}
 
                 var studentRepository = _unitOfWork.StudentRepository;
                 var entities = await studentRepository.GetStudentsByNameAsync(request.SerachName);

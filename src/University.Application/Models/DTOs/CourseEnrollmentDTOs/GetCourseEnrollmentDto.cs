@@ -15,6 +15,6 @@ namespace University.Application.Models.DTOs.CourseEnrollmentDTOs
         public GetStudentDto? StudentDto { get; set; }
         public GetCourseDto? CourseDto { get; set; }
 
-        public required StaffDto EnrolledBy { get; set; }
+        //public required StaffDto EnrolledBy { get; set; }
     }
 }

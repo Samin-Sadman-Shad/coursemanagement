@@ -51,7 +51,7 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Queries
                 {
                     StudentDto = entity.Student.MapToGetStudentDto(staff),
                     CourseDto = entity.Course.MapToGetCourseDto(staff),
-                    EnrolledBy = staff,
+                    //EnrolledBy = staff,
                     CreatedBy = staff,
                     CreatedAt = entity.CreatedAt,
                 };
