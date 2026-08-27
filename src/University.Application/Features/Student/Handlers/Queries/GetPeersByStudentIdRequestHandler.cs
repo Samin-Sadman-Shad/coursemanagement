@@ -47,8 +47,6 @@ namespace University.Application.Features.Student.Handlers.Queries
                     var dto = entity.MapToGetStudentDto(staff);
                     dtos.Add(dto);
                 }
-
-                //var records = entities.Select(entity => entity.MapToGetStudentDto(staff)).ToList();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.OK;
                 response.Records = dtos;

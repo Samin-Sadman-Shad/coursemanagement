@@ -44,7 +44,7 @@ namespace University.API.Controllers
 
         }
 
-        [Authorize(nameof(RoleEnum.STUDENT))]
+        [Authorize(Roles = nameof(RoleEnum.STUDENT))]
         [HttpGet("/me/peers")]
         public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetPeers()
         {

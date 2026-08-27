@@ -21,17 +21,25 @@ namespace University.Persistance.Repositories
         //view other students in their classes
         public async Task<List<Student>> GetPeersByStudentIdAsync(Guid studentId)
         {
-            var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.UserId == studentId);
-            if(student is not null)
+            var student = await _dbContext.Students
+                    .Include(s => s.CreditWorksEnrolled)
+                        .ThenInclude(e => e.CreditWork)
+                            .ThenInclude(c => c.StudentsInCreditWork)
+                        .ThenInclude(e => e.Student)
+                .FirstOrDefaultAsync(s => s.UserId == studentId);
+            if(student is null)
             {
-                var creditWorks = student.CreditWorksEnrolled.Select(creditOfStudent => creditOfStudent.CreditWork).ToList();
-                var creditEnrollments  = creditWorks.SelectMany( c=> c.StudentsInCreditWork).ToList();
-                return creditEnrollments.Where(c => c.StudentId != studentId).Select(c => c.Student).ToList();
-            }
-            else
-            {
+                //var creditWorks = student.CreditWorksEnrolled.Select(creditOfStudent => creditOfStudent.CreditWork).ToList();
+                //var creditEnrollments  = creditWorks.SelectMany( c=> c.StudentsInCreditWork).ToList();
+                //return creditEnrollments.Where(c => c.StudentId != studentId).Select(c => c.Student).ToList();
                 throw new ArgumentNullException($"Student with id {studentId} not found.");
             }
+            return student.CreditWorksEnrolled
+                .SelectMany(e => e.CreditWork.StudentsInCreditWork)
+                .Where(e => e.StudentId != student.UserId)
+                .Select(e => e.Student)
+                .Distinct()
+                .ToList();
         }
 
         public async Task<List<Student>> GetStudentsByCreditWorkIdAsync(Guid creditWorkId)
