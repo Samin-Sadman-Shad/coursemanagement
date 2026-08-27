@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using University.Application.Features.CourseCreditWorkRegistration.Requests.Commands;
 using University.Application.Models.DTOs.CourseCreditWorkRegistrationDTOs;
+using University.Application.Models.Identity;
 using University.Application.Models.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,6 +12,7 @@ namespace University.API.Controllers
 {
     [Route("api/course-to-class-registration")]
     [ApiController]
+    [Authorize(Roles = nameof(RoleEnum.STAFF))]
     public class CourseCreditWorkRegistrationController : ApiControllerBase
     {
         private readonly IMediator _mediator;

@@ -14,12 +14,6 @@ namespace University.Application.Models.DTOs.CourseDTOs.Validators
         public CreateCourseDtoValidator(IUnitOfWork uow)
         {
             _unitOfWork = uow;
-            //RuleFor(c => c.CourseTitle)
-            //    .NotEmpty()
-            //    .MaximumLength(20)
-            //    .WithMessage("The {PropertyName} can not excced 20 characters")
-            //    .Must(title => title.All(char.IsLetterOrDigit))
-            //    .WithMessage("The {PropertyName} can contains only alphanumeric characters");
             Include(new ICourseDtoValidator(_unitOfWork));
         }
     }

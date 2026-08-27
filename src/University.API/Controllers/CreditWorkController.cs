@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using University.Application.Features.CreditWork.Requests.Commands;
@@ -6,6 +7,7 @@ using University.Application.Features.CreditWork.Requests.Queries;
 using University.Application.Features.Student.Requests.Commands;
 using University.Application.Models.DTOs.CreditWorkDTOs;
 using University.Application.Models.DTOs.StudentDTOs;
+using University.Application.Models.Identity;
 using University.Application.Models.Responses;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -15,6 +17,7 @@ namespace University.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = nameof(RoleEnum.STAFF))]
     public class CreditWorkController : ApiControllerBase
     {
         private readonly IMediator _mediator;

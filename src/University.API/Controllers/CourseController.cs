@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using University.Application.Features.Course.Requests.Commands;
 using University.Application.Features.Course.Requests.Queries;
 using University.Application.Models.DTOs.CourseDTOs;
+using University.Application.Models.Identity;
 using University.Application.Models.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +13,7 @@ namespace University.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles =nameof( RoleEnum.STAFF))]
     public class CourseController : ApiControllerBase
     {
         private readonly IMediator _mediator;

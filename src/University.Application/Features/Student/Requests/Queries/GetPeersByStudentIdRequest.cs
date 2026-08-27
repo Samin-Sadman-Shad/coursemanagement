@@ -11,6 +11,6 @@ namespace University.Application.Features.Student.Requests.Queries
 {
     public class GetPeersByStudentIdRequest:IRequest<BaseQueryListResponse<GetStudentDto>>
     {
-        public Guid StudentId { get; set; }
+        //public Guid StudentId { get; set; }
     }
 }

@@ -22,25 +22,23 @@ namespace University.Application.Features.Student.Handlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        public GetPeersByStudentIdRequestHandler(IUnitOfWork uow, IUserService userService)
+
+        private readonly ICurrentUserService _currentUserService;
+        public GetPeersByStudentIdRequestHandler(IUnitOfWork uow, IUserService userService, ICurrentUserService currentUser)
         {
             _unitOfWork = uow;
             _userService = userService;
+            _currentUserService = currentUser;
         }
         public async Task<BaseQueryListResponse<GetStudentDto>> Handle(GetPeersByStudentIdRequest request, CancellationToken cancellationToken)
         {
             var response = new BaseQueryListResponse<GetStudentDto>();
             try
             {
-                //var currentStaffId = _currentUserService.UserId;
-                //var staff = await _userService.GetStaffByIdAsync(currentStaffId);
-                //if (staff is null)
-                //{
-                //    staff = new StaffDto();
-                //}
+                var currentStudentId = _currentUserService.UserId;
 
                 var studentRepository = _unitOfWork.StudentRepository;
-                var entities = await studentRepository.GetPeersByStudentIdAsync(request.StudentId);
+                var entities = await studentRepository.GetPeersByStudentIdAsync(currentStudentId);
 
                 var dtos = new List<GetStudentDto>();
                 foreach (var entity in entities)

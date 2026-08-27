@@ -1,9 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using University.Application.Features.Student.Requests.Commands;
 using University.Application.Features.Student.Requests.Queries;
 using University.Application.Models.DTOs.StudentDTOs;
+using University.Application.Models.Identity;
 using University.Application.Models.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,6 +14,7 @@ namespace University.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StudentController : ApiControllerBase
     {
         private readonly IMediator _mediator;
@@ -21,6 +24,7 @@ namespace University.API.Controllers
         }
 
         // GET: api/<StudentController>
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         [HttpGet]
         public async Task<ActionResult< BaseQueryListResponse<GetStudentDto>>> Get()
         {
@@ -30,6 +34,7 @@ namespace University.API.Controllers
         }
 
         // GET api/<StudentController>/5
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> Get(Guid id)
         {
@@ -39,14 +44,16 @@ namespace University.API.Controllers
 
         }
 
-        [HttpGet("peers/{id:Guid}")]
-        public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetPeers([FromRoute]Guid id)
+        [Authorize(nameof(RoleEnum.STUDENT))]
+        [HttpGet("/me/peers")]
+        public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetPeers()
         {
-            var request = new GetPeersByStudentIdRequest { StudentId = id };
+            var request = new GetPeersByStudentIdRequest();
             var response = await _mediator.Send(request);
             return ToActionResult(response);
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         [HttpGet("name")]
         public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetByName([FromQuery]string name)
         {
@@ -57,6 +64,7 @@ namespace University.API.Controllers
 
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         [HttpGet("roll")]
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> GetByRoll([FromQuery]int roll)
         {
@@ -66,6 +74,7 @@ namespace University.API.Controllers
             return ToActionResult(response);
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         [HttpGet("email")]
         public async Task<ActionResult<BaseQueryResponse<GetStudentWithDetailsDto>>> GetByEmail([FromQuery] string email)
         {
@@ -77,6 +86,7 @@ namespace University.API.Controllers
             return ToActionResult(response);
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         // POST api/<StudentController>
         [HttpPost]
         public async Task<ActionResult<CreateCommandResponse<GetStudentDto>>> Post([FromBody] CreateStudentDto studentDto)
@@ -88,6 +98,7 @@ namespace University.API.Controllers
             return ToActionResult(response);
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         // PUT api/<StudentController>/5
         [HttpPut("{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> Put(Guid id, [FromBody] UpdateStudentDto studentDto)
@@ -102,6 +113,7 @@ namespace University.API.Controllers
             return ToActionResult(response);
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         [HttpPatch("email/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateEmail([FromRoute]Guid id, [FromBody] UpdateStudentEmailDto studentDto)
         {
@@ -116,6 +128,7 @@ namespace University.API.Controllers
             return ToActionResult(response);
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         [HttpPatch("name/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateName([FromRoute]Guid id, [FromBody]UpdateStudentNameDto studentDto)
         {
@@ -130,6 +143,7 @@ namespace University.API.Controllers
             return ToActionResult(response);
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         [HttpPatch("roll/{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> UpdateRoll([FromRoute]Guid Id, [FromBody]UpdateStudentRollDto studentDto)
         {
@@ -143,6 +157,7 @@ namespace University.API.Controllers
             return ToActionResult(response);           
         }
 
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         // DELETE api/<StudentController>/5
         [HttpDelete("{id:Guid}")]
         public async Task<ActionResult<BaseCommandResponse>> Delete(Guid id)
