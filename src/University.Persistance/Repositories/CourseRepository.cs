@@ -45,7 +45,9 @@ namespace University.Persistance.Repositories
             var course = await _dbContext.Courses
                 .Where(course => course.Id == id)
                 .Include(course => course.CreditWorksInCourse)
+                .ThenInclude(enroll => enroll.CreditWork)
                 .Include(course => course.StudentsInCourse)
+                .ThenInclude(enroll => enroll.Student)
                 .SingleOrDefaultAsync();
             return course;
 

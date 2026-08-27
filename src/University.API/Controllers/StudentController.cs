@@ -87,6 +87,28 @@ namespace University.API.Controllers
         }
 
         [Authorize(Roles = nameof(RoleEnum.STAFF))]
+        [HttpGet("class")]
+        public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetByCreditWorkId([FromQuery] Guid creditWorkId)
+        {
+            var request = new GetStudentsByCreditWorkIdRequest { CreditWorkId = creditWorkId };
+            var response = new BaseQueryListResponse<GetStudentDto>();
+            response = await _mediator.Send(request);
+
+            return ToActionResult(response);
+        }
+
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
+        [HttpGet("course")]
+        public async Task<ActionResult<BaseQueryListResponse<GetStudentDto>>> GetByCourseId([FromQuery] Guid courseId)
+        {
+            var request = new GetStudentsByCourseIdRequest { CourseId = courseId };
+            var response = new BaseQueryListResponse<GetStudentDto>();
+            response = await _mediator.Send(request);
+
+            return ToActionResult(response);
+        }
+
+        [Authorize(Roles = nameof(RoleEnum.STAFF))]
         // POST api/<StudentController>
         [HttpPost]
         public async Task<ActionResult<CreateCommandResponse<GetStudentDto>>> Post([FromBody] CreateStudentDto studentDto)

@@ -41,7 +41,7 @@ namespace University.Application.Features.Student.Handlers.Queries
                 //}
 
                 var studentRepository = _unitOfWork.StudentRepository;
-                var entities = await studentRepository.GetStudentsByCreditWorkIdAsync(request.CourseId);
+                var entities = await studentRepository.GetStudentsByCourseIdAsync(request.CourseId);
 
                 var records = new List<GetStudentDto>();
                 foreach (var entity in entities)

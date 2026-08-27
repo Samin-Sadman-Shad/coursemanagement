@@ -48,7 +48,6 @@ namespace University.Persistance.Repositories
             return await _dbContext.Students
                 .Where(s => s.CoursesEnrolled.Any(junction => junction.CourseId == courseId))
                 .ToListAsync();
-
         }
 
         public async Task<Student?> GetStudentByEmailAsync(string email)

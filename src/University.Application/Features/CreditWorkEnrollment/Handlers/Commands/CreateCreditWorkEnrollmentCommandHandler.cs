@@ -35,17 +35,19 @@ namespace University.Application.Features.CreditWorkEnrollment.Handlers.Commands
         public async Task<CreateCommandResponse<GetCreditWorkEnrollmentDto>> Handle(CreateCreditWorkEnrollmentCommand request, CancellationToken cancellationToken)
         {
             var response = new CreateCommandResponse<GetCreditWorkEnrollmentDto>();
+            var validator = new CreateCreditWorkEnrollmentDtoValidator(_unitOfWork);
+            var validationResult = await validator.ValidateAsync(request.CreditWorkEnrollmentDto);
+            if (!validationResult.IsValid)
+            {
+                response.IsSuccessful = false;
+                response.Status = HttpStatusCode.BadRequest;
+                response.Errors = validationResult.Errors.Select(error => error.ErrorMessage).ToList();
+                return response;
+            }
+
+            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var validator = new CreateCreditWorkEnrollmentDtoValidator(_unitOfWork);
-                var validationResult = await validator.ValidateAsync(request.CreditWorkEnrollmentDto);
-                if (!validationResult.IsValid)
-                {
-                    response.IsSuccessful = false;
-                    response.Status = HttpStatusCode.BadRequest;
-                    response.Errors = validationResult.Errors.Select(error => error.ErrorMessage).ToList();
-                    return response;
-                }
                 var creditWork = await _unitOfWork.CreditWorkRepository.GetByIdAsync(request.CreditWorkEnrollmentDto.CreditWorkId);
                 var student = await _unitOfWork.StudentRepository.GetByIdAsync(request.CreditWorkEnrollmentDto.StudentId);
                 if (student is null || creditWork is null)
@@ -69,16 +71,18 @@ namespace University.Application.Features.CreditWorkEnrollment.Handlers.Commands
                     CreatedById = staffId,
                     CreatedAt = DateTimeOffset.UtcNow,
                 };
-                var createdEntity = await  _unitOfWork.CreditWorkEnrollmentRepository.CreateCreditWorkEnrollment(enrollment);
+                var createdEntity = await _unitOfWork.CreditWorkEnrollmentRepository.CreateCreditWorkEnrollment(enrollment);
+
                 await _unitOfWork.SaveChangesAsync();
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.Created;
                 response.RecordId = createdEntity.Id;
                 return response;
             }
-            catch (Exception ex)
+            catch 
             {
-                throw new FailToProcessCommandException(ex);
+                await _unitOfWork.RollbackAsync();
+                throw;
             }
         }
     }
