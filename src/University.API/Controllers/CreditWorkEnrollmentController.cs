@@ -5,6 +5,7 @@ using University.Application.Features.CourseEnrollment.Requests.Queries;
 using University.Application.Features.CreditWorkEnrollment.Requests.Commands;
 using University.Application.Features.CreditWorkEnrollment.Requests.Requests;
 using University.Application.Models.DTOs.CourseEnrollmentDTOs;
+using University.Application.Models.DTOs.CreditWorkDTOs;
 using University.Application.Models.DTOs.CreditWorkEnrollmentDto;
 using University.Application.Models.Identity;
 using University.Application.Models.Responses;
@@ -27,11 +28,19 @@ namespace University.API.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<BaseQueryResponse<GetCreditWorkEnrollmentDto>>> GetEnrollmentById(Guid id)
         {
-            var command = new GetCreditWorkEnrollmentRequest
+            var request = new GetCreditWorkEnrollmentRequest
             {
                 CreditWorkEnrollmentId = id
             };
-            var response = await _mediator.Send(command);
+            var response = await _mediator.Send(request);
+            return ToActionResult(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<BaseQueryListResponse<GetCreditWorkEnrollmentDto>>> GetAll()
+        {
+            var request = new GetAllCreditWorkEnrollmentRequest();
+            var response = await _mediator.Send(request);
             return ToActionResult(response);
         }
 

@@ -13,6 +13,7 @@ namespace University.Application.Contracts.Persistance
         //Task<bool> RemoveCreditWorkEnrollment(Guid enrollmentId);
         CreditWorkEnrollment RemoveCreditWorkEnrollment(CreditWorkEnrollment enrollment);
         Task<CreditWorkEnrollment?> GetEnrollment(Guid enrollmentId);
+        Task<List<CreditWorkEnrollment>> GetAllEnrollmentAsync();
 
         Task<bool> ExistsAsync(Guid studentId, Guid creditWorkId);
         Task<bool> ExistsAsync(Guid enrollmentId);

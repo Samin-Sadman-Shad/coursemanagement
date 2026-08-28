@@ -25,11 +25,19 @@ namespace University.API.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<BaseQueryResponse<GetCourseEnrollmentDto>>> GetEnrollmentById(Guid id)
         {
-            var command = new GetCourseEnrollmentRequest
+            var request = new GetCourseEnrollmentRequest
             {
                 CourseEnrollmentId = id
             };
-            var response = await _mediator.Send(command);
+            var response = await _mediator.Send(request);
+            return ToActionResult(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<BaseQueryListResponse<GetCourseEnrollmentDto>>> GetAll()
+        {
+            var request = new GetAllCourseEnrollmentRequest();
+            var response = await _mediator.Send(request);
             return ToActionResult(response);
         }
 

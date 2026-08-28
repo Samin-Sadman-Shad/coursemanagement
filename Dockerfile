@@ -20,5 +20,6 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 ENV ASPNETCORE_HTTP_PORTS=8080
-EXPOSE 8080   #container port
+#container port
+EXPOSE 8080   
 ENTRYPOINT ["dotnet", "University.API.dll"]

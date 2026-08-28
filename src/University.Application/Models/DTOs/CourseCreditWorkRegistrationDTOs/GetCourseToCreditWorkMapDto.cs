@@ -11,6 +11,7 @@ namespace University.Application.Models.DTOs.CourseCreditWorkRegistrationDTOs
 {
     public class GetCourseToCreditWorkMapDto:BaseQueryDto
     {
+        public Guid Registrationid {  get; set; }
         public GetCreditWorkDto? CreditWorkDto { get; set; }
         public GetCourseDto? GetCourseDto { get; set; }
     }

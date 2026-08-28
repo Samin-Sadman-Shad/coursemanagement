@@ -20,7 +20,7 @@ namespace University.Persistance.Repositories
             _dbContext = dbConext;
         }
 
-        public async Task<CourseCreditWork> RegisterCourseToCreditWork(Guid courseId, Guid creditWorkId)
+        public async Task<CourseCreditWork> RegisterCourseToCreditWork(Guid courseId, Guid creditWorkId, Guid staffId)
         {
             var course = await _dbContext.FindAsync<Course>(courseId);
             var creditWork = await _dbContext.FindAsync<CreditWork>(creditWorkId);
@@ -33,7 +33,9 @@ namespace University.Persistance.Repositories
                 CourseId = courseId,
                 CreditWorkId = creditWorkId,
                 Course = course,
-                CreditWork = creditWork
+                CreditWork = creditWork,
+                EnrolledById = staffId,
+                EnrolledAt = DateTimeOffset.UtcNow,
             };
             await _dbContext.AddAsync(entity); //save changes will be dealt from unit of work
             return entity;
@@ -96,6 +98,15 @@ namespace University.Persistance.Repositories
         {
             return await _dbContext.CreditWorksInCourses
                 .FirstOrDefaultAsync(ccw => ccw.Id == id);
+        }
+
+        public async Task<List<CourseCreditWork>> GetAllAsync()
+        {
+            return await _dbContext.CreditWorksInCourses
+                .Include(register => register.Course)
+                .Include(register => register.CreditWorkId)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

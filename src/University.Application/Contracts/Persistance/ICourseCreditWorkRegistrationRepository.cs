@@ -9,7 +9,7 @@ namespace University.Application.Contracts.Persistance
 {
     public interface ICourseCreditWorkRegistrationRepository
     {
-        Task<CourseCreditWork> RegisterCourseToCreditWork(Guid courseId, Guid creditWorkId);
+        Task<CourseCreditWork> RegisterCourseToCreditWork(Guid courseId, Guid creditWorkId, Guid staffId);
 
         //Task<bool> UnregisterCourseFromCreditWork(Guid courseId, Guid creditWorkId);
         //Task<CourseCreditWork> UnregisterCourseFromCreditWork(Guid registrationId);
@@ -20,5 +20,7 @@ namespace University.Application.Contracts.Persistance
         Task<bool> ExistsAsync(Guid courseId, Guid creditWorkId);
 
         public Task<CourseCreditWork?> GetByIdAsync(Guid id);
+
+        Task<List<CourseCreditWork>> GetAllAsync();
     }
 }

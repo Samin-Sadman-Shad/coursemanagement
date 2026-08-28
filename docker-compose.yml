@@ -21,7 +21,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: src/Dockerfile
+      dockerfile: Dockerfile
     container_name: university-api-compose
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
@@ -30,5 +30,3 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-
-volumes: {}   # no named volumes needed — the bind mount above doesn't require a top-level entry

@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using University.Application.Features.CourseCreditWorkRegistration.Requests.Commands;
+using University.Application.Features.CourseCreditWorkRegistration.Requests.Queries;
 using University.Application.Models.DTOs.CourseCreditWorkRegistrationDTOs;
 using University.Application.Models.Identity;
 using University.Application.Models.Responses;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -41,6 +43,14 @@ namespace University.API.Controllers
                 CourseCreditWorkId = courseCreditWorkId
             };
             var response = await _mediator.Send(command);
+            return ToActionResult(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<BaseQueryListResponse<GetCourseToCreditWorkMapDto>>> GetAll()
+        {
+            var request = new GetAllCourseCreditWorkRegistrationRequest();
+            var response = await _mediator.Send(request);
             return ToActionResult(response);
         }
     }

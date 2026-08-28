@@ -32,6 +32,15 @@ namespace University.Persistance.Repositories
                 .FirstOrDefaultAsync(enroll => enroll.Id == enrollmentId);
         }
 
+        public async Task<List<CreditWorkEnrollment>> GetAllEnrollmentAsync()
+        {
+            return await _dbContext.CreditWorkEnrollments
+                .Include(enrollment => enrollment.Student)
+                .Include(enrollment => enrollment.CreditWork)
+                .AsNoTracking()
+                .ToListAsync(); 
+        }
+
         public async Task<bool> DoesEnrollmentExist(Guid enrollmentId)
         {
             var entity = await GetEnrollment(enrollmentId);

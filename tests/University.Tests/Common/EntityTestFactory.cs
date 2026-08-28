@@ -17,14 +17,16 @@ namespace University.Tests.Common
         {
             UserId = userId ?? Guid.NewGuid(),
             Name = "Test Student",
-            Roll = 1
+            Roll = 1,
+            Email = "test@email.com"
         };
 
         public static Student CreateStudent(string name, Guid? userId = null) => new()
         {
             UserId = userId ?? Guid.NewGuid(),
             Name = name,
-            Roll = 1
+            Roll = 1,
+            Email = "test@email.com"
         };
 
         public static CreditWork CreateCreditWork(Guid? id = null) => new()
@@ -107,7 +109,8 @@ namespace University.Tests.Common
                 CourseId = resolvedCourse.Id,
                 Course = resolvedCourse,
                 CreditWorkId = resolvedCreditWork.Id,
-                CreditWork = resolvedCreditWork
+                CreditWork = resolvedCreditWork,
+                EnrolledById = Guid.NewGuid(),
             };
         }
     }

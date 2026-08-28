@@ -14,5 +14,6 @@ namespace University.Application.Contracts.Persistance
         Task<bool> ExistsAsync(Guid enrollmentId);
 
         Task<CourseEnrollment?> GetEnrollment(Guid enrollmentId);
+        Task<List<CourseEnrollment>> GetAllEnrollmentAsync();
     }
 }

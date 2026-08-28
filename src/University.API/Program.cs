@@ -54,7 +54,7 @@ app.UseSerilogRequestLogging(options =>
 });
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 {
     //openapi/v1.json
     //app.MapOpenApi();
@@ -66,7 +66,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+if (!app.Environment.IsEnvironment("Docker"))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
