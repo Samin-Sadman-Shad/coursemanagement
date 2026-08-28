@@ -104,7 +104,7 @@ namespace University.Persistance.Repositories
         {
             return await _dbContext.CreditWorksInCourses
                 .Include(register => register.Course)
-                .Include(register => register.CreditWorkId)
+                .Include(register => register.CreditWork)
                 .AsNoTracking()
                 .ToListAsync();
         }
