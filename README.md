@@ -272,7 +272,7 @@ dotnet test
 ## Quick Start
 
 ```bash
-git clone [<repository-url>](https://github.com/Samin-Sadman-Shad/coursemanagement.git)
+git clone https://github.com/Samin-Sadman-Shad/coursemanagement.git
 cd CourseManagement
 docker compose up --build -d (--build tag allows to generate the image before running the containers)
 ```
