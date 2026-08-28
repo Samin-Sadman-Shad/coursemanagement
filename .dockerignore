@@ -3,3 +3,6 @@
 **/.vs/
 **/.vscode/
 *.user
+tests/
+.git/
+.gitignores

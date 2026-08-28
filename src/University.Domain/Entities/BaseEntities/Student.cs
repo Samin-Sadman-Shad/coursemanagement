@@ -17,7 +17,7 @@ namespace University.Domain.Entities.BaseEntities
         public required string Name { get; set; }
         public required int Roll { get; set; }
         [EmailAddress]
-        public string? Email { get; set; }
+        public required string Email { get; set; } 
 
         public List<CourseEnrollment> CoursesEnrolled { get; set; } = new List<CourseEnrollment>();
         public List<CreditWorkEnrollment> CreditWorksEnrolled { get; set; } = new List<CreditWorkEnrollment>();
