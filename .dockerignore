@@ -6,3 +6,7 @@
 tests/
 .git/
 .gitignores
+
+ERD/
+Postman/
+*.postman_collection.json
