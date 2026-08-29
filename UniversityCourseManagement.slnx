@@ -1,8 +1,18 @@
 <Solution>
+  <Folder Name="/ERD/">
+    <File Path="ERD/Entity diagram with Users table.png" />
+    <File Path="ERD/ERD without Identity Tables.png" />
+  </Folder>
+  <Folder Name="/Postman/">
+    <File Path="postman/UniversityManagement API.postman_collection.json" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".dockerignore" />
     <File Path="docker-compose.yml" />
-    <File Path="Dockerfile"/>
+    <File Path="Dockerfile" />
+    <File Path="ERD/Entity diagram with Users table.png" />
+    <File Path="ERD/ERD without Identity Tables.png" />
+    <File Path="postman/UniversityManagement API.postman_collection.json" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/University.API/University.API.csproj" />
@@ -12,7 +22,8 @@
     <Project Path="src/University.Persistance/University.Persistance.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <File Path="postman/UniversityManagement API.postman_collection.json" />
     <Project Path="tests/University.Tests/University.Tests.csproj" />
   </Folder>
-  <File Path= "README.md"/>
+  <File Path="README.md" />
 </Solution>
