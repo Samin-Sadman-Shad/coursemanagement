@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace University.Identity.Services
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        //static, so shared across http request, lives in heap
+        private static readonly ConcurrentDictionary<Guid, StaffDto> _staffCache = new();
         public UserService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
@@ -42,13 +45,28 @@ namespace University.Identity.Services
 
         public async Task<StaffDto?> GetStaffByIdAsync(Guid staffId)
         {
-            var user = await _userManager.FindByIdAsync(staffId.ToString());
-            if(user is null) return null;
-            return new StaffDto
+            //var user = await _userManager.FindByIdAsync(staffId.ToString());
+            //if(user is null) return null;
+            //return new StaffDto
+            //{
+            //    UserName = user.UserName ?? user.Email ?? string.Empty, 
+            //    Email = user.Email ?? string.Empty
+            // };
+
+            if(_staffCache.TryGetValue(staffId, out var cachedStaff))
             {
-                UserName = user.UserName ?? user.Email ?? string.Empty, 
+                return cachedStaff;
+            }
+            var user = await _userManager.FindByIdAsync(staffId.ToString());
+            if (user is null) return null;
+
+            var staffDto = new StaffDto
+            {
+                UserName = user.UserName ?? user.Email ?? string.Empty,
                 Email = user.Email ?? string.Empty
-             };
+            };
+            _staffCache.TryAdd(staffId, staffDto);
+            return staffDto;
         }
 
     }

@@ -68,8 +68,8 @@ namespace University.Persistance.Repositories
         public async Task<List<Student>> GetStudentsByNameAsync(string name)
         {
             return await _dbContext.Students
-                .Where(s=> s.Name == name)
-                .ToListAsync();   
+                .Where(s => EF.Functions.ILike(s.Name, $"%{name}%"))
+                .ToListAsync();
         }
 
         public async Task<Student?> GetStudentByRollAsync(int? rollNo)
