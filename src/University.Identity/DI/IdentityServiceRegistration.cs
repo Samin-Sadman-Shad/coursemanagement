@@ -46,7 +46,7 @@ namespace University.Identity.DI
 
             //everytime user tries to login, new service will be created
             services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();
 
             var jwtKey = configuration["JwtSettings:Key"]
                 ?? throw new InvalidOperationException(
