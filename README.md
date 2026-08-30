@@ -14,12 +14,13 @@ CourseManagement/
 ├── UniversityCourseManagement.slnx
 │
 └── src/
-    ├── University.API/
-    ├── University.Application/
-    ├── University.Domain/
-    ├── University.Persistance/
-    ├── University.Identity/
-    └── University.Tests/
+|    ├── University.API/
+|    ├── University.Application/
+|    ├── University.Domain/
+|    ├── University.Persistance/
+|    ├── University.Identity/
+|
+└── University.Tests/
 ```
 
 ### Projects
