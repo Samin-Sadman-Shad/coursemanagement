@@ -15,10 +15,10 @@ namespace University.API.Utils
             try
             {
                 var universityDb = serviceProvier.GetRequiredService<UniversityDbContext>();
-                await universityDb.Database.GetAppliedMigrationsAsync();
+                await universityDb.Database.MigrateAsync();
 
                 var univerItendityDb = serviceProvier.GetRequiredService<UniversityIdentityDbContext>();
-                await univerItendityDb.Database.GetAppliedMigrationsAsync();
+                await univerItendityDb.Database.MigrateAsync();
 
                 logger.LogInformation("All migrations are applied successfully");
             }
