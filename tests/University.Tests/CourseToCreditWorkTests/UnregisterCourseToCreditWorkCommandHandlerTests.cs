@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using University.Application.Contracts.Persistance;
 using University.Application.Features.CourseCreditWorkRegistration.Handlers.Commands;
@@ -24,7 +25,7 @@ namespace University.Tests.CourseToCreditWorkTests
             var id = Guid.NewGuid();
 
             uow.SetupGet(x => x.CourseCreditWorkRegistrationRepository).Returns(repo.Object);
-            repo.Setup(x => x.GetByIdAsync(id)).ReturnsAsync((CourseCreditWork?)null);
+            repo.Setup(x => x.GetByIdAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync((CourseCreditWork?)null);
 
             var request = new UnregisterCourseToCreditWorkCommand
             {
@@ -39,7 +40,7 @@ namespace University.Tests.CourseToCreditWorkTests
             result.Status.ShouldBe(HttpStatusCode.NotFound);
             result.RecordId.ShouldBe(id);
 
-            uow.Verify(x => x.SaveChangesAsync(), Times.Never);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -53,7 +54,7 @@ namespace University.Tests.CourseToCreditWorkTests
 
 
             uow.SetupGet(x => x.CourseCreditWorkRegistrationRepository).Returns(repo.Object);
-            repo.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(registration);
+            repo.Setup(x => x.GetByIdAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync(registration);
 
             var request = new UnregisterCourseToCreditWorkCommand
             {
@@ -69,7 +70,7 @@ namespace University.Tests.CourseToCreditWorkTests
             result.RecordId.ShouldBe(id);
 
             repo.Verify(x => x.UnregisterCourseFromCreditWork(registration), Times.Once);
-            uow.Verify(x => x.SaveChangesAsync(), Times.Once);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

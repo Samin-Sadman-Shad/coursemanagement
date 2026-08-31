@@ -10,12 +10,12 @@ namespace University.Application.Contracts.Persistance
     public interface IGenericRepository<T> where T : IBaseEntity
     {
         Task<List<T>> GetAllAsync();
-        Task<T?> GetByIdAsync(Guid id);
+        Task<T?> GetByIdAsync(Guid id, CancellationToken token);
         Task<T?> GetByIdDetailAsync(Guid id);
         Task<T> CreateAsync(T entity);
         T Update(T entity);
         Task<T> DeleteAsync(Guid id);
 
-        Task<bool> ExistsAsync(Guid id);
+        Task<bool> ExistsAsync(Guid id, CancellationToken token);
     }
 }

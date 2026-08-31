@@ -11,7 +11,7 @@ namespace University.Application.Models.DTOs.CourseEnrollmentDTOs.Validators
     public class CreateCourseEnrollmentDtoValidator:AbstractValidator<CreateCourseEnrollmentDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CreateCourseEnrollmentDtoValidator(IUnitOfWork uow)
+        public CreateCourseEnrollmentDtoValidator(IUnitOfWork uow, CancellationToken token)
         {
             _unitOfWork = uow;
             var studentRepo = _unitOfWork.StudentRepository;
@@ -19,12 +19,12 @@ namespace University.Application.Models.DTOs.CourseEnrollmentDTOs.Validators
 
             RuleFor(x => x.StudentId)
                 .NotEmpty()
-                .MustAsync(async (id, token) => await studentRepo.ExistsAsync(id))
+                .MustAsync(async (id, token) => await studentRepo.ExistsAsync(id, token))
                 .WithMessage("Student not found to be enrolled");
 
             RuleFor(x => x.CourseId)
                 .NotEmpty()
-                .MustAsync(async (id, token) => await courseRepo.ExistsAsync(id))
+                .MustAsync(async (id, token) => await courseRepo.ExistsAsync(id, token))
                 .WithMessage("Course not found");
             //RuleFor(enrollment => enrollment.Student)
             //    .NotEmpty()

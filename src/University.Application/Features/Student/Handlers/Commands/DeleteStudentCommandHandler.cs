@@ -29,7 +29,7 @@ namespace University.Application.Features.Student.Handlers.Commands
             try
             {
                 var studentRepository = _unitOfWork.StudentRepository;
-                var entity = await studentRepository.GetByIdAsync(request.StudentId);
+                var entity = await studentRepository.GetByIdAsync(request.StudentId, cancellationToken);
                 if (entity is null)
                 {
                     throw new FailToProcessCommandException();

@@ -41,7 +41,7 @@ namespace University.Tests.CreditWorkTests
                 .ReturnsAsync(creditWork);
 
             var uow = UnitOfWorkMock.Create(creditWorkRepo: repo);
-            uow.Setup(x => x.SaveChangesAsync()).Returns(Task.CompletedTask);
+            uow.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
             var userService = new Mock<IUserService>();
             userService.Setup(x => x.GetStaffByIdAsync(staffId))
@@ -70,7 +70,7 @@ namespace University.Tests.CreditWorkTests
                 e.Description == dto.Description &&
                 e.CreatedById == staffId)), Times.Once);
 
-            uow.Verify(x => x.SaveChangesAsync(), Times.Once);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace University.Tests.CreditWorkTests
             //result.Errors.ShouldContain("Code update will create duplicate entity");
 
             repo.Verify(x => x.CreateAsync(It.IsAny<CreditWork>()), Times.Never);
-            uow.Verify(x => x.SaveChangesAsync(), Times.Never);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]

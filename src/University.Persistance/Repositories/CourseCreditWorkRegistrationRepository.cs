@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using University.Application.Contracts.Persistance;
 using University.Domain.Entities.BaseEntities;
@@ -20,10 +21,10 @@ namespace University.Persistance.Repositories
             _dbContext = dbConext;
         }
 
-        public async Task<CourseCreditWork> RegisterCourseToCreditWork(Guid courseId, Guid creditWorkId, Guid staffId)
+        public async Task<CourseCreditWork> RegisterCourseToCreditWork(Guid courseId, Guid creditWorkId, Guid staffId, CancellationToken cancellationToken = default)
         {
-            var course = await _dbContext.FindAsync<Course>(courseId);
-            var creditWork = await _dbContext.FindAsync<CreditWork>(creditWorkId);
+            var course = await _dbContext.FindAsync<Course>(new object[] { courseId }, cancellationToken: cancellationToken);
+            var creditWork = await _dbContext.FindAsync<CreditWork>(new object[] { creditWorkId }, cancellationToken: cancellationToken);
             if(creditWork is null || course is null)
             {
                 throw new ArgumentException("Either courseId or CrediWorkId is not valid");
@@ -37,7 +38,7 @@ namespace University.Persistance.Repositories
                 EnrolledById = staffId,
                 EnrolledAt = DateTimeOffset.UtcNow,
             };
-            await _dbContext.AddAsync(entity); //save changes will be dealt from unit of work
+            await _dbContext.AddAsync(entity, cancellationToken); //save changes will be dealt from unit of work
             return entity;
         }
 
@@ -52,7 +53,7 @@ namespace University.Persistance.Repositories
         //    var entity = _dbContext.Set<CourseCreditWork>()
         //        .Where(cc => cc.CourseId == courseId && cc.CreditWorkId == creditWorkId)
         //        .SingleOrDefault();
-            
+
         //    if(entity is null)
         //    {
         //        throw new ArgumentException("Course is not registered to the credit");
@@ -62,19 +63,19 @@ namespace University.Persistance.Repositories
         //    return await ExistsAsync(entityId);
         //}
 
-        public async Task<bool> ExistsAsync(Guid id)
+        public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var entity = await _dbContext.Set<CourseCreditWork>()
                 .AsNoTracking()
-                .AnyAsync(ccw => ccw.Id == id);
+                .AnyAsync(ccw => ccw.Id == id, cancellationToken);
             return entity ;
         }
 
-        public async Task<bool> ExistsAsync(Guid courseId, Guid creditWorkId)
+        public async Task<bool> ExistsAsync(Guid courseId, Guid creditWorkId, CancellationToken cancellationToken = default)
         {
             return await _dbContext.CreditWorksInCourses
                 .AsNoTracking()
-                .AnyAsync(ccw => ccw.CourseId == courseId && ccw.CreditWorkId == creditWorkId);
+                .AnyAsync(ccw => ccw.CourseId == courseId && ccw.CreditWorkId == creditWorkId, cancellationToken);
         }
 
         //public async Task<CourseCreditWork> UnregisterCourseFromCreditWork(Guid registrationId)
@@ -94,19 +95,19 @@ namespace University.Persistance.Repositories
             return courseCreditWork;
         }
 
-        public async Task<CourseCreditWork?> GetByIdAsync(Guid id)
+        public async Task<CourseCreditWork?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await _dbContext.CreditWorksInCourses
-                .FirstOrDefaultAsync(ccw => ccw.Id == id);
+                .FirstOrDefaultAsync(ccw => ccw.Id == id, cancellationToken);
         }
 
-        public async Task<List<CourseCreditWork>> GetAllAsync()
+        public async Task<List<CourseCreditWork>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _dbContext.CreditWorksInCourses
                 .Include(register => register.Course)
                 .Include(register => register.CreditWork)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
     }
 }

@@ -40,11 +40,11 @@ namespace University.Tests.CreditWorkTests
             repo.Setup(x => x.DoesCreditWorkTitleExistAsync(dto.Heading, dto.Code, null))
                 .ReturnsAsync(false);
 
-            repo.Setup(x => x.GetByIdAsync(creditWork.Id))
+            repo.Setup(x => x.GetByIdAsync(creditWork.Id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(creditWork);
 
             var uow = UnitOfWorkMock.Create(creditWorkRepo: repo);
-            uow.Setup(x => x.SaveChangesAsync()).Returns(Task.CompletedTask);
+            uow.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
             var currentUser = new Mock<ICurrentUserService>();
             currentUser.SetupGet(x => x.UserId).Returns(staffId);
@@ -73,7 +73,7 @@ namespace University.Tests.CreditWorkTests
             creditWork.Description.ShouldBe(dto.Description);
             creditWork.LastModifiedById.ShouldBe(staffId);
 
-            uow.Verify(x => x.SaveChangesAsync(), Times.Once);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -112,8 +112,8 @@ namespace University.Tests.CreditWorkTests
             result.Status.ShouldBe(HttpStatusCode.BadRequest);
             //result.Errors.ShouldContain("Code update will create duplicate entity");
 
-            repo.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
-            uow.Verify(x => x.SaveChangesAsync(), Times.Never);
+            repo.Verify(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -133,7 +133,7 @@ namespace University.Tests.CreditWorkTests
             repo.Setup(x => x.DoesCreditWorkTitleExistAsync(dto.Heading, dto.Code, null))
                 .ReturnsAsync(false);
 
-            repo.Setup(x => x.GetByIdAsync(creditWorkId))
+            repo.Setup(x => x.GetByIdAsync(creditWorkId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync((CreditWork?)null);
 
             var uow = UnitOfWorkMock.Create(creditWorkRepo: repo);
@@ -154,7 +154,7 @@ namespace University.Tests.CreditWorkTests
 
             // Assert
             await Should.ThrowAsync<FailToProcessCommandException>(act);
-            uow.Verify(x => x.SaveChangesAsync(), Times.Never);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

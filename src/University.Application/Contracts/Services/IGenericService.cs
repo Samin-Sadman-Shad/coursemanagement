@@ -15,9 +15,9 @@ namespace University.Application.Services.Contract
         where TUpdateDto : IUpdateDto
     {
         Task<List<TGetDto>> GetAllAsync();
-        Task<TGetDto?> GetByIdAsync(Guid id);
+        Task<TGetDto?> GetByIdAsync(Guid id, CancellationToken token);
         Task<TGetDto> CreateAsync(TCreateDto dto);
-        Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id);
+        Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id, CancellationToken token);
         Task<TGetDto> DeleteAsync(Guid id, Staff deletedBy);
 
     }

@@ -27,7 +27,7 @@ namespace University.Application.Features.CourseCreditWorkRegistration.Handlers.
             try
             {
                 var courseCreditWork = await _unitOfWork.CourseCreditWorkRegistrationRepository
-                             .GetByIdAsync(request.CourseCreditWorkId);
+                             .GetByIdAsync(request.CourseCreditWorkId, cancellationToken);
 
                 if (courseCreditWork is null)
                 {
@@ -38,7 +38,7 @@ namespace University.Application.Features.CourseCreditWorkRegistration.Handlers.
                 }
 
                  _unitOfWork.CourseCreditWorkRegistrationRepository.UnregisterCourseFromCreditWork(courseCreditWork);
-                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
 
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.NoContent;

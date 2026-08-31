@@ -17,7 +17,7 @@ namespace University.Application.Models.DTOs.CourseCreditWorkRegistrationDTOs.Va
         private readonly ICourseCreditWorkRegistrationRepository _courseCreditWorkRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CourseCreditWorkRegistrationDtoValidator(IUnitOfWork uow)
+        public CourseCreditWorkRegistrationDtoValidator(IUnitOfWork uow, CancellationToken token)
         {
             _unitOfWork = uow;
             _courseRepository = _unitOfWork.CourseRepository;
@@ -26,12 +26,12 @@ namespace University.Application.Models.DTOs.CourseCreditWorkRegistrationDTOs.Va
 
             RuleFor(x => x.CourseId)
                 .NotEmpty()
-                .MustAsync(async (courseId, token) => await _courseRepository.ExistsAsync(courseId))
+                .MustAsync(async (courseId, token) => await _courseRepository.ExistsAsync(courseId, token))
                 .WithMessage("Course not found");
 
             RuleFor(x => x.CreditWorkId)
                 .NotEmpty()
-                .MustAsync(async (creditWorkId, token) => await _creditWorkRepository.ExistsAsync(creditWorkId))
+                .MustAsync(async (creditWorkId, token) => await _creditWorkRepository.ExistsAsync(creditWorkId, token))
                 .WithMessage("Credit work not found");
 
             RuleFor(x => x)

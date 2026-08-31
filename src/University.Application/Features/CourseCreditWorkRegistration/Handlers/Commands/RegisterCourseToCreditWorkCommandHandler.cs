@@ -34,7 +34,7 @@ namespace University.Application.Features.CourseCreditWorkRegistration.Handlers.
             var response = new BaseCommandResponse();
             try
             {
-                var validator = new CourseCreditWorkRegistrationDtoValidator(_unitOfWork);
+                var validator = new CourseCreditWorkRegistrationDtoValidator(_unitOfWork, cancellationToken);
                 var validationResult = await validator.ValidateAsync(request.courseCreditWorkDto, cancellationToken);
                 if (!validationResult.IsValid)
                 {
@@ -53,8 +53,9 @@ namespace University.Application.Features.CourseCreditWorkRegistration.Handlers.
                 var entity = await courseCreditWorkRepository.RegisterCourseToCreditWork(
                     request.courseCreditWorkDto.CourseId, 
                     request.courseCreditWorkDto.CreditWorkId,
-                    staffId);
-                await _unitOfWork.SaveChangesAsync();
+                    staffId,
+                    cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
                 response.IsSuccessful = true;
                 response.Status = HttpStatusCode.Created;
                 response.RecordId = entity.Id;

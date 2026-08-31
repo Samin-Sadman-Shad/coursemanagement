@@ -46,9 +46,9 @@ namespace University.Persistance.Repositories
             return await _dbContext.Set<T>().ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(Guid id)
+        public async Task<T?> GetByIdAsync(Guid id, CancellationToken token)
         {
-            return await _dbContext.FindAsync<T>(id);
+            return await _dbContext.FindAsync<T>(id, token);
         }
 
         public T Update(T entity)
@@ -58,9 +58,9 @@ namespace University.Persistance.Repositories
             return entity;
         }
 
-        public async Task<bool> ExistsAsync(Guid id)
+        public async Task<bool> ExistsAsync(Guid id, CancellationToken token)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await GetByIdAsync(id, token);
             return entity is not null;
         }
 

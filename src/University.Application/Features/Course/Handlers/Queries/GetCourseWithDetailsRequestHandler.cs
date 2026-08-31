@@ -31,7 +31,7 @@ namespace University.Application.Features.Course.Handlers.Queries
             try
             {
                 var repository = _unitOfWork.CourseRepository;
-                var entity = await repository.GetByIdAsync(request.CourseId);
+                var entity = await repository.GetByIdAsync(request.CourseId, cancellationToken);
                 if (entity is null)
                 {
                     response.IsSuccessful = false;

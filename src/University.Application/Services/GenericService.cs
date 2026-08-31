@@ -71,9 +71,9 @@ namespace University.Application.Services
 
         }
 
-        public async Task<TGetDto?> GetByIdAsync(Guid id)
+        public async Task<TGetDto?> GetByIdAsync(Guid id, CancellationToken token)
         {
-            var entity = await _repository.GetByIdAsync(id);
+            var entity = await _repository.GetByIdAsync(id, token);
             if(entity is not null)
             {
                 return ToGetDto(entity);
@@ -81,11 +81,11 @@ namespace University.Application.Services
             throw new Exception($"Problem with fetching {nameof(TEntity)} with id {id}");
         }
 
-        public virtual async Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id)
+        public virtual async Task<TGetDto> UpdateAsync(TUpdateDto dto, Guid id, CancellationToken token)
         {
             try
             {
-                var existingEntity = await _repository.GetByIdAsync(id);
+                var existingEntity = await _repository.GetByIdAsync(id, token);
                 if (existingEntity is null)
                 {
                     throw new Exception("No Entity found");

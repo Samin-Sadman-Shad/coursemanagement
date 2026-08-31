@@ -12,7 +12,7 @@ namespace University.Application.Models.DTOs.CreditWorkEnrollmentDto.Validators
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateCreditWorkEnrollmentDtoValidator(IUnitOfWork uow)
+        public CreateCreditWorkEnrollmentDtoValidator(IUnitOfWork uow, CancellationToken token)
         {
             _unitOfWork = uow;
             var _creditWorkRepository = _unitOfWork.CreditWorkRepository;
@@ -38,12 +38,12 @@ namespace University.Application.Models.DTOs.CreditWorkEnrollmentDto.Validators
 
             RuleFor(dto => dto.CreditWorkId)
                 .NotEmpty()
-                .MustAsync(async (id, token) => await _creditWorkRepository.ExistsAsync(id))
+                .MustAsync(async (id, token) => await _creditWorkRepository.ExistsAsync(id, token))
                 .WithMessage("CreditWork not found");
 
             RuleFor(dto => dto.StudentId)
                 .NotEmpty()
-                .MustAsync(async (id, token) => await _studentRepository.ExistsAsync(id))
+                .MustAsync(async (id, token) => await _studentRepository.ExistsAsync(id, token))
                 .WithMessage("Student not found");
             RuleFor(dto => dto)
                 .MustAsync(async (dto, token) =>

@@ -61,7 +61,7 @@ public class CreateStudentCommandHandlerTests
 
 
         unitOfWork
-            .Setup(x => x.SaveChangesAsync())
+            .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         var command = new CreateStudentCommand
@@ -101,7 +101,7 @@ public class CreateStudentCommandHandlerTests
                 s.LastModifiedById == staffId)),
             Times.Once);
 
-        unitOfWork.Verify(x => x.SaveChangesAsync(), Times.Once);
+        unitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -150,6 +150,6 @@ public class CreateStudentCommandHandlerTests
             x => x.CreateAsync(It.IsAny<Student>()),
             Times.Never);
 
-        unitOfWork.Verify(x => x.BeginTransactionAsync(), Times.Never);
+        unitOfWork.Verify(x => x.BeginTransactionAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

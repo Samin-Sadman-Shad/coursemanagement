@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using University.Application.Contracts.Persistance;
 using University.Identity;
@@ -55,29 +56,29 @@ namespace University.Persistance.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public async Task BeginTransactionAsync()
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            _transaction = await _dbContext.Database.BeginTransactionAsync();
+            _transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
             await _identityDbContext.Database.UseTransactionAsync(_transaction.GetDbTransaction());
         }
 
-        public async Task SaveChangesAsync()
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await _dbContext.SaveChangesAsync();
-            await _identityDbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _identityDbContext.SaveChangesAsync(cancellationToken);
             if (_transaction is not null)
             {
-                await _transaction.CommitAsync();
+                await _transaction.CommitAsync(cancellationToken);
                 await _transaction.DisposeAsync();
                 _transaction = null;
             }
         }
 
-        public async Task RollbackAsync()
+        public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction is not null)
             {
-                await _transaction.RollbackAsync();
+                await _transaction.RollbackAsync(cancellationToken);
                 await _transaction.DisposeAsync();
                 _transaction = null;
             }

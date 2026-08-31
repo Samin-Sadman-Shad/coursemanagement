@@ -35,7 +35,7 @@ namespace University.Application.Features.CreditWorkEnrollment.Handlers.Commands
         public async Task<CreateCommandResponse<GetCreditWorkEnrollmentDto>> Handle(CreateCreditWorkEnrollmentCommand request, CancellationToken cancellationToken)
         {
             var response = new CreateCommandResponse<GetCreditWorkEnrollmentDto>();
-            var validator = new CreateCreditWorkEnrollmentDtoValidator(_unitOfWork);
+            var validator = new CreateCreditWorkEnrollmentDtoValidator(_unitOfWork, cancellationToken);
             var validationResult = await validator.ValidateAsync(request.CreditWorkEnrollmentDto);
             if (!validationResult.IsValid)
             {
@@ -48,8 +48,8 @@ namespace University.Application.Features.CreditWorkEnrollment.Handlers.Commands
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var creditWork = await _unitOfWork.CreditWorkRepository.GetByIdAsync(request.CreditWorkEnrollmentDto.CreditWorkId);
-                var student = await _unitOfWork.StudentRepository.GetByIdAsync(request.CreditWorkEnrollmentDto.StudentId);
+                var creditWork = await _unitOfWork.CreditWorkRepository.GetByIdAsync(request.CreditWorkEnrollmentDto.CreditWorkId, cancellationToken);
+                var student = await _unitOfWork.StudentRepository.GetByIdAsync(request.CreditWorkEnrollmentDto.StudentId, cancellationToken);
                 if (student is null || creditWork is null)
                 {
                     response.IsSuccessful = false;

@@ -49,7 +49,7 @@ namespace University.Application.Features.CreditWork.Handlers.Commands
                     return response;
                 }
                 var creditWorkRepository = _unitOfWork.CreditWorkRepository;
-                var entity = await creditWorkRepository.GetByIdAsync(request.CreditWorkId);
+                var entity = await creditWorkRepository.GetByIdAsync(request.CreditWorkId, cancellationToken);
                 if (entity is null)
                 {
                     throw new NotFoundException();

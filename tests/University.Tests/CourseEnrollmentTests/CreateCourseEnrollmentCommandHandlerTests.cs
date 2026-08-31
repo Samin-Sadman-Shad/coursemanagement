@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using University.Application.Contracts.API;
 using University.Application.Contracts.Identity;
@@ -34,10 +35,10 @@ namespace University.Tests.CourseEnrollmentTests
             uow.SetupGet(x => x.StudentRepository).Returns(studentRepo.Object);
             uow.SetupGet(x => x.CourseRepository).Returns(courseRepo.Object);
 
-            studentRepo.Setup(x => x.GetByIdAsync(studentId))
+            studentRepo.Setup(x => x.GetByIdAsync(studentId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Student?)null);
 
-            courseRepo.Setup(x => x.GetByIdAsync(courseId))
+            courseRepo.Setup(x => x.GetByIdAsync(courseId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(EntityTestFactory.CreateCourse(courseId));;
 
             var request = new CreateCourseEnrollmentCommand
@@ -84,22 +85,22 @@ namespace University.Tests.CourseEnrollmentTests
             uow.SetupGet(x => x.CourseRepository).Returns(courseRepo.Object);
             uow.SetupGet(x => x.CourseEnrollmentRepository).Returns(enrollmentRepo.Object);
 
-            studentRepo.Setup(x => x.GetByIdAsync(studentId)).ReturnsAsync(student);
-            courseRepo.Setup(x => x.GetByIdAsync(courseId)).ReturnsAsync(course);
+            studentRepo.Setup(x => x.GetByIdAsync(studentId, It.IsAny<CancellationToken>())).ReturnsAsync(student);
+            courseRepo.Setup(x => x.GetByIdAsync(courseId, It.IsAny<CancellationToken>())).ReturnsAsync(course);
 
             studentRepo
-                .Setup(x => x.ExistsAsync(studentId))
+                .Setup(x => x.ExistsAsync(studentId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             courseRepo
-                .Setup(x => x.ExistsAsync(courseId))
+                .Setup(x => x.ExistsAsync(courseId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             currentUser.SetupGet(x => x.UserId).Returns(staffId);
             userService.Setup(x => x.GetStaffByIdAsync(staffId))
                 .ReturnsAsync(new StaffDto());
 
-            enrollmentRepo.Setup(x => x.CreateCourseEnrollment(It.IsAny<CourseEnrollment>()))
+            enrollmentRepo.Setup(x => x.CreateCourseEnrollment(It.IsAny<CourseEnrollment>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(enrollment);
 
             var request = new CreateCourseEnrollmentCommand
@@ -127,10 +128,10 @@ namespace University.Tests.CourseEnrollmentTests
                 x => x.CreateCourseEnrollment(It.Is<CourseEnrollment>(e =>
                     e.StudentId == studentId &&
                     e.CourseId == courseId &&
-                    e.EnrolledById == staffId)),
+                    e.EnrolledById == staffId), CancellationToken.None),
                 Times.Once);
 
-            uow.Verify(x => x.SaveChangesAsync(), Times.Once);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

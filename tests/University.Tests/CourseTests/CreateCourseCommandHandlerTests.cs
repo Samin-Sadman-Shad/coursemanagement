@@ -37,7 +37,7 @@ public class CreateCourseCommandHandlerTests
             });
 
         var uow = UnitOfWorkMock.Create(courseRepo: courseRepo);
-        uow.Setup(x => x.SaveChangesAsync()).Returns(Task.CompletedTask);
+        uow.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
         var userService = new Mock<IUserService>();
         userService.Setup(x => x.GetStaffByIdAsync(staffId))
@@ -65,7 +65,7 @@ public class CreateCourseCommandHandlerTests
             c.Title == dto.CourseTitle &&
             c.CreatedById == staffId &&
             c.LastModifiedById == staffId)), Times.Once);
-        uow.Verify(x => x.SaveChangesAsync(), Times.Once);
+        uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]

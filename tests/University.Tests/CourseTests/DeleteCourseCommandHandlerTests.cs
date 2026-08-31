@@ -22,11 +22,11 @@ public class DeleteCourseCommandHandlerTests
         var course = EntityTestFactory.CreateCourse(courseId);
 
         var courseRepo = new Mock<ICourseRepository>();
-        courseRepo.Setup(x => x.GetByIdAsync(courseId)).ReturnsAsync(course);
+        courseRepo.Setup(x => x.GetByIdAsync(courseId, It.IsAny<CancellationToken>())).ReturnsAsync(course);
         courseRepo.Setup(x => x.DeleteAsync(courseId)).ReturnsAsync(course);
 
         var uow = UnitOfWorkMock.Create(courseRepo: courseRepo);
-        uow.Setup(x => x.SaveChangesAsync()).Returns(Task.CompletedTask);
+        uow.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
         var handler = new DeleteCourseCommandHandler(uow.Object);
         var request = new DeleteCourseCommand { CourseId = courseId };
@@ -39,9 +39,9 @@ public class DeleteCourseCommandHandlerTests
         result.Status.ShouldBe(HttpStatusCode.NoContent);
         result.RecordId.ShouldBe(courseId);
 
-        courseRepo.Verify(x => x.GetByIdAsync(courseId), Times.Once);
+        courseRepo.Verify(x => x.GetByIdAsync(courseId, It.IsAny<CancellationToken>()), Times.Once);
         courseRepo.Verify(x => x.DeleteAsync(courseId), Times.Once);
-        uow.Verify(x => x.SaveChangesAsync(), Times.Once);
+        uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class DeleteCourseCommandHandlerTests
         var courseId = Guid.NewGuid();
         var courseRepo = new Mock<ICourseRepository>();
 
-        courseRepo.Setup(x => x.GetByIdAsync(courseId))
+        courseRepo.Setup(x => x.GetByIdAsync(courseId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Course?)null);
 
         var uow = UnitOfWorkMock.Create(courseRepo: courseRepo);
@@ -64,6 +64,6 @@ public class DeleteCourseCommandHandlerTests
         // Assert
         await Should.ThrowAsync<FailToProcessCommandException>(act);
         courseRepo.Verify(x => x.DeleteAsync(It.IsAny<Guid>()), Times.Never);
-        uow.Verify(x => x.SaveChangesAsync(), Times.Never);
+        uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

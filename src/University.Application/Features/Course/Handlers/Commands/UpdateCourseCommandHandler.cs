@@ -57,7 +57,7 @@ namespace University.Application.Features.Course.Handlers.Commands
                 var updatedAt = DateTimeOffset.UtcNow;
 
                 var courseRepository = _unitOfWork.CourseRepository;
-                var entity = await courseRepository.GetByIdAsync(request.CourseId);
+                var entity = await courseRepository.GetByIdAsync(request.CourseId, cancellationToken);
                 if (entity is null)
                 {
                     throw new NotFoundException();

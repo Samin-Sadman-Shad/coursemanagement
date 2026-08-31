@@ -24,7 +24,7 @@ public class DeleteStudentCommandHandlerTests
         var student = EntityTestFactory.CreateStudent(studentId);
 
         studentRepo
-            .Setup(x => x.GetByIdAsync(studentId))
+            .Setup(x => x.GetByIdAsync(studentId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(student);
 
         studentRepo
@@ -32,7 +32,7 @@ public class DeleteStudentCommandHandlerTests
     .ReturnsAsync(student);
 
         unitOfWork
-            .Setup(x => x.SaveChangesAsync())
+            .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         var command = new DeleteStudentCommand
@@ -50,9 +50,9 @@ public class DeleteStudentCommandHandlerTests
         result.Status.ShouldBe(HttpStatusCode.NoContent);
         result.RecordId.ShouldBe(studentId);
 
-        studentRepo.Verify(x => x.GetByIdAsync(studentId), Times.Once);
+        studentRepo.Verify(x => x.GetByIdAsync(studentId, It.IsAny<CancellationToken>()), Times.Once);
         studentRepo.Verify(x => x.DeleteAsync(studentId), Times.Once);
-        unitOfWork.Verify(x => x.SaveChangesAsync(), Times.Once);
+        unitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class DeleteStudentCommandHandlerTests
         var studentId = Guid.NewGuid();
 
         studentRepo
-            .Setup(x => x.GetByIdAsync(studentId))
+            .Setup(x => x.GetByIdAsync(studentId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Student?)null);
 
         var command = new DeleteStudentCommand
@@ -82,6 +82,6 @@ public class DeleteStudentCommandHandlerTests
         await Should.ThrowAsync<FailToProcessCommandException>(act);
 
         studentRepo.Verify(x => x.DeleteAsync(It.IsAny<Guid>()), Times.Never);
-        unitOfWork.Verify(x => x.SaveChangesAsync(), Times.Never);
+        unitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

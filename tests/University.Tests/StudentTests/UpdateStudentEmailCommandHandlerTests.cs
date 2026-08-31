@@ -41,11 +41,11 @@ public class UpdateStudentEmailCommandHandlerTests
             .ReturnsAsync(false);
 
         studentRepo
-            .Setup(x => x.GetByIdAsync(studentId))
+            .Setup(x => x.GetByIdAsync(studentId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(student);
 
         unitOfWork
-            .Setup(x => x.SaveChangesAsync())
+            .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         var command = new UpdateStudentEmailCommand
@@ -71,7 +71,7 @@ public class UpdateStudentEmailCommandHandlerTests
         student.LastModifiedAt.ShouldNotBe(DateTimeOffset.MinValue);
 
         studentRepo.Verify(x => x.Update(student), Times.Once);
-        unitOfWork.Verify(x => x.SaveChangesAsync(), Times.Once);
+        unitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -116,9 +116,9 @@ public class UpdateStudentEmailCommandHandlerTests
 
         student.Email.ShouldBe("old@example.com");
 
-        studentRepo.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        studentRepo.Verify(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
         studentRepo.Verify(x => x.Update(It.IsAny<Student>()), Times.Never);
-        unitOfWork.Verify(x => x.SaveChangesAsync(), Times.Never);
+        unitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class UpdateStudentEmailCommandHandlerTests
             .ReturnsAsync(false);
 
         studentRepo
-            .Setup(x => x.GetByIdAsync(studentId))
+            .Setup(x => x.GetByIdAsync(studentId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Student?)null);
 
         var command = new UpdateStudentEmailCommand
@@ -161,6 +161,6 @@ public class UpdateStudentEmailCommandHandlerTests
         await Should.ThrowAsync<FailToProcessCommandException>(act);
 
         studentRepo.Verify(x => x.Update(It.IsAny<Student>()), Times.Never);
-        unitOfWork.Verify(x => x.SaveChangesAsync(), Times.Never);
+        unitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

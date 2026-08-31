@@ -41,8 +41,8 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Commands
             {
                 var dto = request.CourseEnrollmentDto;
 
-                var student = await _unitOfWork.StudentRepository.GetByIdAsync(dto.StudentId);
-                var course = await _unitOfWork.CourseRepository.GetByIdAsync(dto.CourseId);
+                var student = await _unitOfWork.StudentRepository.GetByIdAsync(dto.StudentId, cancellationToken);
+                var course = await _unitOfWork.CourseRepository.GetByIdAsync(dto.CourseId, cancellationToken);
 
                 if (student is null || course is null)
                 {
@@ -50,7 +50,7 @@ namespace University.Application.Features.CourseEnrollment.Handlers.Commands
                     response.Status = System.Net.HttpStatusCode.NotFound;
                     return response;
                 }
-                var validator = new CreateCourseEnrollmentDtoValidator(_unitOfWork);
+                var validator = new CreateCourseEnrollmentDtoValidator(_unitOfWork, cancellationToken);
                 var validationResult = await validator.ValidateAsync(dto);
                 if (!validationResult.IsValid)
                 {

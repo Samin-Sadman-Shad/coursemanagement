@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using University.Application.Contracts.Persistance;
 using University.Application.Features.CreditWorkEnrollment.Handlers.Commands;
@@ -24,7 +25,7 @@ namespace University.Tests.CreditWrokEnrollmentTests
             var id = Guid.NewGuid();
 
             uow.SetupGet(x => x.CreditWorkEnrollmentRepository).Returns(repo.Object);
-            repo.Setup(x => x.GetEnrollment(id))
+            repo.Setup(x => x.GetEnrollment(id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync((CreditWorkEnrollment?)null);
 
             var request = new RemoveCreditWorkEnrollmentCommand
@@ -39,7 +40,7 @@ namespace University.Tests.CreditWrokEnrollmentTests
             result.IsSuccessful.ShouldBeFalse();
             result.Status.ShouldBe(HttpStatusCode.NotFound);
 
-            uow.Verify(x => x.SaveChangesAsync(), Times.Never);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -52,7 +53,7 @@ namespace University.Tests.CreditWrokEnrollmentTests
             var enrollment = EntityTestFactory.CreateCreditWorkEnrollment(id);
 
             uow.SetupGet(x => x.CreditWorkEnrollmentRepository).Returns(repo.Object);
-            repo.Setup(x => x.GetEnrollment(id)).ReturnsAsync(enrollment);
+            repo.Setup(x => x.GetEnrollment(id, It.IsAny<CancellationToken>())).ReturnsAsync(enrollment);
 
             var request = new RemoveCreditWorkEnrollmentCommand
             {
@@ -68,7 +69,7 @@ namespace University.Tests.CreditWrokEnrollmentTests
             result.RecordId.ShouldBe(id);
 
             repo.Verify(x => x.RemoveCreditWorkEnrollment(enrollment), Times.Once);
-            uow.Verify(x => x.SaveChangesAsync(), Times.Once);
+            uow.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

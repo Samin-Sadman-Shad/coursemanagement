@@ -28,7 +28,7 @@ namespace University.Application.Features.Course.Handlers.Commands
             try
             {
                 var courseRepository = _unitOfWork.CourseRepository;
-                var entity = await courseRepository.GetByIdAsync(request.CourseId);
+                var entity = await courseRepository.GetByIdAsync(request.CourseId, cancellationToken);
                 if (entity is null)
                 {
                     throw new FailToProcessCommandException();

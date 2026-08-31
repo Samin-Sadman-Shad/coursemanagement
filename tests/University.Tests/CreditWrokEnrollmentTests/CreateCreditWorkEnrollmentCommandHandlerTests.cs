@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using University.Application.Contracts.API;
 using University.Application.Contracts.Identity;
@@ -36,8 +37,8 @@ namespace University.Tests.CreditWrokEnrollmentTests
             uow.SetupGet(x => x.StudentRepository).Returns(studentRepo.Object);
             uow.SetupGet(x => x.CreditWorkEnrollmentRepository).Returns(enrollmentRepo.Object);
 
-            creditWorkRepo.Setup(x => x.ExistsAsync(creditWorkId)).ReturnsAsync(false);
-            studentRepo.Setup(x => x.ExistsAsync(studentId)).ReturnsAsync(true);
+            creditWorkRepo.Setup(x => x.ExistsAsync(creditWorkId, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            studentRepo.Setup(x => x.ExistsAsync(studentId, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
             var request = new CreateCreditWorkEnrollmentCommand
             {
@@ -58,7 +59,7 @@ namespace University.Tests.CreditWrokEnrollmentTests
             result.IsSuccessful.ShouldBeFalse();
             result.Status.ShouldBe(HttpStatusCode.BadRequest);
 
-            uow.Verify(x => x.BeginTransactionAsync(), Times.Never);
+            uow.Verify(x => x.BeginTransactionAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -85,18 +86,18 @@ namespace University.Tests.CreditWrokEnrollmentTests
             uow.SetupGet(x => x.StudentRepository).Returns(studentRepo.Object);
             uow.SetupGet(x => x.CreditWorkEnrollmentRepository).Returns(enrollmentRepo.Object);
 
-            creditWorkRepo.Setup(x => x.ExistsAsync(creditWorkId)).ReturnsAsync(true);
-            studentRepo.Setup(x => x.ExistsAsync(studentId)).ReturnsAsync(true);
-            enrollmentRepo.Setup(x => x.ExistsAsync(studentId, creditWorkId)).ReturnsAsync(false);
+            creditWorkRepo.Setup(x => x.ExistsAsync(creditWorkId, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            studentRepo.Setup(x => x.ExistsAsync(studentId, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            enrollmentRepo.Setup(x => x.ExistsAsync(studentId, creditWorkId, It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
-            creditWorkRepo.Setup(x => x.GetByIdAsync(creditWorkId)).ReturnsAsync(creditWork);
-            studentRepo.Setup(x => x.GetByIdAsync(studentId)).ReturnsAsync(student);
+            creditWorkRepo.Setup(x => x.GetByIdAsync(creditWorkId, It.IsAny<CancellationToken>())).ReturnsAsync(creditWork);
+            studentRepo.Setup(x => x.GetByIdAsync(studentId, It.IsAny<CancellationToken>())).ReturnsAsync(student);
 
             currentUser.SetupGet(x => x.UserId).Returns(staffId);
             userService.Setup(x => x.GetStaffByIdAsync(staffId))
                 .ReturnsAsync(new StaffDto());
 
-            enrollmentRepo.Setup(x => x.CreateCreditWorkEnrollment(It.IsAny<CreditWorkEnrollment>()))
+            enrollmentRepo.Setup(x => x.CreateCreditWorkEnrollment(It.IsAny<CreditWorkEnrollment>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(enrollment);
 
             var request = new CreateCreditWorkEnrollmentCommand
@@ -123,11 +124,11 @@ namespace University.Tests.CreditWrokEnrollmentTests
                 x => x.CreateCreditWorkEnrollment(It.Is<CreditWorkEnrollment>(e =>
                     e.CreditWorkId == creditWorkId &&
                     e.StudentId == studentId &&
-                    e.EnrolledById == staffId)),
+                    e.EnrolledById == staffId), CancellationToken.None),
                 Times.Once);
 
-            uow.Verify(x => x.BeginTransactionAsync(), Times.Once);
-            uow.Verify(x => x.SaveChangesAsync(), Times.Once);
+            uow.Verify(x => x.BeginTransactionAsync(CancellationToken.None), Times.Once);
+            uow.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
         }
     }
 }
